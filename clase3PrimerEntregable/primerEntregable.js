@@ -45,12 +45,12 @@ class ProductManager {
     };
 
     getProducts = () => {
-        console.log('These are all the products:\n',this.products);
+        console.log(`These are all the products:\n ${this.products}`);
     };
 
     getProductById = (id) => {
         const obj = this.products.find(product => product.id === id);
-        (obj) ? console.log('The product is: ',obj) : console.log('Product not found');
+        (obj) ? console.log(`The product is: ${obj}`) : console.log('Product not found');
     }
 
 };
