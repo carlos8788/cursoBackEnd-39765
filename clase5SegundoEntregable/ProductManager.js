@@ -26,13 +26,20 @@ class ProductManager {
     };
 
     #checkID = async (id) => {
-        const getFileProducts = await fs.promises.readFile(this.path, 'utf-8')
-        const parseProducts = JSON.parse(getFileProducts);
+        try {
+            const getFileProducts = await fs.promises.readFile(this.path, 'utf-8')
+            const parseProducts = JSON.parse(getFileProducts);
 
-        const findObj = parseProducts.find(product => product.id === id);
-        // if (!findObj) return console.log(`Product not found. ID: ${id}`);
-        if (!findObj) return false;
-        return parseProducts;
+            const findObj = parseProducts.find(product => product.id === id);
+            // if (!findObj) return console.log(`Product not found. ID: ${id}`);
+            if (!findObj) return false;
+            return parseProducts;
+        }
+
+        catch (err) {
+            console.log(err);
+        }
+
     };
 
     // Methods for Fyle System
@@ -122,7 +129,7 @@ class ProductManager {
             description,
             price,
             thumbail,
-            code, 
+            code,
             stock
         }
 
@@ -142,13 +149,13 @@ const productsInstance = new ProductManager('./db.json');
 
 // ***** AGREGA LOS PRODUCTOS AL JSON *****
 
-productsInstance.addProduct("Leche","Leche descremada",150,"./img/leche.png",123,200)
-productsInstance.addProduct("Pan","Pan de centeno",250,"./img/pan.png",456,100)
-productsInstance.addProduct("Jamon crudo","Jamon premium",750,"./img/jamonCrudo.png",789,50)
-productsInstance.addProduct("Jamon codido","Jamon oferta",300,"./img/jamonCocido.png",789,40)
-productsInstance.addProduct("Salame","Milan",320,"./img/salame.png",781,60)
-productsInstance.addProduct("Queso Azul","Roquefort",1300,"./img/quesoAzul.png",723,111)
-productsInstance.addProduct("Paleta","paleta oferta",200,"./img/paleta.png",7839,320)
+productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
+productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
+productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 789, 50)
+productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
+productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
+productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
+productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
 
 
 // ***** MUESTRA LOS PRODUCTOS DESDE EL JSON *****
