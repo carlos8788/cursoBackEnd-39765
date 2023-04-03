@@ -1,0 +1,56 @@
+[
+  {
+    "title": "Leche",
+    "description": "Leche descremada",
+    "price": 150,
+    "thumbail": "./img/leche.png",
+    "code": 123,
+    "stock": 200,
+    "id": 1
+  },
+  {
+    "title": "Pan",
+    "description": "Pan de centeno",
+    "price": 250,
+    "thumbail": "./img/pan.png",
+    "code": 456,
+    "stock": 100,
+    "id": 2
+  },
+  {
+    "title": "Jamon crudo",
+    "description": "Jamon premium",
+    "price": 750,
+    "thumbail": "./img/jamonCrudo.png",
+    "code": 789,
+    "stock": 50,
+    "id": 3
+  },
+  {
+    "title": "Salame",
+    "description": "Milan",
+    "price": 320,
+    "thumbail": "./img/salame.png",
+    "code": 781,
+    "stock": 60,
+    "id": 4
+  },
+  {
+    "title": "Queso Azul",
+    "description": "Roquefort",
+    "price": 1300,
+    "thumbail": "./img/quesoAzul.png",
+    "code": 723,
+    "stock": 111,
+    "id": 5
+  },
+  {
+    "title": "Paleta",
+    "description": "paleta oferta",
+    "price": 200,
+    "thumbail": "./img/paleta.png",
+    "code": 7839,
+    "stock": 320,
+    "id": 6
+  }
+]
