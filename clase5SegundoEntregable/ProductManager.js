@@ -148,37 +148,40 @@ class ProductManager {
 const productsInstance = new ProductManager('./db.json');
 
 // ***** AGREGA LOS PRODUCTOS AL JSON *****
-
-productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
-productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
-productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 789, 50)
-productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
-productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
-productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
-productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
-
-
-// ***** MUESTRA LOS PRODUCTOS DESDE EL JSON *****
-
-// productsInstance.getProducts()
-
-// ***** MUESTRA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
-
-// productsInstance.getProductById(7)
-// productsInstance.getProductById(2)
+const test = async () => {
+    productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
+    productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
+    productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 789, 50)
+    productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
+    productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
+    productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
+    productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
 
 
-// ***** ACTUALIZA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
+    // ***** MUESTRA LOS PRODUCTOS DESDE EL JSON *****
 
-// productsInstance.updateProduct(2, {
-//     "title": "Pan",
-//     "description": "Pan de centeno",
-//     "price": 300,
-//     "thumbail": "./img/pan.png",
-//     "code": 456,
-//     "stock": 205,
-//   },)
+    await productsInstance.getProducts()
 
-// ***** ELIMINA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
+    // ***** MUESTRA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
 
-// productsInstance.deleteProduct(2)
+    await productsInstance.getProductById(7)
+    await productsInstance.getProductById(2)
+
+
+    // ***** ACTUALIZA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
+
+    await productsInstance.updateProduct(2, {
+        "title": "Pan",
+        "description": "Pan de centeno",
+        "price": 300,
+        "thumbail": "./img/pan.png",
+        "code": 456,
+        "stock": 205,
+      },)
+
+    // ***** ELIMINA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
+
+    await productsInstance.deleteProduct(2)
+};
+
+test();
