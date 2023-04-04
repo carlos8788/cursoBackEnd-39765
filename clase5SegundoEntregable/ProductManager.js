@@ -10,18 +10,19 @@ class ProductManager {
     // Private methods
 
 
-    #validateCodeProduct = (obj) => {
+    #validateCodeProduct = async (obj) => {
         let validateCode = this.products.find(property => property.code === Object.values(obj)[4]);
         if (validateCode) return console.log(`Could not add the product: "${obj.title}", its code is repeated: "${obj.code}" already exists`)
-        this.#addId(obj);
+        await this.#addId(obj);
     };
 
-    #addId = (obj) => {
+
+    #addId = async (obj) => {
         (this.products.length > 0)
             ? obj.id = this.products.length + 1
             : obj.id = 1;
         this.products.push(obj)
-        this.#saveProductsFS();
+        await this.#saveProductsFS();
 
     };
 
@@ -31,8 +32,8 @@ class ProductManager {
             const parseProducts = JSON.parse(getFileProducts);
 
             const findObj = parseProducts.find(product => product.id === id);
-            // if (!findObj) return console.log(`Product not found. ID: ${id}`);
-            if (!findObj) return false;
+            if (!findObj) return console.log(`Product not found. ID: ${id}`);
+            
             return parseProducts;
         }
 
@@ -122,8 +123,9 @@ class ProductManager {
 
     // Public methods
 
-    addProduct = (title, description, price, thumbail, code, stock) => {
-
+    addProduct = async (title, description, price, thumbail, code, stock) => {
+        const productsFS = await fs.promises.readFile(this.path, 'utf-8')
+        this.products = JSON.parse(productsFS);
         const product = {
             title,
             description,
@@ -145,13 +147,13 @@ class ProductManager {
 
 
 
-// const productsInstance = new ProductManager('./db.json');
+const productsInstance = new ProductManager('./db.json');
 
 // ***** AGREGA LOS PRODUCTOS AL JSON *****
 const test = async () => {
-    // productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
+    productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
     // productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
-    // productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 789, 50)
+    // productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 1234, 50)
     // productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
     // productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
     // productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)

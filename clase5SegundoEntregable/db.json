@@ -22,9 +22,18 @@
     "description": "Jamon premium",
     "price": 750,
     "thumbail": "./img/jamonCrudo.png",
-    "code": 789,
+    "code": 1234,
     "stock": 50,
     "id": 3
+  },
+  {
+    "title": "Jamon codido",
+    "description": "Jamon oferta",
+    "price": 300,
+    "thumbail": "./img/jamonCocido.png",
+    "code": 789,
+    "stock": 40,
+    "id": 4
   },
   {
     "title": "Salame",
@@ -33,7 +42,7 @@
     "thumbail": "./img/salame.png",
     "code": 781,
     "stock": 60,
-    "id": 4
+    "id": 5
   },
   {
     "title": "Queso Azul",
@@ -42,7 +51,7 @@
     "thumbail": "./img/quesoAzul.png",
     "code": 723,
     "stock": 111,
-    "id": 5
+    "id": 6
   },
   {
     "title": "Paleta",
@@ -51,6 +60,6 @@
     "thumbail": "./img/paleta.png",
     "code": 7839,
     "stock": 320,
-    "id": 6
+    "id": 7
   }
 ]
