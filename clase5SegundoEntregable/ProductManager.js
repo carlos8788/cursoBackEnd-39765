@@ -33,7 +33,7 @@ class ProductManager {
 
             const findObj = parseProducts.find(product => product.id === id);
             if (!findObj) return console.log(`Product not found. ID: ${id}`);
-            
+
             return parseProducts;
         }
 
@@ -58,13 +58,20 @@ class ProductManager {
     };
 
     getProducts = async () => {
-        try {
-            const readJSON = await fs.promises.readFile(this.path, 'utf-8')
-            return console.log(`These are all the products:\n`, JSON.parse(readJSON));
+        if (fs.existsSync(this.path)) {
+            try {
+                const readJSON = await fs.promises.readFile(this.path, 'utf-8')
+                console.log(`These are all the products:\n`, JSON.parse(readJSON));
+                return JSON.parse(readJSON)
+            }
+            catch (err) {
+                console.log(err);
+                return [];
+            }
         }
-        catch (err) {
-            return console.log(err);
-        }
+        console.log(`The file does not exist`);
+        return [];
+
     };
 
     getProductById = async (id) => {
@@ -124,8 +131,8 @@ class ProductManager {
     // Public methods
 
     addProduct = async (title, description, price, thumbail, code, stock) => {
-        const productsFS = await fs.promises.readFile(this.path, 'utf-8')
-        this.products = JSON.parse(productsFS);
+        this.products = await this.getProducts()
+        console.log(this.products)
         const product = {
             title,
             description,
@@ -151,13 +158,13 @@ const productsInstance = new ProductManager('./db.json');
 
 // ***** AGREGA LOS PRODUCTOS AL JSON *****
 const test = async () => {
-    // await productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
-    // await productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
-    // await productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 1234, 50)
-    // await productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
-    // await productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
-    // await productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
-    // await productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
+    await productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
+    await productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
+    await productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 1234, 50)
+    await productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
+    await productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
+    await productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
+    await productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
 
 
     // ***** MUESTRA LOS PRODUCTOS DESDE EL JSON *****
