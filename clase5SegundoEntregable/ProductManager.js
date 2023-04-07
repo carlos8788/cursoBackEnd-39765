@@ -19,7 +19,7 @@ class ProductManager {
 
     #addId = async (obj) => {
         (this.products.length > 0)
-            ? obj.id = this.products.length + 1
+            ? obj.id = this.products[this.products.length - 1].id + 1
             : obj.id = 1;
         this.products.push(obj)
         await this.#saveProductsFS();
@@ -32,8 +32,7 @@ class ProductManager {
             const parseProducts = JSON.parse(getFileProducts);
 
             const findObj = parseProducts.find(product => product.id === id);
-            if (!findObj) return console.log(`Product not found. ID: ${id}`);
-
+            if (!findObj) return null;
             return parseProducts;
         }
 
@@ -88,20 +87,21 @@ class ProductManager {
 
     };
 
-    updateProduct = async (id, updateObject) => {
+    updateProduct = async (pid, updateObject) => {
         try {
-            const products = await this.#checkID(id)
-            if (!products) return console.log(`Product not found. ID: ${id}`);
+            const productsOfFS = await this.#checkID(pid)
 
-
-            const returnedObject = Object.assign(products[id - 1], updateObject);
-
-            products[id - 1] = returnedObject;
-            this.products = products
+            this.products = productsOfFS.map(element => {
+                if(element.id == 2){
+                    element = Object.assign(element, updateObject);
+                   return element
+                }
+                return element
+            })
 
 
             this.#saveProductsFS();
-            return console.log(`The product was successfully updated:`, returnedObject);
+            return console.log(`The product was successfully updated:`, this.products);
         }
         catch (err) {
             return console.log(err);
@@ -116,8 +116,12 @@ class ProductManager {
             const products = await this.#checkID(id)
             if (!products) return console.log(`Product not found. ID: ${id}`);
 
-            products.splice(id - 1, 1);
-            this.products = products;
+            products.forEach(element => {
+                if(element.id !== id){
+                    this.products.push(element)
+                }
+            })
+
             this.#saveProductsFS()
             return console.log(`the product ID:"${id}" has been successfully removed`);;
         }
@@ -158,13 +162,13 @@ const productsInstance = new ProductManager('./db.json');
 
 // ***** AGREGA LOS PRODUCTOS AL JSON *****
 const test = async () => {
-    await productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
-    await productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
-    await productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 1234, 50)
-    await productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
-    await productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
-    await productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
-    await productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
+    // await productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
+    // await productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
+    // await productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 1234, 50)
+    // await productsInstance.addProduct("Jamon codido", "Jamon oferta", 300, "./img/jamonCocido.png", 789, 40)
+    // await productsInstance.addProduct("Salame", "Milan", 320, "./img/salame.png", 781, 60)
+    // await productsInstance.addProduct("Queso Azul", "Roquefort", 1300, "./img/quesoAzul.png", 723, 111)
+    // await productsInstance.addProduct("Paleta", "paleta oferta", 200, "./img/paleta.png", 7839, 320)
 
 
     // ***** MUESTRA LOS PRODUCTOS DESDE EL JSON *****
@@ -181,16 +185,16 @@ const test = async () => {
 
     // await productsInstance.updateProduct(2, {
     //     "title": "Pan",
-    //     "description": "Pan de centeno",
+    //     "description": "Pan de masa madre",
     //     "price": 300,
     //     "thumbail": "./img/pan.png",
     //     "code": 456,
     //     "stock": 205,
-    //   },)
+    // },)
 
     // ***** ELIMINA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
 
-    // await productsInstance.deleteProduct(2)
+    await productsInstance.deleteProduct(7)
 };
 
 test();

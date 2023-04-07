@@ -9,12 +9,12 @@
     "id": 1
   },
   {
-    "title": "Leche",
-    "description": "Leche descremada",
-    "price": 150,
-    "thumbail": "./img/leche.png",
-    "code": 123,
-    "stock": 200,
+    "title": "Pan",
+    "description": "Pan de campo",
+    "price": 300,
+    "thumbail": "./img/pan.png",
+    "code": 456,
+    "stock": 205,
     "id": 2
   },
   {
@@ -52,14 +52,5 @@
     "code": 781,
     "stock": 60,
     "id": 6
-  },
-  {
-    "title": "Queso Azul",
-    "description": "Roquefort",
-    "price": 1300,
-    "thumbail": "./img/quesoAzul.png",
-    "code": 723,
-    "stock": 111,
-    "id": 7
   }
 ]
