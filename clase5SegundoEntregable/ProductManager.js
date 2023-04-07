@@ -92,7 +92,7 @@ class ProductManager {
             const productsOfFS = await this.#checkID(pid)
 
             this.products = productsOfFS.map(element => {
-                if(element.id == 2){
+                if(element.id == pid){
                     element = Object.assign(element, updateObject);
                    return element
                 }
