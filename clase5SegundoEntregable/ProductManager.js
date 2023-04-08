@@ -116,11 +116,15 @@ class ProductManager {
             const products = await this.#checkID(id)
             if (!products) return console.log(`Product not found. ID: ${id}`);
 
+            /*
             products.forEach(element => {
                 if(element.id !== id){
                     this.products.push(element)
                 }
             })
+            */
+            
+            this.products = products.filter(product => product.id !== id)
 
             this.#saveProductsFS()
             return console.log(`the product ID:"${id}" has been successfully removed`);;
