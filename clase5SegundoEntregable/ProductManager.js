@@ -116,17 +116,6 @@ class ProductManager {
             const products = await this.#checkID(id)
             if (!products) return console.log(`Product not found. ID: ${id}`);
 
-<<<<<<< HEAD
-=======
-            /*
-            products.forEach(element => {
-                if(element.id !== id){
-                    this.products.push(element)
-                }
-            })
-            */
-            
->>>>>>> 974cdd7d7b51bcb5b7fefa3a0e3d1a644d1bb8e3
             this.products = products.filter(product => product.id !== id)
 
             this.#saveProductsFS()
