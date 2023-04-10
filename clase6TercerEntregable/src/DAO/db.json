@@ -1,0 +1,56 @@
+[
+  {
+    "title": "Paleta",
+    "description": "paleta oferta",
+    "price": 200,
+    "thumbail": "./img/paleta.png",
+    "code": 7839,
+    "stock": 320,
+    "id": 1
+  },
+  {
+    "title": "Pan",
+    "description": "Pan de campo",
+    "price": 300,
+    "thumbail": "./img/pan.png",
+    "code": 456,
+    "stock": 205,
+    "id": 2
+  },
+  {
+    "title": "Pan",
+    "description": "Pan de centeno",
+    "price": 250,
+    "thumbail": "./img/pan.png",
+    "code": 456,
+    "stock": 100,
+    "id": 3
+  },
+  {
+    "title": "Jamon crudo",
+    "description": "Jamon premium",
+    "price": 750,
+    "thumbail": "./img/jamonCrudo.png",
+    "code": 1234,
+    "stock": 50,
+    "id": 4
+  },
+  {
+    "title": "Jamon codido",
+    "description": "Jamon oferta",
+    "price": 300,
+    "thumbail": "./img/jamonCocido.png",
+    "code": 789,
+    "stock": 40,
+    "id": 5
+  },
+  {
+    "title": "Salame",
+    "description": "Milan",
+    "price": 320,
+    "thumbail": "./img/salame.png",
+    "code": 781,
+    "stock": 60,
+    "id": 6
+  }
+]

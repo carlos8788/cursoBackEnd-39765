@@ -2,9 +2,9 @@ import fs from 'fs';
 
 class ProductManager {
 
-    constructor(path) {
+    constructor() {
         this.products = [];
-        this.path = path;
+        this.path = './src/DAO/db.json';
     };
 
     // Private methods
@@ -74,12 +74,15 @@ class ProductManager {
     };
 
     getProductById = async (id) => {
+        id = Number(id);
         try {
             const products = await this.#checkID(id)
+            // console.log(products);
             if (!products) {
-                return console.log(`Product not found. ID: ${id}`);
+                return {status:'error', message: `Product not found. ID: ${id}`};
             }
-            return console.log(`The product is:`, products[id - 1]);
+            const product = products.find(product => product.id === id)
+            return {status:'success', product: product};
         }
         catch (err) {
             return console.log(err);
@@ -151,13 +154,13 @@ class ProductManager {
 
 };
 
+export default ProductManager;
 
 
-
-const productsInstance = new ProductManager('./db.json');
+// const productsInstance = new ProductManager('./db.json');
 
 // ***** AGREGA LOS PRODUCTOS AL JSON *****
-const test = async () => {
+// const test = async () => {
     // await productsInstance.addProduct("Leche", "Leche descremada", 150, "./img/leche.png", 123, 200)
     // await productsInstance.addProduct("Pan", "Pan de centeno", 250, "./img/pan.png", 456, 100)
     // await productsInstance.addProduct("Jamon crudo", "Jamon premium", 750, "./img/jamonCrudo.png", 1234, 50)
@@ -190,7 +193,7 @@ const test = async () => {
 
     // ***** ELIMINA EL PRODUCTO SEGÚN EL ID DESDE EL JSON *****
 
-    await productsInstance.deleteProduct(7)
-};
+    // await productsInstance.deleteProduct(7)
+// };
 
-test();
+// test();
