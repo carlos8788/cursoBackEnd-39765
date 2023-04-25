@@ -26,8 +26,9 @@ class CartManager {
 
         let boolean = true;
         for (let product of listProducts) {
+            
             let result = await pm.getProductById(product.id)
-            console.log(result);
+            
             if (result.status === 'error') boolean = false;
         }
         return boolean;
@@ -53,7 +54,8 @@ class CartManager {
         try {
 
             const resultProducts = await this.#validateProducts(products);
-            if (resultProducts) return { status: 'error', message: 'pruduct not found' };
+            
+            if (!resultProducts) return { status: 'error', message: 'pruduct not found' };
 
 
             let result = await fs.promises.readFile(this.path, 'utf-8')
