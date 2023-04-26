@@ -17,7 +17,7 @@ routerC.get('/:cid', async (request, response) => {
 
         // Se devuelve el resultado
         const result = await cm.getproductsById(Number(cid))
-        // console.log(result);
+
         // Si el valor de status es 'error' devuelve un error
         if (result.status === 'error') return response.status(400).send({ result });
 
