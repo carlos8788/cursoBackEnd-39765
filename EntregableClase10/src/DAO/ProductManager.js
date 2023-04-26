@@ -151,6 +151,8 @@ class ProductManager {
     addProduct = async ({ title, description, price, code, stock, status, category, thumbnails }) => {
         try {
             this.products = await this.getProducts()
+
+            if(price < 0 || stock < 0 ) return { status: 'error', message: 'Product and stock cannot be values less than or equal to zero' };
             const product = {
                 title,
                 description,
@@ -161,6 +163,8 @@ class ProductManager {
                 category,
                 thumbnails
             }
+
+            
 
             const result = (Object.values(product).every(property => property))
             

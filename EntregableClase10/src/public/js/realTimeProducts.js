@@ -102,7 +102,7 @@ formulario.addEventListener('submit', (event) => {
         if(res.status === 'error') {
             Swal.fire({
                 icon: 'error',
-                title: 'Repeated code',
+                title: 'Error!',
                 text: res.message,
                 
               })
@@ -116,6 +116,7 @@ formulario.addEventListener('submit', (event) => {
               })
         }
     })
+    formulario.reset()
 })
 
 

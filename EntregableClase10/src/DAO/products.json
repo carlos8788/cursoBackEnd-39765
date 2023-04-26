@@ -102,31 +102,5 @@
       "empty"
     ],
     "id": 8
-  },
-  {
-    "title": "asd",
-    "description": "asdasd",
-    "price": 123123,
-    "code": "12312311",
-    "stock": 123123,
-    "status": true,
-    "category": "123123",
-    "thumbnails": [
-      "empty"
-    ],
-    "id": 10
-  },
-  {
-    "title": "asd",
-    "description": "asdasd",
-    "price": 123123,
-    "code": "1231231122",
-    "stock": 123123,
-    "status": true,
-    "category": "123123",
-    "thumbnails": [
-      "empty"
-    ],
-    "id": 11
   }
 ]
