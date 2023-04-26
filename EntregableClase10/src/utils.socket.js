@@ -10,8 +10,7 @@ export default function socketProducts(socketServer){
 
     socket.on('product', async data => {
 
-        try {
-        
+        try {        
             const valueReturned = await pm.addProduct(data)
           
             socket.emit('message', valueReturned)
@@ -20,7 +19,6 @@ export default function socketProducts(socketServer){
             console.log(err);
         }
 
- 
     })
 
     socket.on('delete', async data => {
