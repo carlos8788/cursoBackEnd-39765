@@ -1,5 +1,5 @@
 /compas
 /apuntes
-/clase6TercerEntregable/node_modules
-/primerEntregaFinal/node_modules
-/EntregableClase10
+
+node_modules
+package-lock.json

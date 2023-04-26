@@ -16,8 +16,8 @@ routerC.get('/:cid', async (request, response) => {
         }
 
         // Se devuelve el resultado
-        const result = await cm.getCartById(Number(cid))
-        
+        const result = await cm.getproductsById(Number(cid))
+        // console.log(result);
         // Si el valor de status es 'error' devuelve un error
         if (result.status === 'error') return response.status(400).send({ result });
 
@@ -36,13 +36,13 @@ routerC.post('/', async (request, response) => {
 
         if (!Array.isArray(products)) return response.status(400).send({ status: 'error', message: 'TypeError' });
 
-        if (products.length === 0) return response.status(400).send({ status: 'error', message: 'The cart is empty' })
+        if (products.length === 0) return response.status(400).send({ status: 'error', message: 'The products is empty' })
 
         const result = await cm.addCart(products)
 
-        if (result.status === 'error') return response.status(400).send({ result });
+        if (result.status === 'error') return response.status(400).send(result.message);
 
-        return response.status(200).send({ result });
+        return response.status(200).send(result.message);
     }
     catch (err) {
         console.log(err);
@@ -51,10 +51,10 @@ routerC.post('/', async (request, response) => {
 
 routerC.post('/:cid/product/:pid', async (request, response) => {
     let { cid, pid } = request.params
-    const quantity = request.body
+    const {quantity} = request.body
     
-    const result = await cm.addProductInCart(Number(cid), [{id:Number(pid), quantity: quantity.quantity}])
-    return response.status(200).send({ result });
+    const result = await cm.addProductInCart(Number(cid), [{id:Number(pid), quantity}])
+    return response.status(200).send(`${result.message} with ID: ${cid}`);
 })
 
 
