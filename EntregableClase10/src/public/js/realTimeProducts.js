@@ -29,7 +29,7 @@ const btnEliminar = () => {
                     Swal.fire(event.message, '', 'success')
                   })
                   
-                } else if (result.isDenied) {
+                } else {
                   Swal.fire('the product was not removed', '', 'info')
                 }
               })
