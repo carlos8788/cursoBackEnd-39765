@@ -27,6 +27,7 @@ const httpServer = app.listen(PORT, () => {
     try {
         console.log(`Listening to the port ${PORT}`);
         console.log("http://localhost:8080/")
+        console.log("http://localhost:8080/realtimeproducts");
     }
     catch (err) {
         console.log(err);
