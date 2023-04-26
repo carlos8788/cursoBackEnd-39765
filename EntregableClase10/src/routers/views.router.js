@@ -9,7 +9,7 @@ routerV.get('/', async (req, res) => {
     try {
         const products = await pm.getProducts()
         console.log(products);
-        res.render("home", { valueReturned: products })
+        res.render("index", { valueReturned: products })
     }
     catch (err) {
         console.log(err);

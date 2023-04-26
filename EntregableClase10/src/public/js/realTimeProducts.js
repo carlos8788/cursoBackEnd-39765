@@ -42,6 +42,7 @@ const btnEliminar = () => {
 
 
 socket.on('products', data => {
+    
     console.log('mensaje del servidor');
 
     let productos = ''
