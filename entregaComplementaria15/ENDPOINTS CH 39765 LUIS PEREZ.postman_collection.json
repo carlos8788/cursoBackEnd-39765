@@ -186,7 +186,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"_id\": \"646926afde59689f252aae3d\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"_id\": \"64667292a031853676b32ac\",\r\n            \"quantity\": 20\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"_id\": \"64667292a031853676b32ac1\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"_id\": \"64667292a031853676b32ac4\",\r\n            \"quantity\": 20\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -253,7 +253,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/carts/646b758230b31359db1a7c4a/product/646926afde59689f252aae3d",
+					"raw": "http://localhost:8080/api/carts/646caae3ae78fb4238f851de/product/64667292a031853676b32ac4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -262,9 +262,9 @@
 					"path": [
 						"api",
 						"carts",
-						"646b758230b31359db1a7c4a",
+						"646caae3ae78fb4238f851de",
 						"product",
-						"646926afde59689f252aae3d"
+						"64667292a031853676b32ac4"
 					]
 				}
 			},
