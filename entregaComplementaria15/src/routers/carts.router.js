@@ -41,6 +41,7 @@ routerC.post('/', async (request, response) => {
         // Corroborar si todos los ID de los productos existen
         const results = await Promise.all(products.map(async (product) => {
             const checkId = await pm.getProductById(product._id);
+            if (checkId === null) return response.status(404).send({ message: `product id ${product._id} not found` });
             if ('error' in checkId) {
                 return {error: checkId.error, _id:product._id}
             }
