@@ -1,0 +1,132 @@
+[
+  {
+    "title": "Paleta",
+    "description": "paleta oferta",
+    "price": 200,
+    "code": "7839",
+    "stock": 320,
+    "id": 1,
+    "status": true,
+    "category": "Fiambreria",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Pan",
+    "description": "Pan de campo",
+    "price": 300,
+    "code": "4569",
+    "stock": 205,
+    "id": 2,
+    "status": true,
+    "category": "Panadería",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Pan",
+    "description": "Pan de centeno",
+    "price": 250,
+    "code": "456",
+    "stock": 100,
+    "id": 3,
+    "status": true,
+    "category": "Panadería",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Jamon crudo",
+    "description": "Jamon premium",
+    "price": 750,
+    "code": "1234",
+    "stock": 50,
+    "id": 4,
+    "status": true,
+    "category": "Fiambreria",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Jamon codido",
+    "description": "Jamon oferta",
+    "price": 300,
+    "code": "789",
+    "stock": 40,
+    "id": 5,
+    "status": true,
+    "category": "Fiambreria",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Salame",
+    "description": "Milan",
+    "price": 320,
+    "code": "781",
+    "stock": 60,
+    "id": 6,
+    "status": true,
+    "category": "Fiambreria",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Paleta",
+    "description": "paleta oferta",
+    "price": 200,
+    "code": "asd321",
+    "stock": 320,
+    "id": 7,
+    "status": true,
+    "category": "Fiambreria",
+    "thumbnails": [
+      "empty"
+    ]
+  },
+  {
+    "title": "Salchichon",
+    "description": "Salchichon oferta",
+    "price": 200,
+    "code": "65465421",
+    "stock": 320,
+    "status": true,
+    "category": "Fiambreria",
+    "thumbnails": [
+      "empty"
+    ],
+    "id": 8
+  },
+  {
+    "title": "Queso",
+    "description": "De cabra",
+    "price": 465,
+    "code": "98798465qq",
+    "stock": 50,
+    "status": true,
+    "category": "Fiambres y Lacteos",
+    "thumbnails": [
+      "empty"
+    ],
+    "id": 9
+  },
+  {
+    "title": "asdasdas",
+    "description": "asdasdasd",
+    "price": 12312312,
+    "code": "asdasd",
+    "stock": 12312313,
+    "status": true,
+    "category": "asdasd",
+    "thumbnails": [
+      "empty"
+    ],
+    "id": 11
+  }
+]
