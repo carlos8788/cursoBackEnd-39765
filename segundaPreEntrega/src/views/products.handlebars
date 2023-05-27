@@ -1,0 +1,56 @@
+<h1>Products</h1>
+<img src="./img/cart.svg" alt="">
+<h3 class="number">{{cart}}</h3>
+
+
+<div class="row mt-4">
+    {{#each products }}
+    <div class="card bg-secondary mb-3 mx-4 my-4" style="max-width: 20rem;">
+        <div class="card-header">code: {{this.code}}</div>
+        <div class="card-body">
+            <h4 class="card-title">{{this.title}}</h4>
+            <p class="card-text">
+                <li>
+                    description: {{this.description}}
+                </li>
+                <li>
+                    price: ${{this.price}}
+                </li>
+                <li>
+                    category: {{this.category}}
+                </li>
+                <li>
+                    status: {{this.status}}
+                </li>
+                <li>
+                    stock: {{this.stock}}
+                </li>
+                <li>
+                    thumbnail: <img src="{{this.thumbnails}}" alt="" width="120" height="80">
+                </li>
+            </p>
+            <a class="btn btn-success text-lg product" id="{{this._id}}" data-value="{{this.stock}}">Agregar a carrito</a>
+        </div>
+    </div>
+
+
+    {{/each}}
+</div>
+
+<div class="container d-flex justify-content-center align-items-center gap-4 p-4">
+    
+
+    {{#if hasPrevPage}}
+    <a class="btn btn-primary px-5" href="{{prevLink}}">prev</a>
+
+    {{/if}}
+
+    {{#if hasNextPage}}
+
+    <a class="btn btn-primary px-5" href="{{nextLink}}">next</a>
+
+    <h3>Page: {{page}}/{{totalPages}}</h3>
+    {{/if}}
+</div>
+
+<script src="js/sendCart.js"></script>

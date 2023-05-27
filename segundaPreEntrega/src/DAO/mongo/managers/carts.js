@@ -102,6 +102,14 @@ class CartManager {
             return err
         }
     }
+    updateOneProduct = async (cid, products) => {
+        
+        await cartModel.updateOne(
+            { _id: cid },
+            {products})
+        return await cartModel.findOne({ _id: cid })
+    }
+
 
 
 };

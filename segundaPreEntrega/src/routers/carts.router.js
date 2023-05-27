@@ -63,7 +63,10 @@ routerC.post('/:cid/product/:pid', async (request, response) => {
         
         let { cid, pid } = request.params
         const { quantity } = request.body
-    
+        
+        if (isNaN(Number(quantity))||!Number.isInteger(quantity)) return response.status(400).send({status:'error', payload:null, message: 'The quantity is not valid'})
+        
+        if (quantity < 1) return response.status(400).send({status:'error', payload:null, message:'The quantity must be greater than 1'})
         
         const checkIdProduct = await pm.getProductById(pid);
         if ('error' in checkIdProduct) return response.status(404).send({error: `The ID product: ${pid} not found`})
@@ -135,36 +138,51 @@ routerC.put('/:cid/product/:pid', async (request, response) => {
         
         let { cid, pid } = request.params
         const { quantity } = request.body
-    
+        
         
         const checkIdProduct = await pm.getProductById(pid);
         if ('error' in checkIdProduct) return response.status(404).send({error: `The ID product: ${pid} not found`})
-        console.log(checkIdProduct);
+        
         const checkIdCart = await cm.getCartById(cid)
         
         if (checkIdCart === null || 'reason' in checkIdCart) return response.status(404).send({error: `The ID cart: ${cid} not found`})
-        checkIdCart.products.forEach(product => {console.log(product._id._id.toString() === checkIdCart._id.toString());})
-
-        // const results = await Promise.all(checkIdCart.products.map(async (product) => {
-        //     const checkId = await pm.getProductById(product._id);
-        //     if ('error' in checkId) {
-        //         return {error: checkId.error, _id:product._id}
-        //     }
-        // }))
-        // console.log(results);
-        // const check = results.find(value => value !== undefined)
-        // if (check) return response.status(404).send(check)
-
-        // const result = await cm.addProductInCart(cid, { _id: pid, quantity })
-        const result = 'ok'
+        const result = checkIdCart.products.findIndex(product => product._id._id.toString() === pid)
         
-        return response.status(200).send({message:`added product ID: ${pid}, in cart ID: ${cid}`, cart: result});
+        if(result === -1) return response.status(404).send({status: 'error', payload:null, message:`the product with ID: ${pid} cannot be updated because it is not in the cart`})
+        
+        if (isNaN(Number(quantity))||!Number.isInteger(quantity)) return response.status(400).send({status:'error', payload:null, message: 'The quantity is not valid'})
+        
+        if (quantity < 1) return response.status(400).send({status:'error', payload:null, message:'The quantity must be greater than 1'})
 
+        checkIdCart.products[result].quantity = quantity
+
+
+        const cart = await cm.updateOneProduct(cid, checkIdCart.products)
+        
     } catch (error) {
         console.log(error);
     }
 })
 
+
+routerC.delete('/:cid', async (request, response) => {
+    try {
+        const {cid} = request.params
+        const checkIdCart = await cm.getCartById(cid)
+        
+        if (checkIdCart === null || 'reason' in checkIdCart) return response.status(404).send({error: `The ID cart: ${cid} not found`})
+
+        if (checkIdCart.products.length === 0) return response.status(404).send({status: 'error', payload:null, message: 'The cart is already empty'})
+
+        checkIdCart.products = []
+        
+        const cart = await cm.updateOneProduct(cid, checkIdCart.products)
+        return response.status(200).send({status:'success', message:`the cart whit ID: ${cid} was emptied correctly `, cart});
+        
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 
 export default routerC

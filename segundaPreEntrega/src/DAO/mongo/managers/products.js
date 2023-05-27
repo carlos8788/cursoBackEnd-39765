@@ -24,6 +24,14 @@ export default class ProductManager {
 
     }
 
+    getProductsView = async () => {
+        try {
+            return await productModel.find().lean();
+
+        } catch (err) {
+            return err
+        }
+    };
 
     getProducts = async (filter, options) => {
         try {
