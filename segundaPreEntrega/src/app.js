@@ -32,9 +32,8 @@ connectToDB()
 const httpServer = app.listen(PORT, () => {
     try {
         console.log(`Listening to the port ${PORT}\nAcceder a:`);
-        console.log(`\t1). http://localhost:${PORT}/`)
-        console.log(`\t2). http://localhost:${PORT}/realtimeproducts`);
-        console.log(`\t3). http://localhost:${PORT}/chat`);
+        console.log(`\t1). http://localhost:${PORT}/products`)
+        console.log(`\t2). http://localhost:${PORT}/carts/646df484d31949d4081c72eb`);
     }
     catch (err) {
         console.log(err);
