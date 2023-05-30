@@ -34,7 +34,7 @@ routerV.get('/products', async (req, res) => {
     try {
 
         let { limit, page, sort, category } = req.query
-        console.log(sort);
+        
 
         const options = {
             page: Number(page) || 1,
@@ -108,7 +108,7 @@ routerV.get('/products/inCart', async (req, res) => {
 routerV.post('/products', async (req, res) => {
     try {
         const { product, finishBuy } = req.body
-        console.log(finishBuy);
+        
         if (product) {
             if (product.quantity > 0) {
                 const findId = cart.findIndex(productCart => productCart._id === product._id);
@@ -134,14 +134,14 @@ routerV.get('/carts/:cid', async (req, res) => {
         const { cid } = req.params
 
         const result = await CM.getCartById(cid)
-        console.log(result);
+        
         if(result === null || typeof(result) === 'string') return res.render('cart', { result: false, message: 'ID not found' });
 
         return res.render('cart', { result });
 
 
     } catch (err) {
-        console.log(err, 1111);
+        console.log(err);
     }
 
 })
