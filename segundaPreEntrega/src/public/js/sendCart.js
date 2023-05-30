@@ -38,7 +38,7 @@ arrayProducts.forEach(product => {
             showCancelButton: true,
             confirmButtonText: 'Confirm',
         }).then(response => {
-            // console.log(response);
+            
             if (stock > Number(response.value) && Number(response.value) > 0) {
                 Swal.fire({
                     title: 'Product added successfully',
@@ -61,6 +61,14 @@ arrayProducts.forEach(product => {
                 Swal.fire({
                     title: 'Quantity must be greater than 0',
                     icon: 'warning'
+                })
+            }
+
+            else{
+                Swal.fire({
+                    title: 'Quantity cannot be greater than stock',
+                    icon: 'error',
+
                 })
             }
         })
