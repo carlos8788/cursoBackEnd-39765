@@ -47,7 +47,7 @@ export default class ProductManager {
             return await productModel.findById(id)
 
         } catch (err) {
-            return { error: err.message }
+            return err.message
         }
 
     }

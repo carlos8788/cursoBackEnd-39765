@@ -19,10 +19,10 @@ class CartManager {
     getCartById = async (cartId) => {
         try {
 
-            return await cartModel.findOne({ _id: cartId })
+            return await cartModel.findOne({ _id: cartId }).lean()
 
         } catch (err) {
-            return err
+            return err.message
         }
 
     }
@@ -91,7 +91,7 @@ class CartManager {
 
     }
 
-    updateProducsInCart = async (cid, products) => {
+    updateProductsInCart = async (cid, products) => {
         try {
             return await cartModel.findOneAndUpdate(
                 { _id: cid },
@@ -102,6 +102,7 @@ class CartManager {
             return err
         }
     }
+
     updateOneProduct = async (cid, products) => {
         
         await cartModel.updateOne(
