@@ -1,0 +1,37 @@
+<h1>PRODUCTS</h1>
+
+<div class="row mt-4">
+    {{#each valueReturned }}
+    <div class="card bg-secondary mb-3 mx-4 my-4" style="max-width: 20rem;">
+        <div class="card-header">code: {{this.code}}</div>
+        <div class="card-body">
+            <h4 class="card-title">{{this.title}}</h4>
+            <p class="card-text">
+                <li>
+                    id: {{this._id}}
+                </li>
+                <li>
+                    description: {{this.description}}
+                </li>
+                <li>
+                    price: ${{this.price}}
+                </li>
+                <li>
+                    category: {{this.category}}
+                </li>
+                <li>
+                    status: {{this.status}}
+                </li>
+                <li>
+                    stock: {{this.stock}}
+                </li>
+                <li>
+                    thumbnail: <img src="{{this.thumbnails}}" alt="" width="120" height="80">
+                </li>
+            </p>
+        </div>
+    </div>
+
+
+    {{/each}}
+</div>

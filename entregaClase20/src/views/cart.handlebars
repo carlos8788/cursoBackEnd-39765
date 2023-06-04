@@ -1,0 +1,17 @@
+<div>
+    <h1>Cart</h1>
+    {{#if result}}
+        <p>ID: {{result._id}}</p>
+        {{#each result.products }}
+        <li>
+            <h3>Title: {{this._id.title}}</h3>
+            <p>Description: {{this._id.description}}</p>
+            <p>Category: {{this._id.category}}</p>
+            <p>Quantity: {{this.quantity}}</p>
+        </li>
+        
+        {{/each}}
+    {{else}}
+        <h1>{{message}}</h1>
+    {{/if}}
+</div>

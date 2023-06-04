@@ -1,6 +1,32 @@
 const products = document.getElementsByClassName('product');
 const btnCartFinal = document.getElementById('cartFinal')
 const modalBody = document.getElementById('modalBody')
+const btnLogout = document.getElementById('logout')
+console.log('jsfront');
+btnLogout.addEventListener('click', () => {
+    Swal.fire({
+        title: 'Do you want to close the session?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#73be73',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!'
+    }).then(response => {
+        if (response.isConfirmed) {
+            fetch('http://localhost:8080/api/session/logout')
+                .then(window.location.replace('/login'))
+        }
+        else{
+            Swal.fire({
+                title: 'The session has not been closed',
+                icon: 'info'
+            })
+        }
+    }
+
+    )
+
+})
 
 const arrayProducts = Array.from(products);
 
@@ -27,7 +53,7 @@ const productsInCart = () => {
 
 arrayProducts.forEach(product => {
     product.addEventListener('click', () => {
-        
+
         const stock = Number(product.getAttribute('data-value'))
         Swal.fire({
             title: 'Add quantity',
@@ -38,7 +64,7 @@ arrayProducts.forEach(product => {
             showCancelButton: true,
             confirmButtonText: 'Confirm',
         }).then(response => {
-            
+
             if (stock > Number(response.value) && Number(response.value) > 0) {
                 Swal.fire({
                     title: 'Product added successfully',
@@ -57,14 +83,14 @@ arrayProducts.forEach(product => {
                 productsInCart()
 
             }
-            else if (Number(response.value) < 0){
+            else if (Number(response.value) < 0) {
                 Swal.fire({
                     title: 'Quantity must be greater than 0',
                     icon: 'warning'
                 })
             }
 
-            else{
+            else {
                 Swal.fire({
                     title: 'Quantity cannot be greater than stock',
                     icon: 'error',
@@ -98,7 +124,7 @@ btnCartFinal.addEventListener('click', () => {
                         }).then(
                             Swal.fire({
                                 title: 'Completed purchase!',
-                                icon:'success'
+                                icon: 'success'
                             }
                             )
                         ).then(

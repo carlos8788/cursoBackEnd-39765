@@ -1,0 +1,61 @@
+<form class="row g-3 mx-4" id="form">
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Title:
+        </label>
+        <input name="title" type="text" class="form-control" id="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Description:
+        </label>
+        <input name="description" type="text" class="form-control" id="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Price:
+        </label>
+        <input name="price" type="number" class="form-control" id="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Code:
+        </label>
+        <input name="code" type="text" class="form-control" id="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Stock:
+        </label>
+        <input name="stock" type="number" class="form-control" id="" required>
+    </div>
+    <div class="form-check mx-4">
+        <input name="status" class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" checked="">
+        <label class="form-check-label" for="flexCheckChecked">
+            Status
+        </label>
+    </div>
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Category:
+        </label>
+        <input name="category" type="text" class="form-control" id="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="" class="form-label">
+            Thumbnails:
+        </label>
+        <input name="thumbnails" type="file" class="form-control" id="">
+    </div>
+    <div class="col-12">
+        <button class="btn btn-primary" type="submit">Enviar producto</button>
+    </div>
+</form>
+
+<div class="row mt-4" id="products">
+
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
