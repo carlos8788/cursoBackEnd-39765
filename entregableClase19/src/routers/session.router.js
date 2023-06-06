@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
     const userDB = await um.validateEmailPassword(email, password)
 
 
-    if (!userDB) return res.send({ status: 'error', message: 'User not found, please try again' })
+    if (!userDB) return res.send({ status: 'error', message: 'User not found, please try again or password not valid' })
 
     req.session.user = {
         first_name: userDB.first_name,
