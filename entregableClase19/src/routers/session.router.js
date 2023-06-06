@@ -7,14 +7,14 @@ const router = Router()
 
 
 router.post('/login', async (req, res) => {
-// router.post('/login', async (req, res) => {
+
     const { email, password } = req.body
     
-    if (email === 'luis@admin.com' && password === 'admin') {
+    if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
         req.session.user = {
             first_name: 'admin',
-            last_name: '',
-            email: '',
+            last_name: 'coder',
+            email: 'adminCoder@coder.com',
             role: 'admin'
         }
        return res.status(200).send({status:'success', message:'User admin logged'})
