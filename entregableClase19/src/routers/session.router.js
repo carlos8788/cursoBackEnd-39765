@@ -29,6 +29,7 @@ router.post('/login', async (req, res) => {
         first_name: userDB.first_name,
         last_name: userDB.last_name,
         email: userDB.email,
+        role: userDB.role
     }
 
     return res.status(200).send({ status: 'success', message: 'User log' })

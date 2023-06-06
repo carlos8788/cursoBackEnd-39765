@@ -34,7 +34,7 @@ routerV.get('/chat', async (req, res) => {
 
 routerV.get('/products',async (req, res) => {
     try {
-        console.log('orders');
+        
         if(!req.session.user) return res.status(401).redirect("/login");
 
         let { limit, page, sort, category } = req.query
