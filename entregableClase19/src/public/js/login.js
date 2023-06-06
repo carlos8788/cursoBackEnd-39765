@@ -7,9 +7,9 @@ registerBtn.addEventListener('click', () => {
 
 loginForm.addEventListener('submit', event =>{
     event.preventDefault();
-    // console.log(event.target);
+    
     const user = Object.fromEntries(new FormData(event.target))
-    // console.log(user);
+    
     fetch('/api/session/login', {
         method: 'POST',
         body: JSON.stringify(user),
@@ -19,7 +19,7 @@ loginForm.addEventListener('submit', event =>{
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        
         if(data.status === 'error'){
             alert(data.message)
         }
