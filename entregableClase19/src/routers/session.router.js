@@ -1,70 +1,63 @@
 import { Router } from 'express'
 import UserManager from '../DAO/mongo/managers/users.js'
+import { privacy } from '../middleware/auth.js'
 
 const um = new UserManager()
 const router = Router()
 
-router.get('/exist', (req, res) => {
-
-    if (req.session.user) {
-
-        res.send({ message: 'si' })
-
-    }
-    res.send({ message: 'no' })
-})
 
 router.post('/login', async (req, res) => {
+// router.post('/login', async (req, res) => {
     const { email, password } = req.body
-    // validar email y password
-    console.log(req.session);
-    // vamos a tener una función para validar el password
-    const userDB = await um.validateEmailPassword(email, password)
-    console.log(userDB);
+    
+    if (email === 'luis@admin.com' && password === 'admin') {
+        req.session.user = {
+            first_name: 'admin',
+            last_name: '',
+            email: '',
+            role: 'admin'
+        }
+       return res.status(200).send({status:'success', message:'User admin logged'})
+    }
 
-    if (!userDB) return res.send({ status: 'error', message: 'No existe ese usuario, revisar' })
-    console.log(req.session);
+    const userDB = await um.validateEmailPassword(email, password)
+
+
+    if (!userDB) return res.send({ status: 'error', message: 'User not found, please try again' })
+
     req.session.user = {
         first_name: userDB.first_name,
         last_name: userDB.last_name,
         email: userDB.email,
-        role: 'admin'
     }
 
-    // res.send({
-    //     status: 'success',
-    //     message: 'login success',
-    //     session: req.session.user
-    // })
-    res.redirect('/products')
+    return res.status(200).send({ status: 'success', message: 'User log' })
 })
 
 
 router.post('/register', async (req, res) => {
     try {
-        const { username, first_name, last_name, email, age, password } = req.body
+        const { first_name, last_name, email, age, password } = req.body
 
         const existUser = await um.getUsersByEmail(email)
 
-        if (existUser) return res.send({ status: 'error', message: 'el email ya está registrado' })
+        if (existUser) return res.send({ status: 'error', message: 'The email is not available' })
 
         const newUser = {
-            username,
             first_name,
             last_name,
             email,
             age,
             password  /// encriptar
         }
-        let resultUser = await um.createUser(newUser)
+        const checkUser = Object.values(newUser).every(property => property)
+        if (!checkUser) return res.send({ status: 'error', message: 'User Incomplete' })
 
-
-
+        await um.createUser(newUser)
 
         res.status(200).send({
             status: 'success',
-            message: 'Usuario creado correctamente',
-            resultUser
+            message: 'User created successfully',
         })
     } catch (error) {
         console.log(error)
@@ -73,42 +66,24 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/logout', async (req, res) => {
-    console.log(req.session, 'has logged')
+
     try {
-        
+
         req.session.destroy(err => {
             if (err) {
                 console.log(err);
-                return res.send({ status: 'error', error: err })
+                // return res.send({ status: 'error', error: err })
             }
-    
-            res.clearCookie('connect.sid')
-    
-    
-            res.redirect('/login')
         })
+        // res.clearCookie('connect.sid')
+        res.sendStatus(200)
     } catch (error) {
-        console.log(error);
-    }
-    return res.redirect('/login')
-})
-
-
-
-// sesiones 
-router.get('/counter', (req, res) => {
-    if (req.session.counter) {
-        req.session.counter++
-        res.send(`se ha visitado el sitio ${req.session.counter} veces.`)
-    } else {
-        req.session.counter = 1
-        res.send('Bienvenido')
+        console.log(error, 'logout error');
     }
 })
 
-// router.get('/privada', auth,(req,res) => {
 
-//     res.send('Todo lo que esta acá solo lo puede ver un admin loagueado')
-// })
+
+
 
 export default router

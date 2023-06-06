@@ -90,7 +90,7 @@ const productsByServer = ()=>{
 
 formulario.addEventListener('submit', (event) => {
     event.preventDefault()
-    console.log(event.target);
+    
     const product = Object.fromEntries(new FormData(event.target))
     product['status'] = new Boolean(product['status'])
     product['thumbnails'] = ['empty']

@@ -2,7 +2,7 @@ const products = document.getElementsByClassName('product');
 const btnCartFinal = document.getElementById('cartFinal')
 const modalBody = document.getElementById('modalBody')
 const btnLogout = document.getElementById('logout')
-console.log('jsfront');
+;
 btnLogout.addEventListener('click', () => {
     Swal.fire({
         title: 'Do you want to close the session?',
@@ -14,6 +14,7 @@ btnLogout.addEventListener('click', () => {
     }).then(response => {
         if (response.isConfirmed) {
             fetch('http://localhost:8080/api/session/logout')
+                .then(window.location.replace('/login'))
         }
         else{
             Swal.fire({

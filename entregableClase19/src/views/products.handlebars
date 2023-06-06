@@ -1,9 +1,10 @@
-<div class="container m-auto">
+<div class="container m-auto p-4">
     <nav class="d-flex justify-content-between">
-        <div class="title">
+        <div class="title d-flex ">
             <h1>Products</h1>
-
+            
         </div>
+        <div class="m-auto"><h2>Bienvenido: {{user.first_name}}</h2></div>
         <div class="cart d-flex p-0 mt-2 gap-4 ">
             
             <img src="./img/cart.svg" alt="cart" class="img-fluid">
@@ -36,6 +37,9 @@
             <button type="button" class="btn btn-warning" id="logout">
                 Logout
             </button>
+            <a href="/profile" class="btn btn-secondary text-primary">
+                Profile
+            </a>
         </div>
     </nav>
 

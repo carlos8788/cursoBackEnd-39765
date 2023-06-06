@@ -31,7 +31,7 @@ connectToDB()
 
 app.use(session({
     store: mongoStore.create({
-        ttl:100000*60,
+        ttl:3600,
         mongoUrl:'mongodb+srv://carlos8788:eN8xNDCYsEwjkaDL@e-commerce.nyingmg.mongodb.net/ecommerce?retryWrites=true&w=majority',
         mongoOptions: {
             useNewUrlParser: true,

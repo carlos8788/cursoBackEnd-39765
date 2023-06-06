@@ -1,15 +1,13 @@
 import { Router } from "express";
 import ProductManager from "../DAO/mongo/managers/products.js";
 import CartManager from "../DAO/mongo/managers/carts.js";
+import { privacy } from "../middleware/auth.js";
 const routerV = Router();
 const pm = new ProductManager()
 const CM = new CartManager()
 
 let cart = []
 
-routerV.get('/test', (req, res) => {
-    res.render('test')
-})
 
 routerV.get('/', async (req, res) => {
     try {
@@ -34,9 +32,10 @@ routerV.get('/chat', async (req, res) => {
     res.render('chat');
 })
 
-routerV.get('/products', async (req, res) => {
+routerV.get('/products',async (req, res) => {
     try {
-        if(!req.session.user) return res.redirect('/login');
+        console.log('orders');
+        if(!req.session.user) return res.status(401).redirect("/login");
 
         let { limit, page, sort, category } = req.query
         
@@ -94,7 +93,21 @@ routerV.get('/products', async (req, res) => {
 
         if (page > totalPages) return res.render('notFound', { pageNotFound: '/products' })
 
-        return res.render('products', { products: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink, page, cart: cart.length });
+        return res.render(
+            'products', 
+                { products: docs, 
+                    totalPages, 
+                    prevPage, 
+                    nextPage, 
+                    hasNextPage, 
+                    hasPrevPage, 
+                    prevLink, 
+                    nextLink, 
+                    page, 
+                    cart: cart.length, 
+                    user:req.session.user 
+                }
+            );
     } catch (error) {
         console.log(error);
     }
@@ -151,16 +164,23 @@ routerV.get('/carts/:cid', async (req, res) => {
 
 })
 
-// routerV.get('/register', (req, res) =>{
-//     res.render('register')
-// })
 
-routerV.get('/login', (req, res) => {
+routerV.get('/login', privacy('NO_AUTHENTICATED'), (req, res) => {
     res.render('login')
 })
 
-routerV.get('/register', (req, res) => {
+routerV.get('/register', privacy('NO_AUTHENTICATED'), (req, res) => {
     res.render('registerForm')
+})
+
+routerV.get('/profile', privacy('PRIVATE'), (req, res) => {
+    try {
+        delete req.session.user.password
+        res.render('profile', {user: req.session.user})
+
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 

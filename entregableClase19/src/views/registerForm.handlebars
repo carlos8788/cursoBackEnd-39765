@@ -1,9 +1,11 @@
 <h1>Register</h1>
-<form class="container d-flex flex-column col-4 gap-4" action="/api/session/register" method="POST">
-   <input type="text" name="first_name" placeholder="ingrese nombre" > 
-   <input type="text" name="last_name" placeholder="ingrese apellido" > 
-   <input type="text" name="email" placeholder="ingrese email" > 
-   <input type="number" name="age" placeholder="ingrese edad" > 
-   <input type="password" name="password" placeholder="ingrese password" > 
-   <button>Enviar</button>
+<form class="container d-flex flex-column col-4 gap-4" id="registerForm">
+   <input type="text" name="first_name" placeholder="First name" > 
+   <input type="text" name="last_name" placeholder="Last name" > 
+   <input type="text" name="email" placeholder="Email" > 
+   <input type="number" name="age" placeholder="Age" > 
+   <input type="password" name="password" placeholder="Password" > 
+   <input type="submit" class="btn btn-primary"></input >
 </form>
+
+<script src="js/register.js"></script>
