@@ -1,0 +1,5 @@
+App ID: 345287
+
+Client ID: Iv1.28f5606a66153af8
+
+Client secret: 17204f4f44381bdde9d6a680e3a10636a841c9d7

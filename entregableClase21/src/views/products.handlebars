@@ -1,0 +1,99 @@
+<div class="container m-auto p-4">
+    <nav class="d-flex justify-content-between">
+        <div class="title d-flex ">
+            <h1>Products</h1>
+            
+        </div>
+        <div class="m-auto"><h2>Bienvenido: {{user.name}} ({{user.role}})</h2></div>
+        <div class="cart d-flex p-0 mt-2 gap-4 ">
+            
+            <img src="./img/cart.svg" alt="cart" class="img-fluid">
+
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCart">
+                View Cart
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cart</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modalBody">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-info" id="cartFinal">
+                Buy Cart
+            </button>
+            <button type="button" class="btn btn-warning" id="logout">
+                Logout
+            </button>
+            <a href="/profile" class="btn btn-secondary text-primary">
+                Profile
+            </a>
+        </div>
+    </nav>
+
+    <div class="row mt-4">
+        {{#each products }}
+        <div class="card bg-secondary mb-3 mx-4 my-4" style="max-width: 20rem;">
+            <div class="card-header">code: {{this.code}}</div>
+            <div class="card-body">
+                <h4 class="card-title">{{this.title}}</h4>
+                <p class="card-text">
+                    <li>
+                        description: {{this.description}}
+                    </li>
+                    <li>
+                        price: ${{this.price}}
+                    </li>
+                    <li>
+                        category: {{this.category}}
+                    </li>
+                    <li>
+                        status: {{this.status}}
+                    </li>
+                    <li>
+                        stock: {{this.stock}}
+                    </li>
+                    <li>
+                        thumbnail: <img src="{{this.thumbnails}}" alt="" width="120" height="80">
+                    </li>
+                </p>
+                <a class="btn btn-success text-lg product" id="{{this._id}}" data-value="{{this.stock}}">Agregar a
+                    carrito</a>
+            </div>
+        </div>
+
+
+        {{/each}}
+    </div>
+
+    <div class="container d-flex justify-content-center align-items-center gap-4 p-4">
+
+
+        {{#if hasPrevPage}}
+        <a class="btn btn-primary px-5" href="{{prevLink}}">prev</a>
+
+        {{/if}}
+
+        {{#if hasNextPage}}
+
+        <a class="btn btn-primary px-5" href="{{nextLink}}">next</a>
+
+        <h3>Page: {{page}}/{{totalPages}}</h3>
+        {{/if}}
+    </div>
+
+</div>
+
+<script src="js/productsFront.js"></script>
