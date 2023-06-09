@@ -17,6 +17,8 @@ import routerS from './routers/session.router.js';
 import __dirname from './utils.js';
 import connectToDB from './config/configServer.js';
 
+
+
 const app = express();
 const PORT = process.env.PORT || 8080
 
@@ -60,7 +62,8 @@ const httpServer = app.listen(PORT, () => {
         console.log(`Listening to the port ${PORT}\nAcceder a:`);
         console.log(`\t1). http://localhost:${PORT}/products`)
         console.log(`\t2). http://localhost:${PORT}/carts/646df484d31949d4081c72eb`);
-    }
+
+    }   
     catch (err) {
         console.log(err);
     }
