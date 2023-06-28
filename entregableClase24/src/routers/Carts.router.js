@@ -1,18 +1,30 @@
-import { cartsService, productsService } from '../DAO/mongo/managers/index.js';
-import { passportCall } from '../utils.js';
+import { cartsService, productsService, usersService } from '../DAO/mongo/managers/index.js';
+import { passportCall } from '../middleware/auth.js';
 import BaseRouter from './Router.js';
 
 
 export default class CartsRouter extends BaseRouter {
     init() {
         // ENDPOINT Auxiliar para corroborar todos los carritos y hacer diferentes pruebas
-        this.get('/',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.get('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             const result = await cartsService.getCarts()
             return res.status(200).send(result)
         })
 
+        this.get('/usercarts', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
+            console.log('viene?');
+            try {
+
+                const carts = await cartsService.getCartsByUser(req.user.id)
+                console.log(carts);
+                return res.sendSuccess(carts)
+            } catch (error) {
+                console.log(error);
+                return res.sendInternalError(error)
+            }
+        })
         // ENDPOINT Que devuelve un carrito
-        this.get('/:cid',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.get('/:cid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
                 const { cid } = req.params
 
@@ -24,42 +36,46 @@ export default class CartsRouter extends BaseRouter {
 
                 // Resultado
                 return res.status(200).send(result);
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                return res.sendInternalError(error)
             }
 
         })
 
         // ENDPOINT para crear un carrito con o sin productos
-        this.post('/',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.post('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
-                const { products } = req.body
+                const { products, userId } = req.body
+
+                const user = await usersService.getUsersById(userId)
 
 
-                if (!Array.isArray(products)) return res.status(400).send({ status: 'error', message: 'TypeError' });
+                if (!Array.isArray(products)) return res.sendNotFound({ status: 'error', message: 'TypeError' });
 
                 // Corroborar si todos los ID de los productos existen
                 const results = await Promise.all(products.map(async (product) => {
                     const checkId = await productsService.getProductById(product._id);
-                    if (checkId === null || typeof (checkId) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${product._id} not found` })
+                    if (checkId === null || typeof (checkId) === 'string') return `The ID product: ${product._id} not found`
                 }))
 
                 const check = results.find(value => value !== undefined)
-                if (check) return res.status(404).send(check)
+                if (check) return res.sendNotFound(check)
 
-                const cart = await cartsService.addCart(products)
-
-
-                res.status(200).send(cart);
+                const cart = await cartsService.addCart({ userId, products })
+                console.log(cart);
+                const addCartInUser = await usersService.addCart({ userId: cart.user, cartId: cart._id })
+                console.log(addCartInUser);
+                return res.sendSuccess(cart);
 
             }
-            catch (err) {
-                console.log(err);
+            catch (error) {
+                return res.sendInternalError(error.message)
+
             }
         })
 
         // ENDPOINT para colocar la cantidad de un producto
-        this.post('/:cid/product/:pid',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.post('/:cid/product/:pid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
 
                 let { cid, pid } = req.params
@@ -83,13 +99,13 @@ export default class CartsRouter extends BaseRouter {
                 return res.status(200).send({ message: `added product ID: ${pid}, in cart ID: ${cid}`, cart: result });
 
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error)
             }
         })
 
 
         // ENDPOINT que actualiza la lista de productos 
-        this.put('/:cid',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.put('/:cid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
                 const { cid } = req.params
                 const { products } = req.body
@@ -111,12 +127,12 @@ export default class CartsRouter extends BaseRouter {
                 const cart = await cartsService.updateProductsInCart(cid, products)
                 return res.status(200).send({ status: 'success', payload: cart })
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error)
             }
 
         })
 
-        this.put('/:cid/product/:pid',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.put('/:cid/product/:pid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
 
                 let { cid, pid } = req.params
@@ -148,13 +164,13 @@ export default class CartsRouter extends BaseRouter {
                 res.status(200).send({ status: 'success', cart })
 
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error)
             }
         })
 
 
         // ENDPOINT que elimina un producto dado
-        this.delete('/:cid/product/:pid',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.delete('/:cid/product/:pid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
 
                 const { cid, pid } = req.params
@@ -176,12 +192,12 @@ export default class CartsRouter extends BaseRouter {
 
                 return res.status(200).send({ status: 'success', message: `deleted product ID: ${pid}`, cart })
             } catch (error) {
-                console.log(err);
+                return res.sendInternalError(error)
             }
         })
 
         // ENDPOINT que elimina todos los productos de un carrito
-        this.delete('/:cid',['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.delete('/:cid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
             try {
                 const { cid } = req.params
                 const checkIdCart = await cartsService.getCartById(cid)
@@ -196,9 +212,10 @@ export default class CartsRouter extends BaseRouter {
                 return res.status(200).send({ status: 'success', message: `the cart whit ID: ${cid} was emptied correctly `, cart });
 
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error)
             }
         })
+
     }
 };
 

@@ -1,9 +1,13 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
-const PRIVATE_KEY = 'JpvL8yCjZJjLCa5baNXtuk6DGrxxTZrRx9XBhUErl9U'
+// const PRIVATE_KEY = process.env.PRIVATE_KEY
+const PRIVATE_KEY = "JpvL8yCjZJjLCa5baNXtuk6DGrxxTZrRx9XBhUErl9U"
 
 export const generateToken = (user) => {
+    
     const token = jwt.sign(user, PRIVATE_KEY, {expiresIn:'24h'});
     return token;
 }
@@ -18,7 +22,7 @@ export const authToken = (req, res, next) => {
         if(error) return res.status(403).send({error: 'Not authorized'});
 
         req.user = credentials.user;
-        console.log('estoy en next');
+        
         next();
     });
 }

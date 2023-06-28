@@ -1,10 +1,5 @@
+import { passportCall } from '../middleware/auth.js';
 
-
-
-import { privacy } from "../middleware/auth.js";
-
-import { passportCall } from "../utils.js";
-import { authRoles } from '../middleware/auth.js'
 import BaseRouter from "./Router.js";
 import { productsService, cartsService } from "../DAO/mongo/managers/index.js";
 
@@ -14,12 +9,12 @@ let cart = []
 export default class ViewsRouter extends BaseRouter {
 
     init() {
-        this.get('/', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+        this.get('/', ['PUBLIC'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
             try {
-                // Productos 
+                
                 const products = await productsService.getProductsView();
 
-                res.render("index", { valueReturned: products })
+                res.render("index", { valueReturned: products, isLoggedIn: req.user });
             }
             catch (err) {
                 console.log(err);
@@ -35,13 +30,16 @@ export default class ViewsRouter extends BaseRouter {
         this.get('/chat', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
             res.render('chat');
         })
+        this.get('/carts', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
+            res.render('userCarts');
+        })
 
         this.get('/viewGitHub', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
             const user = req.user
-            res.render('viewGitHub', { user });
+            res.render('viewGitHub', { user, isLoggedIn: req.user });
         })
 
-        this.get('/products', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), authRoles('user'), async (req, res) => {
+        this.get('/products', ['LOGIN'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
             try {
 
                 if (!req.user) return res.status(401).redirect("/login");
@@ -90,9 +88,9 @@ export default class ViewsRouter extends BaseRouter {
                     const { prevLink, nextLink } = links(products);
                     const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs, page } = products
 
-                    if (page > totalPages) return res.render('notFound', { pageNotFound: '/products' })
+                    if (page > totalPages) return res.render('notFound', { pageNotFound: '/products' , isLoggedIn: req.user})
 
-                    return res.render('products', { products: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink, page, cart: cart.length });
+                    return res.render('products', { products: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink, page, cart: cart.length, isLoggedIn: req.user });
                 }
 
                 const products = await productsService.getProducts({}, options);
@@ -100,7 +98,7 @@ export default class ViewsRouter extends BaseRouter {
                 const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
                 const { prevLink, nextLink } = links(products);
 
-                if (page > totalPages) return res.render('notFound', { pageNotFound: '/products' })
+                if (page > totalPages) return res.render('notFound', { pageNotFound: '/products', isLoggedIn: req.user})
                 console.log(req.user);
                 return res.render(
                     'products',
@@ -115,7 +113,8 @@ export default class ViewsRouter extends BaseRouter {
                         nextLink,
                         page,
                         cart: cart.length,
-                        user: req.user
+                        user: req.user,
+                        isLoggedIn: req.user
                     }
                 );
             } catch (error) {
@@ -135,7 +134,8 @@ export default class ViewsRouter extends BaseRouter {
 
         this.post('/products', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
             try {
-                const { product, finishBuy } = req.body
+                const userId = req.user.id;
+                const { product, finishBuy} = req.body;
 
                 if (product) {
                     if (product.quantity > 0) {
@@ -143,17 +143,20 @@ export default class ViewsRouter extends BaseRouter {
                         (findId !== -1) ? cart[findId].quantity += product.quantity : cart.push(product)
                     }
                     else {
-                        return res.render('products', { message: 'Quantity must be greater than 0' })
+                        return res.render('products', { message: 'Quantity must be greater than 0',  })
                     }
                 }
                 if (finishBuy) {
-                    console.log(cart);
-                    const createdCart = await cartsService.addCart(cart)
-                    console.log(createdCart);
+                    const purchaseCart = {
+                        userId,
+                        products: cart
+                    }
+                    const createdCart = await cartsService.addCart(purchaseCart)
+                    
                     cart.splice(0, cart.length)
                 }
 
-                return res.render('products')
+                return res.render('products', {isLoggedIn: req.user})
             } catch (error) {
                 console.log(error);
             }
@@ -167,7 +170,7 @@ export default class ViewsRouter extends BaseRouter {
 
                 if (result === null || typeof (result) === 'string') return res.render('cart', { result: false, message: 'ID not found' });
 
-                return res.render('cart', { result });
+                return res.render('cart', { result , isLoggedIn: req.user});
 
 
             } catch (err) {
@@ -176,24 +179,38 @@ export default class ViewsRouter extends BaseRouter {
 
         })
 
-        this.get('/login', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), (req, res) => {
-            res.render('login')
+        this.get('/login', ['PUBLIC'], passportCall('login', {strategyType: 'login'}), (req, res) => {
+            try {
+                if(req.user) return res.redirect('/products')   
+                return res.render('login', {isLoggedIn: req.user})
+                
+            } catch (error) {
+                console.log(error);
+            }
         })
 
-        this.get('/register', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), privacy('NO_AUTHENTICATED'), (req, res) => {
-            res.render('registerForm')
+        this.get('/register', ['PUBLIC'], passportCall('register', {strategyType: 'login'}), (req, res) => {
+            try {
+                if(req.user) return res.redirect('/products')
+                return res.render('registerForm', {isLoggedIn: req.user})
+                
+            } catch (error) {
+                return res.sendInternalError(error)
+            }
         })
 
-        this.get('/profile', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), privacy('PRIVATE'), (req, res) => {
+        this.get('/profile', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), (req, res) => {
             try {
                 delete req.user.password
                 console.log(req.user, 'profile');
-                res.render('profile', { user: req.user })
+                res.render('profile', { user: req.user , isLoggedIn: req.user})
 
             } catch (error) {
                 console.log(error);
             }
         })
+
+        
 
     }
 

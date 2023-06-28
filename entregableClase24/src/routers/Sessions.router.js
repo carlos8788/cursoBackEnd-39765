@@ -1,37 +1,37 @@
 import BaseRouter from "./Router.js";
-import { passportCall } from "../utils.js";
+import { passportCall } from '../middleware/auth.js';
 import { generateToken } from '../utils.jwt.js'
 
 export default class SessionsRouter extends BaseRouter {
     init() {
-        this.get('/github', ['github'], passportCall('github', { strategyType: "github" }), (req, res) => { });
+        this.get('/github', ['GITHUB'], passportCall('github', { strategyType: "github" }), (req, res) => { });
 
-        this.get('/githubcallback', ['github'], passportCall('github', { strategyType: "github" }), (req, res) => {
+        this.get('/githubcallback', ['GITHUB'], passportCall('github', { strategyType: "github" }), (req, res) => {
             try {
-                // const user = req.user;
+
                 const user = {
                     name: `${req.user.first_name} ${req.user.last_name}`,
                     role: req.user.role,
                     id: req.user.id,
                     email: req.user.email
                 }
-                console.log(user);
+
                 const access_token = generateToken(user)
                 console.log('entro al return');
                 return res.cookie('authToken', access_token, {
                     maxAge: 1000 * 60 * 60 * 24,
                     httpOnly: true,
-
+                    
                 }).sendSuccess('Login successful')
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error);
             }
 
         })
 
         this.post('/login', ['NO_AUTH'], passportCall('login', { strategyType: "locals" }), async (req, res) => {
             try {
-                console.log('login');
+
                 const user = {
                     name: `${req.user.first_name} ${req.user.last_name}`,
                     role: req.user.role,
@@ -43,10 +43,10 @@ export default class SessionsRouter extends BaseRouter {
                 return res.cookie('authToken', access_token, {
                     maxAge: 1000 * 60 * 60 * 24,
                     httpOnly: true,
-
+                    
                 }).sendSuccess('Login successful')
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error);
             }
 
         })
@@ -55,22 +55,31 @@ export default class SessionsRouter extends BaseRouter {
 
         this.post('/register', ['NO_AUTH'], passportCall('register', { strategyType: "locals" }), async (req, res) => {
             try {
-                res.send({ status: 'success', message: 'User registered successfully' })
+                res.sendSuccess('User registered successfully')
             } catch (error) {
-                console.log(error);
+                return res.sendInternalError(error);
             }
         })
 
 
-
-        this.get('/logout', ['PUBLIC'], async (req, res) => {
+        this.get('/logout', ['AUTH'], (req, res) => {
 
             try {
-                // req.logout();
-                return res.clearCookie('authToken').send('logged out successfully')
+                return res.clearCookie('authToken').sendSuccess('logged out successfully')
             } catch (error) {
-                console.log(error, 'logout error acá');
+                return res.sendInternalError(error);
             }
         })
+
+        this.get('/current', ['AUTH'], passportCall('jwt', { strategyType: "locals" }), (req, res) => {
+            try {
+                return res.sendSuccess(req.user);
+
+            } catch (error) {
+                return res.sendInternalError(error);
+            }
+        });
+
     }
+
 }

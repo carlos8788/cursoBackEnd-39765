@@ -7,8 +7,9 @@ registerBtn.addEventListener('click', () => {
 
 loginForm.addEventListener('submit', event => {
     event.preventDefault();
-
+    console.log(event.target);
     const user = Object.fromEntries(new FormData(event.target))
+    console.log(user);
     try {
         fetch('/api/session/login', {
             method: 'POST',
@@ -17,27 +18,32 @@ loginForm.addEventListener('submit', event => {
                 'Content-Type': 'application/json',
             },
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.status === 'error') {
-                    alert(data.message)
-                // }
-                // else {
-                //     localStorage.setItem('authToken', data.access_token)
-                //     alert(data.message)
-                //     const jwt = localStorage.getItem('authToken')
-                //     fetch('/products',{
-                //         headers:{
-                //             authorization: 'Bearer ' + jwt
-                //         }
-                //     }).then(
-                        
-                //         window.location.replace('/products')
-                //     )
+            .then(response => {
+                if(response.ok){
+                    window.location.replace('/products')
                 }
+            })
+            //     if)
+            // .then(data => console.log(data))
+                // if (data.status === 'error') {
+                //     alert(data.message)
+                // // }
+                // // else {
+                // //     localStorage.setItem('authToken', data.access_token)
+                // //     alert(data.message)
+                // //     const jwt = localStorage.getItem('authToken')
+                // //     fetch('/products',{
+                // //         headers:{
+                // //             authorization: 'Bearer ' + jwt
+                // //         }
+                // //     }).then(
+                        
+                // //         window.location.replace('/products')
+                // //     )
+                // }
 
-            }).catch(
+            // })
+            .catch(
                 error => console.log(error)
                 );
 

@@ -1,37 +1,56 @@
-<h1>PRODUCTS</h1>
+<style>
+    .text__register {
+        color: rgb(127, 127, 255);
+    }
 
-<div class="row mt-4">
-    {{#each valueReturned }}
-    <div class="card bg-secondary mb-3 mx-4 my-4" style="max-width: 20rem;">
-        <div class="card-header">code: {{this.code}}</div>
-        <div class="card-body">
-            <h4 class="card-title">{{this.title}}</h4>
-            <p class="card-text">
-                <li>
-                    id: {{this._id}}
-                </li>
-                <li>
-                    description: {{this.description}}
-                </li>
-                <li>
-                    price: ${{this.price}}
-                </li>
-                <li>
-                    category: {{this.category}}
-                </li>
-                <li>
-                    status: {{this.status}}
-                </li>
-                <li>
-                    stock: {{this.stock}}
-                </li>
-                <li>
-                    thumbnail: <img src="{{this.thumbnails}}" alt="" width="120" height="80">
-                </li>
-            </p>
+    .text__register:hover {
+        transition-duration: 0.3s;
+        color: white;
+    }
+</style>
+
+<div class="vh-100" style="background-image: url('img/background.jpg'); background-size: cover;">
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+        <div class="row align-items-center g-lg-5 py-5 m-5 " style="background-color: rgba(36, 33, 33, 0.5);">
+            <div class="col-lg-7 text-center text-lg-start">
+                <h1 class="display-5 fw-bold lh-1 mb-3 text-center text-info py-2"
+                    style="background-color: rgba(224, 217, 217, 0.5);">Blue bean supermarket</h1>
+                <p class="col-lg-10 fs-4 text-white">Discover the joy of shopping at world's best supermarket - where
+                    quality meets affordability,
+                    where freshness knows no boundaries, where every customer is valued. your happiness is our
+                    satisfaction. come,
+                    experience the difference in every moment, every day!</p>
+            </div>
+            {{#if isLoggedIn}}
+            <h1 class="text-danger col-lg-3 text-center bg-dark m-auto py-2">You are already logged in</h1>
+            {{else}}
+            <div class="col-md-10 mx-auto col-lg-5">
+                <form class="p-4 p-md-5 border rounded-3 bg-info" id="loginForm">
+                    <div class="form-floating mb-3">
+                        <input type="email" name="email" class="form-control" id="floatingInput"
+                            placeholder="name@example.com">
+                        <label for="floatingInput">Email address</label>
+                    </div>
+                    <div class="form-floating mb-5">
+                        <input type="password" name="password" class="form-control" id="floatingPassword"
+                            placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+                    <a href="" class="w-100 btn btn-dark btn-primary my-3">Login whit GitHub <span class="mx-2"><i
+                                class="fab fa-github"></i> </span> </a>
+                    <hr class="my-2">
+                    <a class="text__register text-decoration-none " id="register" href="/register">If you don't
+                        have a user, register</a>
+                </form>
+
+            </div>
+            {{/if}}
+
         </div>
     </div>
 
-
-    {{/each}}
 </div>
+
+<script src="js/login.js"></script>

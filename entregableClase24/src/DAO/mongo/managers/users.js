@@ -12,7 +12,7 @@ export default class UserManager {
     }
     getUsersById = (id) => {
         try {
-            return userModel.findById({_id: id})
+            return userModel.findById({ _id: id })
         } catch (error) {
             return error
         }
@@ -20,15 +20,15 @@ export default class UserManager {
 
     getUsersByEmail = (email) => {
         try {
-            return userModel.findOne({email: email})
+            return userModel.findOne({ email: email })
         } catch (error) {
             return error
         }
     }
 
-    validateUser= (email) => {
+    validateUser = (email) => {
         try {
-            return userModel.findOne({email:email}, {email:1, first_name:1, last_name:1, password:1, role:1})
+            return userModel.findOne({ email: email }, { email: 1, first_name: 1, last_name: 1, password: 1, role: 1 })
         } catch (error) {
             return error
         }
@@ -37,6 +37,17 @@ export default class UserManager {
         try {
 
             return userModel.create(user);
+        } catch (error) {
+            return error
+        }
+    }
+    addCart = async (cart) => {
+        try {
+            const { userId, cartId } = cart;
+            const user = await this.getUsersById(userId);
+            user.carts.push(cartId);
+            await user.save();
+            return user;
         } catch (error) {
             return error
         }

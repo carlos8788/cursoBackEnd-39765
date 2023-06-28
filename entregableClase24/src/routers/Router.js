@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { passportCall } from '../utils.js';
+import { passportCall } from '../middleware/auth.js';
 
 export default class BaseRouter {
     constructor() {
@@ -29,25 +29,24 @@ export default class BaseRouter {
         res.sendSuccessWithPayload = payload => res.send({ status: 'success', payload });
         res.sendInternalError = error => res.status(500).send({ status: 'error', error });
         res.sendUnauthorized = error => res.status(400).send({ status: 'error', error });
+        res.sendNotFound = error => res.status(404).send({ status: 'error', error });
         next();
     };
 
     handlePolicies = policies => {
-        console.log(Array.isArray(policies, 'policies'));
+            
         return (req, res, next) => {
             if (policies[0] === "PUBLIC") return next();
             const user = req.user;
-            if (policies[0] === "github") {
-                console.log('olicies github');
-                return next();
-            }
-
+            if (policies[0] === "LOGIN" && !user) return res.redirect('/login')
+            if (policies[0] === "LOGIN" && user) return next();
+            if (policies[0] === "GITHUB") return next();
             if (policies[0] === "AUTH" && user) return next();
+            if (policies[0] === "AUTH" && !user) return res.status(401).send({ status: "error", error: "Unauthorized Router doesn't exist the user" });
             if (policies[0] === "NO_AUTH" && user) return res.status(401).send({ status: "error", error: "Unauthorized Router" });
             if (policies[0] === "NO_AUTH" && !user) return next();
-
             if (!user) return res.status(401).send({ status: "error", error: req.error });
-            if (!policies.includes(user.role.toUpperCase())) return res.status(403).send({ status: "error", error: "Forbidden" });
+            if (!policies.includes(user.role.toUpperCase())) return res.status(403).send({ status: "error", error: "Forbidden" });            
             next();
         }
     }
@@ -57,6 +56,7 @@ export default class BaseRouter {
             try {
                 await callback.apply(this, params);
             } catch (error) {
+                console.log(error);
                 params[1].status(500).send(error);
             }
         })

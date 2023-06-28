@@ -23,9 +23,11 @@ class CartManager {
 
     }
 
-    addCart = async (products) => {
+    addCart = async (cart) => {
+        
         try {
-            const cartCreated = await cartModel.create({})
+            const { userId, products } = cart
+            const cartCreated = await cartModel.create({user: userId})
             products.forEach(product => cartCreated.products.push(product));
             cartCreated.save()
             return cartCreated
@@ -107,6 +109,13 @@ class CartManager {
         return await cartModel.findOne({ _id: cid })
     }
 
+    getCartsByUser = async (userId) => {
+        try {
+            return await cartModel.find({user: userId})
+        } catch (error) {
+            return error
+        }
+    }
 
 
 };

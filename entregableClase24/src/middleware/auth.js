@@ -1,24 +1,40 @@
-export const privacy = (privacyType) => {
-  return (req, res, next) => {
-    const user = req.session.user;
+import passport from "passport";
 
-    switch (privacyType) {
-      case "PRIVATE":
+export const passportCall = (strategy,options={}) =>{
+    
+    return async(req,res,next) =>{
+        
+        passport.authenticate(strategy,(error,user,info)=>{
+            if(error) return next(error);
+            if(!options.strategyType){
+                console.log(`Route ${req.url} doesn't have defined a strategyType`);
+                return res.sendInternalError(`Route ${req.url} doesn't have defined a strategyType`);
+            }
 
-        if (user) next();
-        else res.redirect('/login')
-        break;
-      case "NO_AUTHENTICATED":
-        if (!user) next()
-        else res.redirect('/products')
+            if(!user) {
+                
+                switch(options.strategyType) {
+                    case 'jwt':
+                        req.error = info.message?info.message:info.toString();
+                        return next();
+                    case 'locals':
+                        return res.sendUnauthorized(info.message?info.message:info.toString())
+                    case 'login':
+                        return next();
+                    
+                }
+            }
+            req.user = user; 
+            next();
+        })(req,res,next);
     }
-  };
-};
+}
 
-export const authRoles = (role) => {
-  //Si llegué a este punto, SIEMPRE debo tener un usuario ya. 
-  return async (req, res, next) => {
-    if (req.user.role != role) return res.status(403).send({ status: "error", error: "Fobidden" })
-    next();
-  }
+export const cookieExtractor = (req) =>{
+    let token = null; 
+
+    if(req&&req.cookies) {
+        token = req.cookies['authToken']
+    }
+    return token;
 }

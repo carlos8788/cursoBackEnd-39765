@@ -1,40 +1,8 @@
 const products = document.getElementsByClassName('product');
 const btnCartFinal = document.getElementById('cartFinal');
 const modalBody = document.getElementById('modalBody');
-const btnLogout = document.getElementById('logout');
 
-const jwt = localStorage.getItem('authToken');
-console.log(jwt);
-fetch('/products',{
-    headers:{
-        authorization: 'Bearer ' + jwt
-    }
-})
 
-btnLogout.addEventListener('click', () => {
-    Swal.fire({
-        title: 'Do you want to close the session?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#73be73',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes!'
-    }).then(response => {
-        if (response.isConfirmed) {
-            fetch('http://localhost:8080/api/session/logout')
-                .then(window.location.replace('/login'))
-        }
-        else{
-            Swal.fire({
-                title: 'The session has not been closed',
-                icon: 'info'
-            })
-        }
-    }
-
-    )
-
-})
 
 const arrayProducts = Array.from(products);
 
@@ -128,7 +96,7 @@ btnCartFinal.addEventListener('click', () => {
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({ finishBuy: true }),
+                            body: JSON.stringify({ finishBuy: true}),
                         }).then(
                             Swal.fire({
                                 title: 'Completed purchase!',
@@ -162,3 +130,5 @@ btnCartFinal.addEventListener('click', () => {
 
 
 productsInCart()
+
+

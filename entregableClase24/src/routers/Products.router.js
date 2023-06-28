@@ -1,4 +1,4 @@
-import { passportCall } from '../utils.js';
+import { passportCall } from '../middleware/auth.js';
 import BaseRouter from './Router.js';
 import { productsService } from '../DAO/mongo/managers/index.js';
 
