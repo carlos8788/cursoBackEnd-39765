@@ -5,7 +5,7 @@ const registerBtn = document.getElementById('register');
 
 loginForm.addEventListener('submit', event => {
     event.preventDefault();
-    alert('even')
+    
     const user = Object.fromEntries(new FormData(event.target))
 
     try {
