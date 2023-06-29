@@ -20,7 +20,7 @@ export const initializePassport = () => {
                 const user = await usersService.getUsersByEmail(emailUser)
                 // let user = await userManager.getUsersByEmail(username);
                 if (user) {
-                    // console.log("User already exists");
+                    
                     return done(null, false, { message: 'User already exists' });
                 }
 
@@ -133,7 +133,7 @@ export const initializePassport = () => {
     
         }, async(payload, done) => {
             try {
-                console.log(payload);
+                
                 return done(null, payload);
             } catch (error) {
                 return done(error)

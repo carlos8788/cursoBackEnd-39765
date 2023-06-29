@@ -6,20 +6,21 @@ import BaseRouter from './Router.js';
 export default class CartsRouter extends BaseRouter {
     init() {
         // ENDPOINT Auxiliar para corroborar todos los carritos y hacer diferentes pruebas
-        this.get('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
-            const result = await cartsService.getCarts()
-            return res.status(200).send(result)
-        })
+        
+        // this.get('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
+        //     const result = await cartsService.getCarts()
+        //     return res.status(200).send(result)
+        // })
 
         this.get('/usercarts', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), async (req, res) => {
-            console.log('viene?');
+            
             try {
 
                 const carts = await cartsService.getCartsByUser(req.user.id)
-                console.log(carts);
+                
                 return res.sendSuccess(carts)
             } catch (error) {
-                console.log(error);
+                
                 return res.sendInternalError(error)
             }
         })
@@ -35,7 +36,7 @@ export default class CartsRouter extends BaseRouter {
 
 
                 // Resultado
-                return res.status(200).send(result);
+                return res.sendSuccess(result);
             } catch (error) {
                 return res.sendInternalError(error)
             }
@@ -62,9 +63,9 @@ export default class CartsRouter extends BaseRouter {
                 if (check) return res.sendNotFound(check)
 
                 const cart = await cartsService.addCart({ userId, products })
-                console.log(cart);
+                
                 const addCartInUser = await usersService.addCart({ userId: cart.user, cartId: cart._id })
-                console.log(addCartInUser);
+                
                 return res.sendSuccess(cart);
 
             }
@@ -138,18 +139,18 @@ export default class CartsRouter extends BaseRouter {
                 let { cid, pid } = req.params
                 const { quantity } = req.body
 
-                console.log(quantity, 'quantity');
+                
                 const checkIdProduct = await productsService.getProductById(pid);
-                console.log('checkIdProduct', checkIdProduct);
+                
                 if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
 
                 const checkIdCart = await cartsService.getCartById(cid)
 
-                console.log('checkIdCart', checkIdCart);
+                
                 if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ error: `The ID cart: ${cid} not found` })
 
                 const result = checkIdCart.products.findIndex(product => product._id._id.toString() === pid)
-                console.log('result', result);
+                
 
                 if (result === -1) return res.status(404).send({ status: 'error', payload: null, message: `the product with ID: ${pid} cannot be updated because it is not in the cart` })
 

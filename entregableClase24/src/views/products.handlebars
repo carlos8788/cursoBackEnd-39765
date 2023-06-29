@@ -1,42 +1,36 @@
-<div class="container my-5 py-5">
-    <nav class="d-flex justify-content-between">
-        <div class="title d-flex ">
-            <h1>Products</h1>
-            
-        </div>
-        <div class="m-auto"><h2>Bienvenido: {{user.name}} ({{user.role}})</h2></div>
-        <div class="cart d-flex p-0 mt-2 gap-4 ">
-            
-            <img src="./img/cart.svg" alt="cart" class="img-fluid">
+<div class="container ">
+    <header class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <div class="title text-center text-md-start">
+        <h1>Products</h1>
+    </div>
+    <div class="m-auto"><h2>Bienvenido: {{user.name}} ({{user.role}})</h2></div>
+    <div class="cart d-flex flex-column flex-md-row p-0 mt-2 mt-md-0 gap-4 text-center">
+        <img src="./img/cart.svg" alt="cart" class="img-fluid m-auto m-md-0">
+        <button type="button" class="btn btn-primary m-auto m-md-0" data-bs-toggle="modal" data-bs-target="#modalCart">
+            View Cart
+        </button>
+        <button type="button" class="btn btn-info m-auto m-md-0" id="cartFinal">
+            Buy Cart
+        </button>
+        <div class="modal fade" id="modalCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cart</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
 
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCart">
-                View Cart
-            </button>
-
-            
-            <div class="modal fade" id="modalCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cart</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" id="modalBody">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-
-            <button type="button" class="btn btn-info" id="cartFinal">
-                Buy Cart
-            </button>
-            
         </div>
-    </nav>
+    </div>
+</header>
+
 
     <div class="row mt-4">
         {{#each products }}

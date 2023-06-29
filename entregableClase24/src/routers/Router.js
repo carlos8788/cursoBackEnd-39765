@@ -30,6 +30,7 @@ export default class BaseRouter {
         res.sendInternalError = error => res.status(500).send({ status: 'error', error });
         res.sendUnauthorized = error => res.status(400).send({ status: 'error', error });
         res.sendNotFound = error => res.status(404).send({ status: 'error', error });
+        res.sendSuccessGitHub = () => res.redirect('/viewGitHub')
         next();
     };
 
@@ -56,7 +57,7 @@ export default class BaseRouter {
             try {
                 await callback.apply(this, params);
             } catch (error) {
-                console.log(error);
+                
                 params[1].status(500).send(error);
             }
         })

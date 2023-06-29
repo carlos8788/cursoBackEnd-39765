@@ -13,9 +13,9 @@ export const generateToken = (user) => {
 }
 
 export const authToken = (req, res, next) => {
-    console.log(req.headers);
+    
     const authHeader = req.headers.authorization;
-    console.log(authHeader, 'authHeader');
+    
     if(!authHeader) return res.status(401).send({error: 'Not authenticated'});
     const token = authHeader.split(' ')[1];
     jwt.verify(token, PRIVATE_KEY, (error, credentials) => {

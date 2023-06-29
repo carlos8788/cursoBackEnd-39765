@@ -31,7 +31,7 @@ export default class ViewsRouter extends BaseRouter {
             res.render('chat');
         })
         this.get('/carts', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
-            res.render('userCarts');
+            res.render('userCarts', {isLoggedIn: req.user});
         })
 
         this.get('/viewGitHub', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
@@ -99,7 +99,6 @@ export default class ViewsRouter extends BaseRouter {
                 const { prevLink, nextLink } = links(products);
 
                 if (page > totalPages) return res.render('notFound', { pageNotFound: '/products', isLoggedIn: req.user})
-                console.log(req.user);
                 return res.render(
                     'products',
                     {
@@ -111,7 +110,7 @@ export default class ViewsRouter extends BaseRouter {
                         hasPrevPage,
                         prevLink,
                         nextLink,
-                        page,
+                        page: options.page,
                         cart: cart.length,
                         user: req.user,
                         isLoggedIn: req.user
@@ -202,7 +201,7 @@ export default class ViewsRouter extends BaseRouter {
         this.get('/profile', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), (req, res) => {
             try {
                 delete req.user.password
-                console.log(req.user, 'profile');
+                
                 res.render('profile', { user: req.user , isLoggedIn: req.user})
 
             } catch (error) {

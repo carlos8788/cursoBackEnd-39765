@@ -9,7 +9,7 @@ const btnEliminar = () => {
 
     arrayBtn.forEach(element => {
         element.addEventListener('click', () => {
-            console.log('click');
+            
             Swal.fire({
                 title: 'Do you want to delete this product?',
                 showDenyButton: true,

@@ -9,7 +9,7 @@ export default class ProductsRouter extends BaseRouter {
         this.get('/', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), passportCall('jwt', { strategyType: 'github' }), async (req, res) => {
             try {
                 let { limit, page, sort, category } = req.query
-                console.log(req.originalUrl);
+                
 
                 const options = {
                     page: Number(page) || 1,
@@ -54,12 +54,12 @@ export default class ProductsRouter extends BaseRouter {
                 }
 
                 const products = await productsService.getProducts({}, options);
-                console.log(products, 'Product');
+                
                 const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
                 const { prevLink, nextLink } = links(products);
                 return res.status(200).send({ status: 'success', payload: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
             } catch (err) {
-                console.log(err);
+                return (err);
             }
 
 
@@ -80,7 +80,7 @@ export default class ProductsRouter extends BaseRouter {
                 return res.status(200).send(result);
 
             } catch (err) {
-                console.log(err);
+                return (err);
             }
 
         })
@@ -89,7 +89,7 @@ export default class ProductsRouter extends BaseRouter {
         this.post('/', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), async (req, res) => {
             try {
                 const product = req.body
-                console.log(product);
+                
                 const {
                     title,
                     description,
@@ -130,7 +130,7 @@ export default class ProductsRouter extends BaseRouter {
                 return res.status(201).send(result);
             }
             catch (err) {
-                console.log(err);
+                return err
 
             }
         })
@@ -147,7 +147,7 @@ export default class ProductsRouter extends BaseRouter {
                 return res.status(200).send(`The product ${result.title} whit ID: ${result._id} was updated`);
             }
             catch (err) {
-                console.log(err);
+                return err
             };
 
         })
@@ -159,10 +159,10 @@ export default class ProductsRouter extends BaseRouter {
                 
                 if (!result) return res.status(404).send({ message: `ID: ${pid} not found` })
 
-                return res.status(200).send({ message: `ID: ${pid} was deleted` });
+                return res.sendSuccess(`ID: ${pid} was deleted`);
 
             } catch (err) {
-                console.log(err);
+                return res.internalError(err.message)
             }
         })
     }

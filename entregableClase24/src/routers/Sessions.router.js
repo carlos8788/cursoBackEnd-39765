@@ -17,12 +17,12 @@ export default class SessionsRouter extends BaseRouter {
                 }
 
                 const access_token = generateToken(user)
-                console.log('entro al return');
+                
                 return res.cookie('authToken', access_token, {
                     maxAge: 1000 * 60 * 60 * 24,
                     httpOnly: true,
                     
-                }).sendSuccess('Login successful')
+                }).sendSuccessGitHub('Login successful')
             } catch (error) {
                 return res.sendInternalError(error);
             }

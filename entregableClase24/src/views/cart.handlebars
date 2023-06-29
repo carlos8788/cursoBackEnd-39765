@@ -1,17 +1,23 @@
-<div>
-    <h1>Cart</h1>
+<div class="card w-50 mx-auto">
+    <h1 class="card-header">Cart</h1>
     {{#if result}}
-        <p>ID: {{result._id}}</p>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">ID: {{result._id}}</h6>
         {{#each result.products }}
-        <li>
-            <h3>Title: {{this._id.title}}</h3>
-            <p>Description: {{this._id.description}}</p>
-            <p>Category: {{this._id.category}}</p>
-            <p>Quantity: {{this.quantity}}</p>
-        </li>
-        
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Title: {{this._id.title}}</h5>
+                <p class="card-text">Description: {{this._id.description}}</p>
+                <p class="card-text">Category: {{this._id.category}}</p>
+                <p class="card-text">Quantity: {{this.quantity}}</p>
+            </div>
+        </div>
         {{/each}}
+    </div>
     {{else}}
-        <h1>{{message}}</h1>
+        <div class="card-body">
+            <h1 class="card-title">{{message}}</h1>
+        </div>
     {{/if}}
 </div>
+

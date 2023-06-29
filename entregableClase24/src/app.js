@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import socketProducts from './listeners/socketProducts.js';
 import registerChatHandler from './listeners/chatHandlers.js';
 import cookieParser from 'cookie-parser'
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import { initializePassport } from './config/passport.config.js';
 
@@ -26,6 +27,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("cookieFirmadaCon88PlatosDePapaConQuesoMadeInArgNorte"));
 
+// app.use('/api/session/github', createProxyMiddleware({
+//     target: 'https://github.com/login/oauth/authorize', 
+//     changeOrigin: true, 
+//     pathRewrite: {
+//         '^/api/session/github': '', 
+//     },
+// }));
 
 
 
@@ -45,6 +53,7 @@ const sessionsRouter = new SessionsRouter()
 const productsRouter = new ProductsRouter()
 const cartsRouter = new CartsRouter()
 const viewsRouter = new ViewsRouter()
+
 
 
 app.use('/api/session', sessionsRouter.getRouter());

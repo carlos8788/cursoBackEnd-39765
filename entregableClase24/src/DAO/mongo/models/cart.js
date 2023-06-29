@@ -23,7 +23,8 @@ const cartSchema = new Schema({
         ],
         default: []
     }
-});
+}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 cartSchema.pre('findOne', function (next) {
     this.populate('products._id')
