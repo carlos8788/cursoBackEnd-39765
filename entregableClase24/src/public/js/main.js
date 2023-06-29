@@ -33,3 +33,4 @@ try {
 carts.addEventListener('click', () => {
     window.location.href = '/carts'
 });
+

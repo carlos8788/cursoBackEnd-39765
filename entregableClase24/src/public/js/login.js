@@ -1,19 +1,11 @@
 const loginForm = document.getElementById('loginForm');
 const registerBtn = document.getElementById('register');
-const loginGithub = document.getElementById('github');
-
-loginGithub.addEventListener('click', () => {
-    fetch('api/session/github')
-})
 
 
-registerBtn.addEventListener('click', () => {
-    window.location.replace('/register')
-})
 
 loginForm.addEventListener('submit', event => {
     event.preventDefault();
-
+    alert('even')
     const user = Object.fromEntries(new FormData(event.target))
 
     try {
@@ -38,7 +30,7 @@ loginForm.addEventListener('submit', event => {
 
             .catch(
                 error => {
-                    
+                    console.log(error);
                 }
             );
 
@@ -49,4 +41,11 @@ loginForm.addEventListener('submit', event => {
     }
 
 
+})
+
+
+
+
+registerBtn.addEventListener('click', () => {
+    window.location.replace('/register')
 })

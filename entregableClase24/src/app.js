@@ -27,13 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("cookieFirmadaCon88PlatosDePapaConQuesoMadeInArgNorte"));
 
-// app.use('/api/session/github', createProxyMiddleware({
-//     target: 'https://github.com/login/oauth/authorize', 
-//     changeOrigin: true, 
-//     pathRewrite: {
-//         '^/api/session/github': '', 
-//     },
-// }));
+
 
 
 
