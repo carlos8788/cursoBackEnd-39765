@@ -1,11 +1,11 @@
-import { productsService, cartsService } from "../DAO/mongo/managers/index.js";
+import { productService, cartService } from "../services/index.js";
 
 let cart = []
 
 const getIndexView = async (req, res) => {
     try {
 
-        const products = await productsService.getProductsView();
+        const products = await productService.getProductsViewService();
 
         res.render("index", { valueReturned: products, isLoggedIn: req.user });
     }
@@ -64,12 +64,12 @@ const getProductsView = async (req, res) => {
         }
 
         // Devuelve un array con las categorias disponibles y compara con la query "category"
-        const categories = await productsService.categories()
+        const categories = await productService.categoriesService()
 
         const result = categories.some(categ => categ === category)
         if (result) {
 
-            const products = await productsService.getProducts({ category }, options);
+            const products = await productService.getProductsService({ category }, options);
             const { prevLink, nextLink } = links(products);
             const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs, page } = products
 
@@ -78,7 +78,7 @@ const getProductsView = async (req, res) => {
             return res.render('products', { products: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink, page, cart: cart.length, isLoggedIn: req.user });
         }
 
-        const products = await productsService.getProducts({}, options);
+        const products = await productService.getProductsService({}, options);
 
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
@@ -109,7 +109,7 @@ const getProductsView = async (req, res) => {
 const getProductsInCart = async (req, res) => {
 
     const productsInCart = await Promise.all(cart.map(async (product) => {
-        const productDB = await productsService.getProductById(product._id);
+        const productDB = await productService.getProductByIdService(product._id);
         return { title: productDB.title, quantity: product.quantity }
     }))
 
@@ -135,7 +135,7 @@ const postProductsView = async (req, res) => {
                 userId,
                 products: cart
             }
-            const createdCart = await cartsService.addCart(purchaseCart)
+            const createdCart = await cartService.addCartService(purchaseCart)
 
             cart.splice(0, cart.length)
         }
@@ -150,7 +150,7 @@ const getCartIdView = async (req, res) => {
     try {
         const { cid } = req.params
 
-        const result = await cartsService.getCartById(cid)
+        const result = await cartService.getCartByIdService(cid)
 
         if (result === null || typeof (result) === 'string') return res.render('cart', { result: false, message: 'ID not found' });
 

@@ -7,6 +7,7 @@ import { cookieExtractor } from '../middleware/auth.js'
 
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { usersService } from '../DAO/mongo/managers/index.js';
+import config from './config.js';
 
 const localStrategy = local.Strategy
 
@@ -52,7 +53,7 @@ export const initializePassport = () => {
             async (email, password, done) => {
                 let resultUser;
                 try {
-                    if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+                    if (email === config.adminName && password === config.adminPassword) {
                         resultUser = {
                             first_name: 'admin',
                             last_name: 'coder',
@@ -93,8 +94,8 @@ export const initializePassport = () => {
     );
 
     passport.use('github', new GitHubStrategy({
-        clientID: 'Iv1.28f5606a66153af8',
-        clientSecret: '17204f4f44381bdde9d6a680e3a10636a841c9d7',
+        clientID: config.gitHubClientId,
+        clientSecret: config.gitHubClientSecret,
         callbackURL: 'http://localhost:8080/api/session/githubcallback'
 
 
@@ -129,7 +130,7 @@ export const initializePassport = () => {
     passport.use('jwt', new Strategy(
         {
             jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-            secretOrKey:'JpvL8yCjZJjLCa5baNXtuk6DGrxxTZrRx9XBhUErl9U', // CAMBIAR LUEGO
+            secretOrKey:config.privateKey, // CAMBIAR LUEGO
     
         }, async(payload, done) => {
             try {

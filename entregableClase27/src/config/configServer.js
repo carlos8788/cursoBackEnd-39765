@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-
-const url = 'mongodb+srv://carlos8788:eN8xNDCYsEwjkaDL@e-commerce.nyingmg.mongodb.net/ecommerce?retryWrites=true&w=majority'
+import config from './config.js';
+const url = config.mongoUrl
 
 
 const connectToDB = () => {

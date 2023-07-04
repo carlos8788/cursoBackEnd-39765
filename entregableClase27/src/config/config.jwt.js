@@ -1,10 +1,7 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
+import config from './config.js';
 
-
-// const PRIVATE_KEY = process.env.PRIVATE_KEY
-const PRIVATE_KEY = "JpvL8yCjZJjLCa5baNXtuk6DGrxxTZrRx9XBhUErl9U"
+const PRIVATE_KEY = config.privateKey
 
 export const generateToken = (user) => {
     

@@ -1,8 +1,10 @@
-import { productsService } from '../DAO/mongo/managers/index.js';
+// import { productService } from '../DAO/mongo/managers/index.js';
+import { productService } from '../services/index.js';
 
 const getProducts = async (req, res) => {
     try {
         let { limit, page, sort, category } = req.query
+        console.log(req.query);
         
 
         const options = {
@@ -36,18 +38,18 @@ const getProducts = async (req, res) => {
         }
 
         // Devuelve un array con las categorias disponibles y compara con la query "category"
-        const categories = await productsService.categories()
+        const categories = await productService.categoriesService()
 
         const result = categories.some(categ => categ === category)
         if (result) {
 
-            const products = await productsService.getProducts({ category }, options);
+            const products = await productService.getProductsService({ category }, options);
             const { prevLink, nextLink } = links(products);
             const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
             return res.status(200).send({ status: 'success', payload: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
         }
 
-        const products = await productsService.getProducts({}, options);
+        const products = await productService.getProductsService({}, options);
         
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
@@ -64,7 +66,7 @@ const getProductId = async (req, res) => {
         const { pid } = req.params
 
         // Se devuelve el resultado
-        const result = await productsService.getProductById(pid)
+        const result = await productService.getProductByIdService(pid)
 
         // En caso de que traiga por error en el ID de product
         if (result === null || typeof (result) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
@@ -113,7 +115,7 @@ const postProduct = async (req, res) => {
             .status(400)
             .send({ message: 'Product and stock cannot be values less than or equal to zero' });
 
-        const result = await productsService.addProduct(product)
+        const result = await productService.addProductService(product)
 
         if (result.code === 11000) return res
             .status(400)
@@ -132,7 +134,7 @@ const putProduct = async (req, res) => {
         const { pid } = req.params
         const product = req.body
 
-        const result = await productsService.updateProduct(pid, product);
+        const result = await productService.updateProductService(pid, product);
 
         if (result.message) return res.status(404).send({ message: `ID: ${pid} not found` })
 
@@ -147,7 +149,7 @@ const putProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const { pid } = req.params
-        const result = await productsService.deleteProduct(pid)
+        const result = await productService.deleteProductService(pid)
         
         if (!result) return res.status(404).send({ message: `ID: ${pid} not found` })
 
