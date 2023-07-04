@@ -1,0 +1,210 @@
+import { cartsService, productsService, usersService } from '../DAO/mongo/managers/index.js';
+
+const getUserCarts = async (req, res) => {
+            
+    try {
+
+        const carts = await cartsService.getCartsByUser(req.user.id)
+        
+        return res.sendSuccess(carts)
+    } catch (error) {
+        
+        return res.sendInternalError(error)
+    }
+}
+
+const getCartId = async (req, res) => {
+    try {
+        const { cid } = req.params
+
+        const result = await cartsService.getCartById(cid)
+
+        // Si el resultado del GET tiene la propiedad 'CastError' devuelve un error
+        if (result === null || typeof (result) === 'string') return res.status(404).send({ status: 'error', message: 'ID not found' });
+
+
+        // Resultado
+        return res.sendSuccess(result);
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+
+}
+
+const postCart = async (req, res) => {
+    try {
+        const { products, userId } = req.body
+
+        const user = await usersService.getUsersById(userId)
+
+
+        if (!Array.isArray(products)) return res.sendNotFound({ status: 'error', message: 'TypeError' });
+
+        // Corroborar si todos los ID de los productos existen
+        const results = await Promise.all(products.map(async (product) => {
+            const checkId = await productsService.getProductById(product._id);
+            if (checkId === null || typeof (checkId) === 'string') return `The ID product: ${product._id} not found`
+        }))
+
+        const check = results.find(value => value !== undefined)
+        if (check) return res.sendNotFound(check)
+
+        const cart = await cartsService.addCart({ userId, products })
+        
+        const addCartInUser = await usersService.addCart({ userId: cart.user, cartId: cart._id })
+        
+        return res.sendSuccess(cart);
+
+    }
+    catch (error) {
+        return res.sendInternalError(error.message)
+
+    }
+}
+
+const postProductInCart = async (req, res) => {
+    try {
+
+        let { cid, pid } = req.params
+        const { quantity } = req.body
+
+        if (isNaN(Number(quantity)) || !Number.isInteger(quantity)) return res.status(400).send({ status: 'error', payload: null, message: 'The quantity is not valid' })
+
+        if (quantity < 1) return res.status(400).send({ status: 'error', payload: null, message: 'The quantity must be greater than 1' })
+
+        const checkIdProduct = await productsService.getProductById(pid);
+
+
+        if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
+
+        const checkIdCart = await cartsService.getCartById(cid)
+
+        if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ status: 'error', message: `The ID cart: ${cid} not found` })
+
+        const result = await cartsService.addProductInCart(cid, { _id: pid, quantity })
+
+        return res.status(200).send({ message: `added product ID: ${pid}, in cart ID: ${cid}`, cart: result });
+
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+}
+
+const putCart = async (req, res) => {
+    try {
+        const { cid } = req.params
+        const { products } = req.body
+
+        const results = await Promise.all(products.map(async (product) => {
+            const checkId = await productsService.getProductById(product._id);
+
+            if (checkId === null || typeof (checkId) === 'string') {
+                return res.status(404).send({ status: 'error', message: `The ID product: ${product._id} not found` })
+            }
+        }))
+        const check = results.find(value => value !== undefined)
+        if (check) return res.status(404).send(check)
+
+
+        const checkIdCart = await cartsService.getCartById(cid)
+        if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ status: 'error', message: `The ID cart: ${cid} not found` })
+
+        const cart = await cartsService.updateProductsInCart(cid, products)
+        return res.status(200).send({ status: 'success', payload: cart })
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+
+}
+
+const productInCart = async (req, res) => {
+    try {
+
+        let { cid, pid } = req.params
+        const { quantity } = req.body
+
+        
+        const checkIdProduct = await productsService.getProductById(pid);
+        
+        if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
+
+        const checkIdCart = await cartsService.getCartById(cid)
+
+        
+        if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ error: `The ID cart: ${cid} not found` })
+
+        const result = checkIdCart.products.findIndex(product => product._id._id.toString() === pid)
+        
+
+        if (result === -1) return res.status(404).send({ status: 'error', payload: null, message: `the product with ID: ${pid} cannot be updated because it is not in the cart` })
+
+        if (isNaN(Number(quantity)) || !Number.isInteger(quantity)) return res.status(400).send({ status: 'error', payload: null, message: 'The quantity is not valid' })
+
+        if (quantity < 1) return res.status(400).send({ status: 'error', payload: null, message: 'The quantity must be greater than 1' })
+
+        checkIdCart.products[result].quantity = quantity
+
+
+        const cart = await cartsService.updateOneProduct(cid, checkIdCart.products)
+        res.status(200).send({ status: 'success', cart })
+
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+}
+
+const deleteProductInCart = async (req, res) => {
+    try {
+
+        const { cid, pid } = req.params
+
+        const checkIdProduct = await productsService.getProductById(pid);
+
+        if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
+
+        const checkIdCart = await cartsService.getCartById(cid)
+        if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ status: 'error', message: `The ID cart: ${cid} not found` })
+
+        const findProduct = checkIdCart.products.findIndex((element) => element._id._id.toString() === checkIdProduct._id.toString())
+
+        if (findProduct === -1) return res.status(404).send({ error: `The ID product: ${pid} not found in cart` })
+
+        checkIdCart.products.splice(findProduct, 1)
+
+        const cart = await cartsService.deleteProductInCart(cid, checkIdCart.products)
+
+        return res.status(200).send({ status: 'success', message: `deleted product ID: ${pid}`, cart })
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+}
+
+const deleteCart = async (req, res) => {
+    try {
+        const { cid } = req.params
+        const checkIdCart = await cartsService.getCartById(cid)
+
+        if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ error: `The ID cart: ${cid} not found` })
+
+        if (checkIdCart.products.length === 0) return res.status(404).send({ status: 'error', payload: null, message: 'The cart is already empty' })
+
+        checkIdCart.products = []
+
+        const cart = await cartsService.updateOneProduct(cid, checkIdCart.products)
+        return res.status(200).send({ status: 'success', message: `the cart whit ID: ${cid} was emptied correctly `, cart });
+
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+}
+
+export default {
+    getUserCarts,
+    getCartId,
+    postCart,
+    postProductInCart,
+    putCart,
+    productInCart,
+    deleteProductInCart,
+    deleteCart
+}
