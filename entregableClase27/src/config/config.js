@@ -13,5 +13,6 @@ export default {
     secretKey: process.env.SECRET_KEY,
     gitHubClientId: process.env.GITHUB_CLIENT_ID,
     gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET,
-    url: process.env.URL_HOST
+    url: process.env.URL_HOST,
+    callbackURL: process.env.GITHUB_CALLBACK_URL
 }

@@ -1,4 +1,3 @@
-// import { cartService, productsService, usersService } from '../DAO/mongo/managers/index.js';
 import { userService, productService, cartService } from '../services/index.js'
 
 const getUserCarts = async (req, res) => {
