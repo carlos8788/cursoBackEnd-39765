@@ -53,7 +53,7 @@ const registerPost = async (req, res) => {
     }
 }
 
-const getLogOut = (req, res) => {
+const postLogOut = (req, res) => {
 
     try {
         return res.clearCookie('authToken').sendSuccess('logged out successfully')
@@ -75,6 +75,6 @@ export default {
     gitHubCallBack,
     loginPost,
     registerPost,
-    getLogOut,
+    postLogOut,
     currentSession,
 }

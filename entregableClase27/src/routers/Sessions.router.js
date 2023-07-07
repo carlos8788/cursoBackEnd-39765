@@ -8,10 +8,10 @@ export default class SessionsRouter extends BaseRouter {
 
         this.get('/githubcallback', ['GITHUB'], passportCall('github', { strategyType: "github" }), sessionsController.gitHubCallBack)
 
-        this.get('/logout', ['AUTH'], sessionsController.getLogOut)
-        
         this.get('/current', ['AUTH'], passportCall('jwt', { strategyType: "locals" }), sessionsController.currentSession);
         
+        
+        this.post('/logout', ['AUTH'], sessionsController.postLogOut)
 
         this.post('/login', ['NO_AUTH'], passportCall('login', { strategyType: "locals" }), sessionsController.loginPost)
 

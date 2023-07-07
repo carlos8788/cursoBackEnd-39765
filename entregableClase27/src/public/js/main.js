@@ -12,7 +12,11 @@ try {
         confirmButtonText: 'Yes!'
     }).then(response => {
         if (response.isConfirmed) {
-            fetch('/api/session/logout')
+            fetch('/api/session/logout',
+            {
+                method: 'POST',
+                origin: 'same-origin',
+            })
                 .then(window.location.replace('/login'))
         }
         else {
