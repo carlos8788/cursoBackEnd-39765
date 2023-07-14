@@ -5,7 +5,7 @@ const getUserCarts = async (req, res) => {
     try {
 
         const carts = await cartService.getCartsByUserService(req.user.id)
-        
+        console.log(carts);
         return res.sendSuccess(carts)
     } catch (error) {
         
@@ -66,7 +66,7 @@ const postCart = async (req, res) => {
 const postProductInCart = async (req, res) => {
     try {
 
-        let { cid, pid } = req.params
+        let { cid, pid } = req.params    
         const { quantity } = req.body
 
         if (isNaN(Number(quantity)) || !Number.isInteger(quantity)) return res.status(400).send({ status: 'error', payload: null, message: 'The quantity is not valid' })

@@ -120,7 +120,7 @@ const postProductsView = async (req, res) => {
     try {
         const userId = req.user.id;
         const { product, finishBuy } = req.body;
-
+        
         if (product) {
             if (product.quantity > 0) {
                 const findId = cart.findIndex(productCart => productCart._id === product._id);
@@ -130,11 +130,20 @@ const postProductsView = async (req, res) => {
                 return res.render('products', { message: 'Quantity must be greater than 0', })
             }
         }
+        
         if (finishBuy) {
             const purchaseCart = {
                 userId,
                 products: cart
             }
+            
+            cart.forEach(product => {
+                const getProductById =  productService.getProductByIdService(product._id)
+                getProductById['quantity'] = getProductById['quantity'] - product.quantity
+                const {_id, ...productReady} = getProductById
+                productService.updateProductService(product._id, productReady)
+            })
+
             const createdCart = await cartService.addCartService(purchaseCart)
 
             cart.splice(0, cart.length)
@@ -151,7 +160,18 @@ const getCartIdView = async (req, res) => {
         const { cid } = req.params
 
         const result = await cartService.getCartByIdService(cid)
+        
+        const subtotal_producto = []
+        result.products.forEach(product => {
+            const subtotal = product._id.price * product.quantity
+            let prod = {
+                name: product._id.title,
+                subtotal
+            }
+            subtotal_producto.push(prod)
 
+        })
+        console.log(subtotal_producto);
         if (result === null || typeof (result) === 'string') return res.render('cart', { result: false, message: 'ID not found' });
 
         return res.render('cart', { result, isLoggedIn: req.user });
