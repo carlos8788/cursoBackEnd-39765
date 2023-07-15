@@ -64,3 +64,12 @@ const updateTicketService = async (req, res) => {
         return res.sendInternalError(error)
     }
 };
+
+export default {
+    getTickets,
+    getTicketById,
+    getTicketByUserId,
+    postTicketService,
+    deleteTicketService,
+    updateTicketService,
+}
