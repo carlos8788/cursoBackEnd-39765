@@ -1,7 +1,7 @@
 import { Router } from "express";
 import TicketManager from "../DAO/mongo/managers/tickets.js";
 import BaseRouter from "./Router.js";
-
+import ticketControllers from "../controllers/tickets.controllers.js"
 const router = new Router();
 
 const ticket = new TicketManager();
@@ -22,14 +22,14 @@ router.post('/', async (req, res) => {
 
 export default class TicketsRouter extends BaseRouter {
     init() {
-        this.get('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), )
+        this.get('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.getTicketByUserIdController())
 
-        this.get('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), )
+        this.get('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }),  ticketControllers.getTicketByIdController())
 
-        this.post('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), )
+        this.post('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.postTicketController() )
 
-        this.delete('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), )
+        this.delete('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.deleteTicketController() )
 
-        this.put('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), )
+        this.put('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }),  ticketControllers.updateTicketController())
     }
 }

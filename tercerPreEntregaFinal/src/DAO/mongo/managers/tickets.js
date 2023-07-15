@@ -52,9 +52,9 @@ class TicketManager {
 
     }
 
-    updateTicket = async (tid) => {
+    updateTicket = async (id, ticket) => {
         try {
-            return await ticketModel.findOneAndUpdate({ _id: tid })
+            return await ticketModel.findOneAndUpdate(id, { $set: ticket })
         } catch (err) {
             return err
         }

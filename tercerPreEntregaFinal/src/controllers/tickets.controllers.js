@@ -1,7 +1,7 @@
 import { ticketsService } from "../services/index.js";
 
 
-const getTickets = async (req, res) => {
+const getTicketsController = async (req, res) => {
     try {
         const tickets = await ticketsService.getTicketsService()
         return res.sendSuccess(tickets)
@@ -11,7 +11,7 @@ const getTickets = async (req, res) => {
     }
 };
 
-const getTicketById = async (req, res) => {
+const getTicketByIdController = async (req, res) => {
     const tid = req.params.tid
     try {
         const ticket = await ticketsService.getTicketByUserId(tid)
@@ -22,7 +22,7 @@ const getTicketById = async (req, res) => {
     }
 };
 
-const getTicketByUserId = async (req, res) => {
+const getTicketByUserIdController = async (req, res) => {
     try {
         const uid = req.params.user._id
         const ticket = await ticketsService.getTicketByUserId(uid)
@@ -33,11 +33,17 @@ const getTicketByUserId = async (req, res) => {
     }
 };
 
-const postTicketService = async (req, res) => {
+const postTicketController = async (req, res) => {
     try {
         const uid = req.params.user._id
+        const cid = req.params.user.cart
         const ticketBody = req.body
-        const ticket = await ticketsService.addTicketService(ticketBody);
+        const preTicket = {
+            user: uid,
+            cart : cid,
+            ...ticketBody
+        }
+        const ticket = await ticketsService.addTicketService(preTicket);
         return res.sendSuccess(ticket)
 
     } catch (error) {
@@ -45,8 +51,9 @@ const postTicketService = async (req, res) => {
     }
 };
 
-const deleteTicketService = async (req, res) => {
+const deleteTicketController = async (req, res) => {
     try {
+        const tid = req.params.tid
         const tickets = await ticketsService.deleteTicketService(tid)
         return res.sendSuccess(tickets)
 
@@ -55,9 +62,11 @@ const deleteTicketService = async (req, res) => {
     }
 };
 
-const updateTicketService = async (req, res) => {
+const updateTicketController = async (req, res) => {
     try {
-        const tickets = await ticketsService.getTicketsService()
+        const tid = req.params.tid
+        const ticket = req.params.body
+        const tickets = await ticketsService.updateTicketService(tid, ticket)
         return sendSuccess.send(tickets)
 
     } catch (error) {
@@ -66,10 +75,10 @@ const updateTicketService = async (req, res) => {
 };
 
 export default {
-    getTickets,
-    getTicketById,
-    getTicketByUserId,
-    postTicketService,
-    deleteTicketService,
-    updateTicketService,
+    getTicketsController,
+    getTicketByIdController,
+    getTicketByUserIdController,
+    postTicketController,
+    deleteTicketController,
+    updateTicketController,
 }
