@@ -44,8 +44,8 @@ const getProductsView = async (req, res) => {
 
             carrito = await cartService.addCartService({ userId: req.user.id, products: [] })
         }
-        
-        
+
+
 
 
         if (!(options.sort.price === -1 || options.sort.price === 1)) {
@@ -116,42 +116,35 @@ const getProductsView = async (req, res) => {
 }
 
 const getProductsInCart = async (req, res) => {
-
-    const productsInCart = await Promise.all(cart.map(async (product) => {
-        const productDB = await productService.getProductByIdService(product._id);
-        return { title: productDB.title, quantity: product.quantity }
-    }))
-
-    return res.send({ cartLength: cart.length, productsInCart })
+    try {
+        // console.log(req.user, 'getProductsInCart');
+        const productsInCart = await cartService.getCartByIdService(req.user.cart)
+        console.log(productsInCart.products);
+        
+        return res.send({ cartLength: productsInCart.products.length, productsInCart:productsInCart.products})
+        
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const postProductsView = async (req, res) => {
     try {
+        console.log(req.user, 'postProducts');
         const userId = req.user.id;
-        const { product, finishBuy } = req.body;
-        console.log(product);
-        const cartDB = await cartService.getCartsByUserService(userId)
-        const cartID = cartDB[0]._id
+        const cartId = req.user.cart
+        const { product } = req.body;
+
 
         if (product) {
             if (product.quantity > 0) {
 
-                const updateCart = await cartService.addProductInCartService(cartID, product)
+                const updateCart = await cartService.addProductInCartService(cartId, product)
+                console.log(updateCart.products);
             }
             else {
                 return res.render('products', { message: 'Quantity must be greater than 0', })
             }
-        }
-
-        if (finishBuy) {
-            const purchaseCart = {
-                userId,
-                products: cart
-            }
-
-            const createdCart = await cartService.addProductInCartService(cartID, )
-
-            // cart.splice(0, cart.length)
         }
 
         return res.render('products', { isLoggedIn: req.user })

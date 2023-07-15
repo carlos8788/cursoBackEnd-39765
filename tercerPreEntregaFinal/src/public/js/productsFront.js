@@ -1,29 +1,32 @@
 const products = document.getElementsByClassName('product');
 const btnCartFinal = document.getElementById('cartFinal');
 const modalBody = document.getElementById('modalBody');
-
+const modalFooter = document.getElementById('modalFooter');
 
 
 const arrayProducts = Array.from(products);
 
 const productsInCart = () => {
-    fetch('http://localhost:8080/products/inCart')
+    fetch('/products/inCart')
         .then(response => response.json())
         .then(data => {
-
+            console.log(data);
             if (data.cartLength > 0) {
                 let products = ''
+                let total = 0
                 data.productsInCart.forEach((product, key) => {
-                    products += `<h6>${key + 1}) ${product.title} : ${product.quantity}<h6>`
+                    products += `<h6>${key + 1}) ${product._id.title} : ${product.quantity}<h6>`
+                    total += product.quantity * product._id.price;
                 })
 
                 modalBody.innerHTML = products
+                modalFooter.innerHTML = `<h5>Total: $${Math.round(total * 100) / 100}</h5>`
             }
-
             else {
                 modalBody.innerHTML = `<h3> Empty cart </h3>`
             }
-        });
+        })
+        .catch(err => console.log(err));
 
 }
 
@@ -87,11 +90,11 @@ btnCartFinal.addEventListener('click', () => {
         confirmButtonText: 'Yes!'
     }).then(response => {
         if (response.isConfirmed) {
-            fetch('http://localhost:8080/products/inCart')
+            fetch('/products/ticket')
                 .then(response => response.json())
                 .then(data => {
                     if (data.cartLength > 0) {
-                        fetch('http://localhost:8080/products', {
+                        fetch('/products', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
