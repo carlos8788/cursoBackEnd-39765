@@ -1,0 +1,36 @@
+<style>
+    .text__register {
+        color: rgb(127, 127, 255);
+    }
+
+    .text__register:hover {
+        transition-duration: 0.3s;
+        color: white;
+    }
+</style>
+
+<div class="vh-100" style="background-image: url('img/background.jpg'); background-size: cover;">
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+        <div class="row align-items-center g-lg-5 py-5 m-5 " style="background-color: rgba(36, 33, 33, 0.5);">
+            <div class="col-lg-7 text-center text-lg-start">
+                <h1 class="display-5 fw-bold lh-1 mb-3 text-center text-info py-2"
+                    style="background-color: rgba(224, 217, 217, 0.5);">Blue bean supermarket</h1>
+                <p class="col-lg-10 fs-4 text-white">Discover the joy of shopping at world's best supermarket - where
+                    quality meets affordability,
+                    where freshness knows no boundaries, where every customer is valued. your happiness is our
+                    satisfaction. come,
+                    experience the difference in every moment, every day!</p>
+            </div>
+            {{#if isLoggedIn}}
+            <h1 class="text-danger col-lg-3 text-center bg-dark m-auto py-2">You are already logged in</h1>
+            {{else}}
+            <div class="col-md-10 mx-auto col-lg-5">
+                {{> formLogin}}
+            </div>
+            {{/if}}
+
+        </div>
+    </div>
+
+</div>
+
