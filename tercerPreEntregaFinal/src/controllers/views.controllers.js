@@ -119,12 +119,15 @@ const getProductsInCart = async (req, res) => {
     try {
         // console.log(req.user, 'getProductsInCart');
         const productsInCart = await cartService.getCartByIdService(req.user.cart)
-        console.log(productsInCart.products);
+        console.log(productsInCart, 'getProductsInCart');
+        console.log(req.user.cart, 'getProductsInCart ID');
+        if (!productsInCart) return res.send({cartLength: 0, productsInCart: []} )
         
         return res.send({ cartLength: productsInCart.products.length, productsInCart:productsInCart.products})
         
     } catch (error) {
         console.log(error);
+        return res.sendInternalError(error);
     }
 }
 
@@ -135,12 +138,12 @@ const postProductsView = async (req, res) => {
         const cartId = req.user.cart
         const { product } = req.body;
 
-
+        console.log(cartId);
         if (product) {
             if (product.quantity > 0) {
-
+                console.log('estoy en quantity');
                 const updateCart = await cartService.addProductInCartService(cartId, product)
-                console.log(updateCart.products);
+                // console.log(updateCart.products);
             }
             else {
                 return res.render('products', { message: 'Quantity must be greater than 0', })
@@ -149,7 +152,8 @@ const postProductsView = async (req, res) => {
 
         return res.render('products', { isLoggedIn: req.user })
     } catch (error) {
-        console.log(error);
+
+        console.log(error, 'eeper error');
     }
 }
 

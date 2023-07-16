@@ -2,6 +2,10 @@
 const cartId = document.querySelector('.card-header').id;
 const cardBody = document.querySelector('.card-body')
 const totalBuy = document.getElementById('totalBuy')
+const btnPurchaseCart = document.getElementById('btnPurchaseCart')
+
+let productsFront = '';
+let total = 0;
 
 const getProducts = async (id) => {
     try {
@@ -15,8 +19,6 @@ const getProducts = async (id) => {
 }
 
 const productsInBody = (products) => {
-    let productsFront = '';
-    let total = 0;
     if(products.length === 0) {
         window.location.replace('/products')
     }
@@ -44,47 +46,7 @@ const productsInBody = (products) => {
 
 const btnDelete = (cartID) => {
     const idBtns = document.querySelectorAll('.btn-danger')
-    // /:cid/product/:pid
-    // Array.from(idBtns).forEach(btn => {
-    //     btn.addEventListener('click', async () => {
-    //         Swal.fire({
-    //             title: 'Are you sure delete this product?',
-    //             text: "You won't be able to revert this!",
-    //             icon: 'warning',
-    //             showCancelButton: true,
-    //             confirmButtonColor: '#3085d6',
-    //             cancelButtonColor: '#d33',
-    //             confirmButtonText: 'Yes, delete it!'
-    //         }).then((result) => {
-    //             if (result.isConfirmed) {
-    //                 try {
-    //                     const url = `/api/carts/${cartID}/product/${btn.id}`
-    //                     console.log(url);
-    //                     const response = await fetch(url,
-    //                         {
-
-    //                             method: 'DELETE',
-    //                             headers: {
-    //                                 'Content-Type': 'application/json',
-    //                             }
-    //                         }
-    //                     )
-    //                     const data = await response.json()
-
-    //                 } catch (error) {
-    //                     console.log(error);
-    //                 }
-    //                 //   Swal.fire(
-    //                 //     'Deleted!',
-    //                 //     'Your file has been deleted.',
-    //                 //     'success'
-    //                 //   )
-    //             }
-    //         })
-
-
-    //     })
-    // })
+    
     Array.from(idBtns).forEach(btn => {
         btn.addEventListener('click', () => {
             const deleteProduct = async () => {
@@ -127,6 +89,21 @@ const btnDelete = (cartID) => {
         })
     });
     
+}
+
+const purchaseCart = (cartID) => {
+    btnPurchaseCart.addEventListener('click', async () => {
+        const response = await fetch(`/api/carts/:${cartID}/purchase`, {
+            method: 'POST',
+            body: {
+                amount: total,
+
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+    });
 }
 
 const main = async () => {

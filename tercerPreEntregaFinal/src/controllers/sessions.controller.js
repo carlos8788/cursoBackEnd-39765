@@ -2,13 +2,15 @@ import { generateToken } from '../config/config.jwt.js'
 
 const gitHubCallBack = (req, res) => {
     try {
-        console.log(req.user);
+        console.log(req.user, 'calling gitHubCallBack');
         const user = {
             name: `${req.user.first_name} ${req.user.last_name}`,
             role: req.user.role,
             id: req.user.id,
-            email: req.user.email
+            email: req.user.email,
+            cart: req.user.carts[0]
         }
+        console.log(user, 'calling gitHubCallBack 0');
 
         const access_token = generateToken(user)
         

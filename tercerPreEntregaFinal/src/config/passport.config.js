@@ -123,7 +123,7 @@ export const initializePassport = () => {
                 }
                 const result = await usersService.createUser(userGitHub);
                 let existsCart = await cartService.getCartsByUserService(result._id)
-
+                console.log(existsCart, 'exists');
                 if (existsCart.length === 0) {
                     let newCart = await cartService.addCartService({ userId: result._id, products: [] })
                     const addCartUser = await usersService.addCart({userId: result._id, cartId: newCart._id})

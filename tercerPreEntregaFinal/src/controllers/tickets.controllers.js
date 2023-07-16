@@ -35,15 +35,16 @@ const getTicketByUserIdController = async (req, res) => {
 
 const postTicketController = async (req, res) => {
     try {
-        const uid = req.params.user._id
-        const cid = req.params.user.cart
+        const uid = req.user.id
+        const cid = req.params.cartID
         const ticketBody = req.body
         const preTicket = {
             user: uid,
             cart : cid,
             ...ticketBody
         }
-        const ticket = await ticketsService.addTicketService(preTicket);
+        console.log(uid, cid);
+        // const ticket = await ticketsService.addTicketService(preTicket);
         return res.sendSuccess(ticket)
 
     } catch (error) {

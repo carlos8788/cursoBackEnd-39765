@@ -26,7 +26,7 @@ const ticketSchema = new Schema({
         default: 0,
     }
 
-}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+}, { purchase_datetime: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 ticketSchema.pre('save', async function (next) {

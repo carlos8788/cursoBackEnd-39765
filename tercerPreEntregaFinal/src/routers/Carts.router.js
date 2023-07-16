@@ -28,6 +28,11 @@ export default class CartsRouter extends BaseRouter {
 
         // ENDPOINT que elimina todos los productos de un carrito
         this.delete('/:cid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), cartsController.deleteCart)
+        
+        // ENPOINT que chequea stock y realiza la compra.
+
+        this.post('/:cid/purchase', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), cartsController.purchaseCart)
+
 
     }
 };

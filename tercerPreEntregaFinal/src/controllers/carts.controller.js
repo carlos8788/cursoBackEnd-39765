@@ -1,4 +1,4 @@
-import { userService, productService, cartService } from '../services/index.js'
+import { userService, productService, cartService, ticketsService } from '../services/index.js'
 
 const getUserCarts = async (req, res) => {
             
@@ -111,7 +111,7 @@ const putCart = async (req, res) => {
         const checkIdCart = await cartService.getCartByIdService(cid)
         if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ status: 'error', message: `The ID cart: ${cid} not found` })
 
-        const cart = await cartService.updateProductsInCart(cid, products)
+        const cart = await cartService.updateProductsInCartService(cid, products)
         return res.status(200).send({ status: 'success', payload: cart })
     } catch (error) {
         return res.sendInternalError(error)
@@ -201,6 +201,16 @@ const deleteCart = async (req, res) => {
     }
 }
 
+const purchaseCart = async (req, res) => {
+    const cid = req.params.cid
+    const cart = await cartService.getCartByIdService(cid)
+    console.log(cart);
+    // const insufficientProducts = 2
+    // const ticket = await ticketsService.addTicketService(preTicket)
+    res.status(200).send('OK')
+};
+
+
 export default {
     getUserCarts,
     getCartId,
@@ -209,5 +219,6 @@ export default {
     putCart,
     productInCart,
     deleteProductInCart,
-    deleteCart
+    deleteCart,
+    purchaseCart
 }
