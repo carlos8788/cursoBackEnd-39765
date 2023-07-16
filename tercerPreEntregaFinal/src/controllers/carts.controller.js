@@ -17,7 +17,7 @@ const getUserCarts = async (req, res) => {
 const getCartId = async (req, res) => {
     try {
         const { cid } = req.params
-        
+        console.log(cid);
         
         const result = await cartService.getCartByIdService(cid)
         console.log(result);
@@ -26,7 +26,7 @@ const getCartId = async (req, res) => {
 
 
         // Resultado
-        return res.sendSuccess(result);
+        return res.sendSuccessWithPayload(result);
     } catch (error) {
         return res.sendInternalError(error)
     }
@@ -108,7 +108,7 @@ const putCart = async (req, res) => {
         if (check) return res.status(404).send(check)
 
 
-        const checkIdCart = await cartService.getCartById(cid)
+        const checkIdCart = await cartService.getCartByIdService(cid)
         if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ status: 'error', message: `The ID cart: ${cid} not found` })
 
         const cart = await cartService.updateProductsInCart(cid, products)
@@ -130,7 +130,7 @@ const productInCart = async (req, res) => {
         
         if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
 
-        const checkIdCart = await cartService.getCartById(cid)
+        const checkIdCart = await cartService.getCartByIdService(cid)
 
         
         if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ error: `The ID cart: ${cid} not found` })
@@ -164,7 +164,7 @@ const deleteProductInCart = async (req, res) => {
 
         if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
 
-        const checkIdCart = await cartService.getCartById(cid)
+        const checkIdCart = await cartService.getCartByIdService(cid)
         if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ status: 'error', message: `The ID cart: ${cid} not found` })
 
         const findProduct = checkIdCart.products.findIndex((element) => element._id._id.toString() === checkIdProduct._id.toString())
@@ -173,10 +173,11 @@ const deleteProductInCart = async (req, res) => {
 
         checkIdCart.products.splice(findProduct, 1)
 
-        const cart = await cartService.deleteProductInCart(cid, checkIdCart.products)
+        const cart = await cartService.deleteProductInCartService(cid, checkIdCart.products)
 
         return res.status(200).send({ status: 'success', message: `deleted product ID: ${pid}`, cart })
     } catch (error) {
+        console.log(error);
         return res.sendInternalError(error)
     }
 }
@@ -184,7 +185,7 @@ const deleteProductInCart = async (req, res) => {
 const deleteCart = async (req, res) => {
     try {
         const { cid } = req.params
-        const checkIdCart = await cartService.getCartById(cid)
+        const checkIdCart = await cartService.getCartByIdService(cid)
 
         if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ error: `The ID cart: ${cid} not found` })
 

@@ -1,6 +1,6 @@
 import { productService, cartService, ticketsService } from "../services/index.js";
 
-let cart = []
+const cart = []
 
 const getIndexView = async (req, res) => {
     try {
@@ -26,7 +26,7 @@ const getGitHubView = async (req, res) => {
 
 const getProductsView = async (req, res) => {
     try {
-        console.log(req.user, 'products');
+        
         let { limit, page, sort, category } = req.query
 
         const options = {
@@ -215,7 +215,10 @@ const getProfileView = (req, res) => {
 
 const getTicketView = (req, res) => {
     try {
-        return res.render('ticket', {isLoggedIn: req.user});
+        
+        const logged = Object.values(req.user).every(property => property)
+        
+        return res.render('ticket', {isLoggedIn: logged, user: req.user});
     } catch (error) {
         return res.sendInternalError(error)
     }
