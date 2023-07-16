@@ -10,7 +10,7 @@ import SessionsRouter from './routers/Sessions.router.js';
 import ProductsRouter from './routers/Products.router.js';
 import CartsRouter from './routers/Carts.router.js';
 import ViewsRouter from './routers/Views.router.js';
-// import TicketRouter from './routers/ticket.router.js';
+import TicketRouter from './routers/Ticket.router.js';
 
 import config from './config/config.js';
 
@@ -38,14 +38,14 @@ app.set('view engine', 'handlebars');
 connectToDB();
 initializePassport();
 
+const ticketRouter = new TicketRouter();
+const sessionsRouter = new SessionsRouter();
+const productsRouter = new ProductsRouter();
+const cartsRouter = new CartsRouter();
+const viewsRouter = new ViewsRouter();
 
-const sessionsRouter = new SessionsRouter()
-const productsRouter = new ProductsRouter()
-const cartsRouter = new CartsRouter()
-const viewsRouter = new ViewsRouter()
 
-
-// app.use('/api/ticket', TicketRouter)
+app.use('/api/ticket', ticketRouter.getRouter())
 app.use('/api/session', sessionsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());

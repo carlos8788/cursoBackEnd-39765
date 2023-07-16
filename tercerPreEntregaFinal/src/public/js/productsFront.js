@@ -90,25 +90,28 @@ btnCartFinal.addEventListener('click', () => {
         confirmButtonText: 'Yes!'
     }).then(response => {
         if (response.isConfirmed) {
-            fetch('/products/ticket')
+            fetch('api/carts/usercarts')
                 .then(response => response.json())
                 .then(data => {
-                    if (data.cartLength > 0) {
-                        fetch('/products', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ finishBuy: true}),
-                        }).then(
-                            Swal.fire({
-                                title: 'Completed purchase!',
-                                icon: 'success'
-                            }
-                            )
-                        ).then(
-                            modalBody.innerHTML = `<h3> Empty cart </h3>`
-                        )
+                    console.log('data', data.payload);
+                    // console.log(data);
+                    if (data.payload.products.length > 0) {
+                        window.location.href = '/ticket'
+                        // fetch('/products', {
+                        //     method: 'POST',
+                        //     headers: {
+                        //         'Content-Type': 'application/json',
+                        //     },
+                        //     body: JSON.stringify({ finishBuy: true}),
+                        // }).then(
+                        //     Swal.fire({
+                        //         title: 'Completed purchase!',
+                        //         icon: 'success'
+                        //     }
+                        //     )
+                        // ).then(
+                        //     modalBody.innerHTML = `<h3> Empty cart </h3>`
+                        // )
                     }
                     else {
                         Swal.fire({

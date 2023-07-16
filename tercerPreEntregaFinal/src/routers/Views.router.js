@@ -4,8 +4,6 @@ import BaseRouter from "./Router.js";
 
 
 
-let cart = []
-
 export default class ViewsRouter extends BaseRouter {
 
     init() {
@@ -26,8 +24,9 @@ export default class ViewsRouter extends BaseRouter {
         this.get('/register', ['PUBLIC'], passportCall('register', {strategyType: 'login'}), viewsControllers.getRegisterView)
         
         this.get('/profile', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProfileView)
-
         
+        this.get('/ticket', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getTicketView)
+
         this.post('/products', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.postProductsView)
         
     }

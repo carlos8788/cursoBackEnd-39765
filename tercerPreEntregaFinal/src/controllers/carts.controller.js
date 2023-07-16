@@ -5,8 +5,9 @@ const getUserCarts = async (req, res) => {
     try {
 
         const carts = await cartService.getCartsByUserService(req.user.id)
-        console.log(carts);
-        return res.sendSuccess(carts)
+        console.log(carts, 'estoy en cart');
+        
+        return res.sendSuccessWithPayload(carts[0])
     } catch (error) {
         
         return res.sendInternalError(error)

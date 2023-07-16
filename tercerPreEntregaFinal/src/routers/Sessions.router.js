@@ -1,6 +1,7 @@
 import BaseRouter from "./Router.js";
 import { passportCall } from '../middleware/auth.js';
 
+
 import sessionsController from "../controllers/sessions.controller.js";
 
 export default class SessionsRouter extends BaseRouter {

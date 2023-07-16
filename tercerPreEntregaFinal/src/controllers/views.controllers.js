@@ -1,4 +1,4 @@
-import { productService, cartService } from "../services/index.js";
+import { productService, cartService, ticketsService } from "../services/index.js";
 
 let cart = []
 
@@ -209,6 +209,15 @@ const getProfileView = (req, res) => {
 
     } catch (error) {
         console.log(error);
+        return res.sendInternalError(error)
+    }
+}
+
+const getTicketView = (req, res) => {
+    try {
+        return res.render('ticket', {isLoggedIn: req.user});
+    } catch (error) {
+        return res.sendInternalError(error)
     }
 }
 
@@ -222,5 +231,6 @@ export default {
     getCartIdView,
     getLoginView,
     getRegisterView,
-    getProfileView
+    getProfileView,
+    getTicketView
 }
