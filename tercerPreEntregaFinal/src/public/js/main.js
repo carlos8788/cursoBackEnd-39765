@@ -1,5 +1,5 @@
 const btnLogout = document.getElementById('logout')
-const cartsView = document.getElementById('carts');
+
 const ticketsView = document.getElementById('tickets');
 try {
     btnLogout.addEventListener('click', () => {
@@ -34,9 +34,6 @@ try {
     console.error(error);
 }
 
-cartsView.addEventListener('click', () => {
-    window.location.href = '/ticket'
-});
 
 ticketsView.addEventListener('click', () => {
     window.location.href = '/allTickets'

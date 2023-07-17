@@ -76,17 +76,21 @@ export const initializePassport = () => {
                     delete userDB.password
                     let existsCart = await cartService.getCartsByUserService(userDB._id)
                     
-                    let newUserCart;
-                    if (existsCart.length === 0) {
-                        existsCart = await cartService.addCartService({ userId: userDB._id, products: [] })
-                        let newCart = await usersService.addCart({userId: userDB._id, cartId: existsCart._id})
-                        console.log(newCart, 'linea 83');
-                        newUserCart = newCart[0]
+                    async function handleCart() {
+                        let newUserCart;
+                        if (existsCart.length === 0) {
+                            existsCart = await cartService.addCartService({ userId: userDB._id, products: [] });
+                            let newCart = await usersService.addCart({userId: userDB._id, cartId: existsCart._id});
+                            console.log(newCart, 'linea 83');
+                            newUserCart = newCart.carts[0];
+                        }
+           
+                        return newUserCart; 
                     }
                     console.log(existsCart, 'existCart');
-                    console.log(newUserCart, 'usercart');
-                    let cart = existsCart[0] ? existsCart[0]._id : newUserCart;
-
+                    // console.log(newUserCart, 'usercart');
+                    let cart = existsCart[0] ? existsCart[0]._id : await handleCart();
+                    console.log(cart);
                     const user = {
                         id: userDB._id,
                         first_name: userDB.first_name,
@@ -131,17 +135,14 @@ export const initializePassport = () => {
                 }
                 const result = await usersService.createUser(userGitHub);
                 let existsCart = await cartService.getCartsByUserService(result._id)
-                console.log(existsCart, 'exists');
+                
                 if (existsCart.length === 0) {
                     let newCart = await cartService.addCartService({ userId: result._id, products: [] })
                     const addCartUser = await usersService.addCart({userId: result._id, cartId: newCart._id})
                     
                     return done(null, addCartUser);
                 }
-                
-                
-                
-                
+
                 return done(null, result);
             }
             else {
