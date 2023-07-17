@@ -75,19 +75,27 @@ export const initializePassport = () => {
 
                     delete userDB.password
                     let existsCart = await cartService.getCartsByUserService(userDB._id)
+                    
+                    let newUserCart;
                     if (existsCart.length === 0) {
                         existsCart = await cartService.addCartService({ userId: userDB._id, products: [] })
-                        existsCart = await usersService.addCart({userId: userDB._id, cartId: existsCart._id})
-                        
+                        let newCart = await usersService.addCart({userId: userDB._id, cartId: existsCart._id})
+                        console.log(newCart, 'linea 83');
+                        newUserCart = newCart[0]
                     }
+                    console.log(existsCart, 'existCart');
+                    console.log(newUserCart, 'usercart');
+                    let cart = existsCart[0] ? existsCart[0]._id : newUserCart;
+
                     const user = {
                         id: userDB._id,
                         first_name: userDB.first_name,
                         last_name: userDB.last_name,
                         email: userDB.email,
                         role: userDB.role,
-                        cart: existsCart[0]._id
+                        cart
                     }
+                    console.log(user, 'userConfig')
                     
                     return done(null, user, { status: 'success', message: 'User log' })
                 } catch (error) {

@@ -1,6 +1,6 @@
 const btnLogout = document.getElementById('logout')
 const cartsView = document.getElementById('carts');
-
+const ticketsView = document.getElementById('tickets');
 try {
     btnLogout.addEventListener('click', () => {
     Swal.fire({
@@ -35,6 +35,9 @@ try {
 }
 
 cartsView.addEventListener('click', () => {
-    window.location.href = '/carts'
+    window.location.href = '/ticket'
 });
 
+ticketsView.addEventListener('click', () => {
+    window.location.href = '/allTickets'
+})

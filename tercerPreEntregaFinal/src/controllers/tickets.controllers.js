@@ -15,7 +15,7 @@ const getTicketByIdController = async (req, res) => {
     const tid = req.params.tid
     try {
         const ticket = await ticketsService.getTicketByUserId(tid)
-        return res.sendSuccess(ticket)
+        return res.sendSuccessWithPayload(ticket)
 
     } catch (error) {
         return res.sendInternalError(error)

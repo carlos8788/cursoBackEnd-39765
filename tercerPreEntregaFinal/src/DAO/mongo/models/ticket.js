@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from 'mongoose';
+// import moment from 'moment';
 
 const ticketCollection = 'Tickets';
 
@@ -24,9 +25,10 @@ const ticketSchema = new Schema({
     count: {
         type: Number,
         default: 0,
-    }
+    },
+    
 
-}, { purchase_datetime: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+}, { timestamps: { createdAt: 'purchase_time', updatedAt: 'updated_at' } }
 );
 
 ticketSchema.pre('save', async function (next) {
@@ -42,7 +44,9 @@ ticketSchema.pre('save', async function (next) {
 
             this.code = `${user.email}.${count + 1}/${this._id}`;
             console.log(this.code);
+            
             this.count = count + 1;
+            
 
             next();
 

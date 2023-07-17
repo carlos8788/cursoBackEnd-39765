@@ -1,15 +1,15 @@
 import { userService, productService, cartService, ticketsService } from '../services/index.js'
 
 const getUserCarts = async (req, res) => {
-            
+
     try {
 
         const carts = await cartService.getCartsByUserService(req.user.id)
         console.log(carts, 'estoy en cart');
-        
+
         return res.sendSuccessWithPayload(carts[0])
     } catch (error) {
-        
+
         return res.sendInternalError(error)
     }
 }
@@ -18,7 +18,7 @@ const getCartId = async (req, res) => {
     try {
         const { cid } = req.params
         console.log(cid);
-        
+
         const result = await cartService.getCartByIdService(cid)
         console.log(result);
         // Si el resultado del GET tiene la propiedad 'CastError' devuelve un error
@@ -52,9 +52,9 @@ const postCart = async (req, res) => {
         if (check) return res.sendNotFound(check)
 
         const cart = await cartService.addCartService({ userId, products })
-        
+
         const addCartInUser = await userService.addCartService({ userId: cart.user, cartId: cart._id })
-        
+
         return res.sendSuccess(cart);
 
     }
@@ -67,7 +67,7 @@ const postCart = async (req, res) => {
 const postProductInCart = async (req, res) => {
     try {
 
-        let { cid, pid } = req.params    
+        let { cid, pid } = req.params
         const { quantity } = req.body
 
         if (isNaN(Number(quantity)) || !Number.isInteger(quantity)) return res.status(400).send({ status: 'error', payload: null, message: 'The quantity is not valid' })
@@ -125,18 +125,18 @@ const productInCart = async (req, res) => {
         let { cid, pid } = req.params
         const { quantity } = req.body
 
-        
+
         const checkIdProduct = await productService.getProductByIdService(pid);
-        
+
         if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
 
         const checkIdCart = await cartService.getCartByIdService(cid)
 
-        
+
         if (checkIdCart === null || typeof (checkIdCart) === 'string') return res.status(404).send({ error: `The ID cart: ${cid} not found` })
 
         const result = checkIdCart.products.findIndex(product => product._id._id.toString() === pid)
-        
+
 
         if (result === -1) return res.status(404).send({ status: 'error', payload: null, message: `the product with ID: ${pid} cannot be updated because it is not in the cart` })
 
@@ -202,12 +202,40 @@ const deleteCart = async (req, res) => {
 }
 
 const purchaseCart = async (req, res) => {
-    const cid = req.params.cid
-    const cart = await cartService.getCartByIdService(cid)
-    console.log(cart);
-    // const insufficientProducts = 2
-    // const ticket = await ticketsService.addTicketService(preTicket)
-    res.status(200).send('OK')
+    try {
+        const cid = req.params.cid
+        const { amount } = req.body
+        const cart = await cartService.getCartByIdService(cid)
+
+        let insufficientProducts = [];
+        let productPurchase = [];
+
+        for (let product of cart.products) {
+            if (product._id.stock < product.quantity) {
+                insufficientProducts.push(product);
+            } else {
+                product._id.stock -= product.quantity
+                await productService.updateProductService(product._id._id, product._id)
+                productPurchase.push(product);
+            }
+        }
+
+        const preTicket = {
+            user: req.user.id,
+            cart: cid,
+            amount
+        }
+
+        if (!amount) return res.status(403).send({ message: 'Products not available' });
+        await ticketsService.addTicketService(preTicket)
+        await cartService.updateProductsInCartService(cid, insufficientProducts)
+
+        return res.sendSuccess('Successful purchase')
+    } catch (error) {
+
+        return res.sendInternalError(error)
+    }
+
 };
 
 

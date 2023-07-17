@@ -228,6 +228,15 @@ const getTicketView = (req, res) => {
     }
 }
 
+const getAllTicketView = (req, res) => {
+    try {
+        const logged = Object.values(req.user).every(property => property)
+        return res.render('allTickets', {isLoggedIn: logged, user: req.user});
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+}
+
 export default {
     getIndexView,
     getCartsView,
@@ -239,5 +248,6 @@ export default {
     getLoginView,
     getRegisterView,
     getProfileView,
-    getTicketView
+    getTicketView,
+    getAllTicketView
 }
