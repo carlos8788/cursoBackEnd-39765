@@ -5,7 +5,12 @@ const registerBtn = document.getElementById('register');
 
 loginForm.addEventListener('submit', event => {
     event.preventDefault();
-    
+
+    const actions = {
+        'user': () => window.location.replace('/products'),
+        'ADMIN': () => window.location.replace('/admin'), 
+    };
+
     const user = Object.fromEntries(new FormData(event.target))
 
     try {
@@ -16,28 +21,25 @@ loginForm.addEventListener('submit', event => {
                 'Content-Type': 'application/json',
             },
         })
-            .then(response => {
-                if (response.ok) {
-                    window.location.replace('/products')
-                }
-                else{
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const action = actions[data.user.userRole];
+                console.log(action);
+                if (action) {
+                    action();
+                } else {
                     Swal.fire({
                         title: 'Login failed, please check your username and password',
                         icon: 'warning'
-                    })
+                    });
                 }
-            })
-
-            .catch(
-                error => {
-                    console.log(error);
-                }
-            );
+            });
 
     } catch (error) {
 
         console.log(error);
-        
+
     }
 
 

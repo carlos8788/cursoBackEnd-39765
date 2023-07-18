@@ -18,6 +18,7 @@ const getTickets = async () => {
     try {
         response = await fetch('/api/ticket/' + uid)
         data = await response.json()
+        console.log(data);
         let tickets = ''
         if (data.payload.length > 0) {
             for (let ticket of data.payload) {

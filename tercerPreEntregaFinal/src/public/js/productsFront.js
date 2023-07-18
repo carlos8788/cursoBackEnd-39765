@@ -10,7 +10,7 @@ const productsInCart = () => {
     fetch('/products/inCart')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            
             if (data.cartLength > 0) {
                 let products = ''
                 let total = 0
@@ -44,7 +44,7 @@ arrayProducts.forEach(product => {
             confirmButtonText: 'Confirm',
         }).then(response => {
 
-            if (stock > Number(response.value) && Number(response.value) > 0) {
+            if (stock >= Number(response.value) && Number(response.value) > 0) {
                 Swal.fire({
                     title: 'Product added successfully',
                     text: `ID: ${product.id} - Quantity: ${response.value}`,
@@ -57,9 +57,9 @@ arrayProducts.forEach(product => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ product: { _id: product.id, quantity: Number(response.value) } }),
-                })
+                }).then(() =>productsInCart())
 
-                productsInCart()
+                
 
             }
             else if (Number(response.value) < 0) {
@@ -92,26 +92,10 @@ btnCartFinal.addEventListener('click', () => {
         if (response.isConfirmed) {
             fetch('api/carts/usercarts')
                 .then(response => response.json())
-                .then(data => {
-                    console.log('data', data.payload);
-                    // console.log(data);
+                .then(data => {                    
+                    
                     if (data.payload.products.length > 0) {
                         window.location.href = '/ticket'
-                        // fetch('/products', {
-                        //     method: 'POST',
-                        //     headers: {
-                        //         'Content-Type': 'application/json',
-                        //     },
-                        //     body: JSON.stringify({ finishBuy: true}),
-                        // }).then(
-                        //     Swal.fire({
-                        //         title: 'Completed purchase!',
-                        //         icon: 'success'
-                        //     }
-                        //     )
-                        // ).then(
-                        //     modalBody.innerHTML = `<h3> Empty cart </h3>`
-                        // )
                     }
                     else {
                         Swal.fire({
@@ -120,7 +104,7 @@ btnCartFinal.addEventListener('click', () => {
                             icon: 'info'
                         })
                     }
-                })
+                }).then(() =>productsInCart())
         }
         else {
             Swal.fire({

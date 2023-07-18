@@ -4,14 +4,14 @@ import { passportCall } from '../middleware/auth.js';
 
 export default class TicketsRouter extends BaseRouter {
     init() {
-        this.get('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.getTicketByUserIdController)
+        this.get('/', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.getTicketByUserIdController)
 
-        this.get('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.getTicketByIdController)
+        this.get('/:tid', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.getTicketByIdController)
 
-        this.post('/', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.postTicketController)
+        this.post('/', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.postTicketController)
 
-        this.delete('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.deleteTicketController)
+        this.delete('/:tid', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.deleteTicketController)
 
-        this.put('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.updateTicketController)
+        this.put('/:tid', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.updateTicketController)
     }
 }

@@ -10,6 +10,8 @@ import { usersService } from '../DAO/mongo/managers/index.js';
 import { cartService } from '../services/index.js';
 import config from './config.js';
 
+import UserDTO from '../DTOs/user/userDTO.js';
+
 const localStrategy = local.Strategy
 
 
@@ -26,13 +28,15 @@ export const initializePassport = () => {
                     return done(null, false, { message: 'User already exists' });
                 }
 
-                const newUser = {
+                const newUser = new UserDTO({
                     first_name,
                     last_name,
                     email,
                     age,
                     password: createHash(password),
-                }
+                })
+
+                console.log(newUser);
 
                 const checkUser = Object.values(newUser).every(property => property)
                 if (!checkUser) return res.send({ status: 'error', message: 'User Incomplete' })
@@ -55,14 +59,16 @@ export const initializePassport = () => {
                 let resultUser;
                 try {
                     if (email === config.adminName && password === config.adminPassword) {
-                        resultUser = {
-                            first_name: 'admin',
-                            last_name: 'coder',
-                            email: 'adminCoder@coder.com',
-                            age: 100,
+                        resultUser = new UserDTO(
+                            {
+                                first_name: 'admin',
+                                last_name: 'coder',
+                                email: 'adminCoder@coder.com',
+                                age: 100,
 
-                            role: 'admin'
-                        }
+                                role: 'ADMIN'
+                            }
+                        )
                         return done(null, resultUser);
 
                     }
@@ -75,32 +81,37 @@ export const initializePassport = () => {
 
                     delete userDB.password
                     let existsCart = await cartService.getCartsByUserService(userDB._id)
-                    
+
                     async function handleCart() {
                         let newUserCart;
                         if (existsCart.length === 0) {
                             existsCart = await cartService.addCartService({ userId: userDB._id, products: [] });
-                            let newCart = await usersService.addCart({userId: userDB._id, cartId: existsCart._id});
+                            let newCart = await usersService.addCart({ userId: userDB._id, cartId: existsCart._id });
                             console.log(newCart, 'linea 83');
                             newUserCart = newCart.carts[0];
                         }
-           
-                        return newUserCart; 
+
+                        return newUserCart;
                     }
                     console.log(existsCart, 'existCart');
                     // console.log(newUserCart, 'usercart');
                     let cart = existsCart[0] ? existsCart[0]._id : await handleCart();
-                    console.log(cart);
-                    const user = {
-                        id: userDB._id,
-                        first_name: userDB.first_name,
-                        last_name: userDB.last_name,
-                        email: userDB.email,
-                        role: userDB.role,
-                        cart
-                    }
-                    console.log(user, 'userConfig')
-                    
+                    console.log(userDB._id, 'userDB');
+                    console.log(cart, 'cartConfig');
+
+                    const user = new UserDTO(
+                        {
+                            id: userDB._id,
+                            first_name: userDB.first_name,
+                            last_name: userDB.last_name,
+                            email: userDB.email,
+                            role: userDB.role,
+                            cart
+                        })
+
+
+                    console.log(user, 'userOPasstor');
+
                     return done(null, user, { status: 'success', message: 'User log' })
                 } catch (error) {
                     return done(error)
@@ -123,23 +134,25 @@ export const initializePassport = () => {
             let emailGitHub = `${profile._json.login}@github.com`
             let user = await usersService.getUsersByEmail(emailGitHub);
 
-            
+
             if (!user) {
-                
-                let userGitHub = {
-                    first_name: profile._json.login,
-                    last_name: profile._json.node_id,
-                    email: emailGitHub,
-                    age: 20,
-                    password: ''
-                }
+
+                let userGitHub = new UserDTO(
+                    {
+                        first_name: profile._json.login,
+                        last_name: profile._json.node_id,
+                        email: emailGitHub,
+                        password: '',
+
+                    }
+                )
                 const result = await usersService.createUser(userGitHub);
                 let existsCart = await cartService.getCartsByUserService(result._id)
-                
+
                 if (existsCart.length === 0) {
                     let newCart = await cartService.addCartService({ userId: result._id, products: [] })
-                    const addCartUser = await usersService.addCart({userId: result._id, cartId: newCart._id})
-                    
+                    const addCartUser = await usersService.addCart({ userId: result._id, cartId: newCart._id })
+
                     return done(null, addCartUser);
                 }
 

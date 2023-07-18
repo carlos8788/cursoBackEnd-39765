@@ -30,7 +30,6 @@ async function handleData() {
 
 handleData();
 
-// function auxiliary
 
 const dateString = data => {
 

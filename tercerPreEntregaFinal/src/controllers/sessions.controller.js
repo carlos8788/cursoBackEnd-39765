@@ -8,7 +8,7 @@ const gitHubCallBack = (req, res) => {
             role: req.user.role,
             id: req.user.id,
             email: req.user.email,
-            cart: req.user.carts[0]
+            cart: req.user.carts
         }
         console.log(user, 'calling gitHubCallBack 0');
 
@@ -33,16 +33,16 @@ const loginPost = async (req, res) => {
             role: req.user.role,
             id: req.user.id,
             email: req.user.email,
-            cart: req.user.cart
+            cart: req.user.carts
         }
-        console.log(user)
+        console.log(user, 'loginPost')
         const access_token = generateToken(user)
 
         return res.cookie('authToken', access_token, {
             maxAge: 1000 * 60 * 60 * 24,
             httpOnly: true,
             
-        }).sendSuccess('Login successful')
+        }).sendSuccessUser({userRole: user.role})
     } catch (error) {
         return res.sendInternalError(error);
     }

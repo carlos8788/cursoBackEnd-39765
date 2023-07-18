@@ -93,6 +93,7 @@ const getProductsView = async (req, res) => {
         const { prevLink, nextLink } = links(products);
 
         if (page > totalPages) return res.render('notFound', { pageNotFound: '/products', isLoggedIn: req.user })
+        console.log(req.user, 'estpuy en get products');
         return res.render(
             'products',
             {
@@ -143,7 +144,8 @@ const postProductsView = async (req, res) => {
             if (product.quantity > 0) {
                 console.log('estoy en quantity');
                 const updateCart = await cartService.addProductInCartService(cartId, product)
-                // console.log(updateCart.products);
+                console.log(updateCart);
+                // return res.send({ cartLength: updateCart.products.length, productsInCart:updateCart.products})
             }
             else {
                 return res.render('products', { message: 'Quantity must be greater than 0', })
@@ -234,8 +236,20 @@ const getAllTicketView = (req, res) => {
         return res.render('allTickets', {isLoggedIn: logged, user: req.user});
     } catch (error) {
         return res.sendInternalError(error)
+        
     }
 }
+
+const getAdminView = (req, res) => {
+    try {
+        console.log('getAdminView');
+        const logged = Object.values(req.user).every(property => property)
+        return res.render('admin', {isLoggedIn: logged});
+    } catch (error) {
+        return res.sendInternalError(error)
+    }
+}
+
 
 export default {
     getIndexView,
@@ -249,5 +263,6 @@ export default {
     getRegisterView,
     getProfileView,
     getTicketView,
-    getAllTicketView
+    getAllTicketView,
+    getAdminView
 }
