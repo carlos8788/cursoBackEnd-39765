@@ -7,29 +7,32 @@ import BaseRouter from "./Router.js";
 export default class ViewsRouter extends BaseRouter {
 
     init() {
-        this.get('/', ['PUBLIC'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getIndexView)
-
-        this.get('/carts', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getCartsView)
-
-        this.get('/viewGitHub', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getGitHubView)
-
-        this.get('/products', ['LOGIN'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProductsView)
-
-        this.get('/products/inCart', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProductsInCart)
-        
-        this.get('/carts/:cid', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getCartIdView)
-        
-        this.get('/login', ['PUBLIC'], passportCall('login', {strategyType: 'login'}), viewsControllers.getLoginView)
+        this.get('/admin', ['ADMIN'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getAdminView) //ADMIN
         
         this.get('/register', ['PUBLIC'], passportCall('register', {strategyType: 'login'}), viewsControllers.getRegisterView)
-        
-        this.get('/profile', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProfileView)
-        
-        this.get('/ticket', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getTicketView)
 
-        this.get('/allTickets', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getAllTicketView)
+        this.get('/login', ['PUBLIC', 'ADMIN'], passportCall('login', {strategyType: 'login'}), viewsControllers.getLoginView)
 
-        this.post('/products', ['AUTH'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.postProductsView)
+        this.get('/', ['PUBLIC', 'ADMIN'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getIndexView) 
+
+
+        this.get('/carts', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getCartsView) //USER
+
+        this.get('/viewGitHub', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getGitHubView) //USER
+
+        this.get('/products', ['LOGIN', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProductsView) //USER
+
+        this.get('/products/inCart', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProductsInCart) //USER
+        
+        this.get('/carts/:cid', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getCartIdView) //USER
+                
+        this.get('/profile', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getProfileView) //USER
+        
+        this.get('/ticket', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getTicketView) //USER
+
+        this.get('/allTickets', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getAllTicketView) //USER
+
+        this.post('/products', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.postProductsView) //USER
         
     }
 
