@@ -6,6 +6,7 @@ const modalFooter = document.getElementById('modalFooter');
 
 const arrayProducts = Array.from(products);
 
+
 const productsInCart = () => {
     fetch('/products/inCart')
         .then(response => response.json())
@@ -104,7 +105,10 @@ btnCartFinal.addEventListener('click', () => {
                             icon: 'info'
                         })
                     }
-                }).then(() =>productsInCart())
+                })
+                .then(() =>productsInCart())
+                .catch(error => console.log(error))
+
         }
         else {
             Swal.fire({
@@ -120,5 +124,6 @@ btnCartFinal.addEventListener('click', () => {
 
 
 productsInCart()
+
 
 

@@ -15,6 +15,7 @@ export default class ViewsRouter extends BaseRouter {
 
         this.get('/', ['PUBLIC', 'ADMIN'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getIndexView) 
 
+        this.get('/forbidden', ['PUBLIC', 'ADMIN'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.forbiddenView) 
 
         this.get('/carts', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getCartsView) //USER
 

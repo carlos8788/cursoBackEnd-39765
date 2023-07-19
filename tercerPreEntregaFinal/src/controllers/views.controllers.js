@@ -250,6 +250,10 @@ const getAdminView = (req, res) => {
     }
 }
 
+const forbiddenView = (req, res) => {
+    res.render('forbidden');
+}
+
 
 export default {
     getIndexView,
@@ -264,5 +268,6 @@ export default {
     getProfileView,
     getTicketView,
     getAllTicketView,
-    getAdminView
+    getAdminView,
+    forbiddenView
 }
