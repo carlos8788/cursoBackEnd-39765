@@ -1,9 +1,5 @@
 const divTickets = document.getElementById('divTickets');
 const uid = document.querySelector('.card-header').id;
-// console.log(uid);
-// const date = new Date();
-// const formattedDate = date.toLocaleString('es-AR', { hour12: false });
-// console.log(formattedDate);
 
 const formatDate = (dateTime) => {
     let date = new Date(dateTime);

@@ -3,9 +3,23 @@ import { productService } from '../services/index.js';
 
 const getProducts = async (req, res) => {
     try {
-        let { limit, page, sort, category } = req.query
+        let { limit, page, sort, category, filterStock } = req.query
         console.log(req.query);
-        
+
+        if (filterStock) {
+            try {
+                console.log('estoy');
+                const products = await productService.getProductsViewService()
+                
+                const filterByStock = products.filter(product => product.stock <= Number(filterStock))
+                
+                return res.sendSuccessWithPayload(filterByStock);
+            } catch (error) {
+                console.log(error);
+                return res.sendInternalError(error);
+            }
+
+        }
 
         const options = {
             page: Number(page) || 1,
@@ -50,7 +64,7 @@ const getProducts = async (req, res) => {
         }
 
         const products = await productService.getProductsService({}, options);
-        
+
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
         return res.status(200).send({ status: 'success', payload: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
@@ -83,7 +97,7 @@ const getProductId = async (req, res) => {
 const postProduct = async (req, res) => {
     try {
         const product = req.body
-        
+        console.log(product);
         const {
             title,
             description,
@@ -150,7 +164,7 @@ const deleteProduct = async (req, res) => {
     try {
         const { pid } = req.params
         const result = await productService.deleteProductService(pid)
-        
+
         if (!result) return res.status(404).send({ message: `ID: ${pid} not found` })
 
         return res.sendSuccess(`ID: ${pid} was deleted`);

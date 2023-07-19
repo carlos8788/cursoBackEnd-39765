@@ -211,7 +211,7 @@ const purchaseCart = async (req, res) => {
         let productPurchase = [];
 
         for (let product of cart.products) {
-            if (product._id.stock < product.quantity) {
+            if (product._id.stock <= product.quantity) {
                 insufficientProducts.push(product);
             } else {
                 product._id.stock -= product.quantity
