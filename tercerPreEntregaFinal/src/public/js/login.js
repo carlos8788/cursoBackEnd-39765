@@ -23,9 +23,9 @@ loginForm.addEventListener('submit', event => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                
                 const action = actions[data.user.userRole];
-                console.log(action);
+                
                 if (action) {
                     action();
                 } else {
