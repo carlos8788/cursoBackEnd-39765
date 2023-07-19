@@ -5,7 +5,7 @@ const getUserCarts = async (req, res) => {
     try {
 
         const carts = await cartService.getCartsByUserService(req.user.id)
-        console.log(carts, 'estoy en cart');
+        
 
         return res.sendSuccessWithPayload(carts[0])
     } catch (error) {
@@ -17,10 +17,10 @@ const getUserCarts = async (req, res) => {
 const getCartId = async (req, res) => {
     try {
         const { cid } = req.params
-        console.log(cid);
+        
 
         const result = await cartService.getCartByIdService(cid)
-        console.log(result);
+        
         // Si el resultado del GET tiene la propiedad 'CastError' devuelve un error
         if (result === null || typeof (result) === 'string') return res.status(404).send({ status: 'error', message: 'ID not found' });
 

@@ -4,11 +4,11 @@ import { productService } from '../services/index.js';
 const getProducts = async (req, res) => {
     try {
         let { limit, page, sort, category, filterStock } = req.query
-        console.log(req.query);
+        
 
         if (filterStock) {
             try {
-                console.log('estoy');
+                
                 const products = await productService.getProductsViewService()
                 
                 const filterByStock = products.filter(product => product.stock <= Number(filterStock))
@@ -97,7 +97,7 @@ const getProductId = async (req, res) => {
 const postProduct = async (req, res) => {
     try {
         const product = req.body
-        console.log(product);
+        
         const {
             title,
             description,

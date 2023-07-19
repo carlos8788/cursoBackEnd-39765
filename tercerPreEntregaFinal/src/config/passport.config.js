@@ -36,7 +36,7 @@ export const initializePassport = () => {
                     password: createHash(password),
                 })
 
-                console.log(newUser);
+                
 
                 const checkUser = Object.values(newUser).every(property => property)
                 if (!checkUser) return res.send({ status: 'error', message: 'User Incomplete' })
@@ -87,17 +87,17 @@ export const initializePassport = () => {
                         if (existsCart.length === 0) {
                             existsCart = await cartService.addCartService({ userId: userDB._id, products: [] });
                             let newCart = await usersService.addCart({ userId: userDB._id, cartId: existsCart._id });
-                            console.log(newCart, 'linea 83');
+                            
                             newUserCart = newCart.carts[0];
                         }
 
                         return newUserCart;
                     }
-                    console.log(existsCart, 'existCart');
-                    // console.log(newUserCart, 'usercart');
+                    
+                    
                     let cart = existsCart[0] ? existsCart[0]._id : await handleCart();
-                    console.log(userDB._id, 'userDB');
-                    console.log(cart, 'cartConfig');
+                    
+                    
 
                     const user = new UserDTO(
                         {
@@ -110,7 +110,7 @@ export const initializePassport = () => {
                         })
 
 
-                    console.log(user, 'userOPasstor');
+                    
 
                     return done(null, user, { status: 'success', message: 'User log' })
                 } catch (error) {

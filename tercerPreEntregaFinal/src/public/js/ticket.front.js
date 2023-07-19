@@ -1,11 +1,11 @@
-// fetch('api/cart')
+
 const cartId = document.querySelector('.card-header').id;
 const cardBody = document.querySelector('.card-body')
 const totalBuy = document.getElementById('totalBuy')
 const btnPurchaseCart = document.getElementById('btnPurchaseCart')
 const idBtns = document.querySelectorAll('.btn-danger')
-console.log(idBtns);
-console.log(btnPurchaseCart);
+
+
 let productsFront = '';
 let total = 0;
 
@@ -29,7 +29,7 @@ const productsInBody = async (products) => {
 
             respose = await fetch(`api/products/${product._id._id}`);
             data = await respose.json();
-            console.log(data.stock);
+            
             let available = (data.stock > product.quantity)
                 ? '<button class="btn btn-outline-success m-auto m-md-0 m-0 p-0" disabled>Available</button>'
                 : '<button class="btn btn-outline-warning m-auto m-md-0 m-0 p-0" disabled>Quantity not available</button>'
@@ -55,7 +55,7 @@ const productsInBody = async (products) => {
             </div>
             `
             total += subtotal
-            console.log(product._id._id);
+            
         }
         
         cardBody.innerHTML = productsFront
@@ -65,9 +65,9 @@ const productsInBody = async (products) => {
 }
 
 const btnDelete = (cartID) => {
-    console.log('entro?');
+    
     const idBtns = document.querySelectorAll('.btn-danger')
-    console.log(idBtns);
+    
     Array.from(idBtns).forEach(btn => {
         btn.addEventListener('click', () => {
             const deleteProduct = async () => {
@@ -114,7 +114,7 @@ const btnDelete = (cartID) => {
 
 const purchaseCart = (cartID) => {
     btnPurchaseCart.addEventListener('click', async () => {
-        console.log('purchaseCart');
+        
         const response = await fetch(`/api/carts/${cartID}/purchase`, {
             method: 'POST',
             body: JSON.stringify({

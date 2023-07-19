@@ -43,8 +43,8 @@ const postTicketController = async (req, res) => {
             cart : cid,
             ...ticketBody
         }
-        console.log(uid, cid);
-        // const ticket = await ticketsService.addTicketService(preTicket);
+        
+        
         return res.sendSuccess(ticket)
 
     } catch (error) {

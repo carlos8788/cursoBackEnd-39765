@@ -1,4 +1,4 @@
-console.log('GITHUB SUCCESS seras redirigido')
+
 
 window.onload = function() {
     setTimeout(function() {

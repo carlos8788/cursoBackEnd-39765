@@ -4,7 +4,7 @@ const productsStock = document.getElementById('productsStock')
 const productsInFront = document.getElementById('productsInFront')
 const formUpdate = document.getElementById('formUpdate')
 
-console.log(formUpdate);
+
 
 document.querySelectorAll('.update-product').forEach(button => {
     button.addEventListener('click', (event) => {
@@ -86,7 +86,6 @@ document.getElementById('productForm').addEventListener('submit', (event) => {
     let productData = Object.fromEntries(formData);
     productData['thumbnails'] = [productData['thumbnails']]
     productData['price'] = Number(productData['price'])
-    console.log(productData['status']);
     productData['status'] = productData['status'] === 'on' ? true : false;
     productData['stock'] = Number(productData['stock'])
 

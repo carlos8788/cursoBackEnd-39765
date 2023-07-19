@@ -93,7 +93,7 @@ const getProductsView = async (req, res) => {
         const { prevLink, nextLink } = links(products);
 
         if (page > totalPages) return res.render('notFound', { pageNotFound: '/products', isLoggedIn: req.user })
-        console.log(req.user, 'estpuy en get products');
+        
         return res.render(
             'products',
             {
@@ -118,10 +118,10 @@ const getProductsView = async (req, res) => {
 
 const getProductsInCart = async (req, res) => {
     try {
-        // console.log(req.user, 'getProductsInCart');
+        
         const productsInCart = await cartService.getCartByIdService(req.user.cart)
-        console.log(productsInCart, 'getProductsInCart');
-        console.log(req.user.cart, 'getProductsInCart ID');
+        
+        
         if (!productsInCart) return res.send({cartLength: 0, productsInCart: []} )
         
         return res.send({ cartLength: productsInCart.products.length, productsInCart:productsInCart.products})
@@ -134,17 +134,17 @@ const getProductsInCart = async (req, res) => {
 
 const postProductsView = async (req, res) => {
     try {
-        console.log(req.user, 'postProducts');
+        
         const userId = req.user.id;
         const cartId = req.user.cart
         const { product } = req.body;
 
-        console.log(cartId);
+        
         if (product) {
             if (product.quantity > 0) {
-                console.log('estoy en quantity');
+                
                 const updateCart = await cartService.addProductInCartService(cartId, product)
-                console.log(updateCart);
+                
                 // return res.send({ cartLength: updateCart.products.length, productsInCart:updateCart.products})
             }
             else {
@@ -175,7 +175,7 @@ const getCartIdView = async (req, res) => {
             subtotal_producto.push(prod)
 
         })
-        console.log(subtotal_producto);
+        
         if (result === null || typeof (result) === 'string') return res.render('cart', { result: false, message: 'ID not found' });
 
         return res.render('cart', { result, isLoggedIn: req.user });
@@ -210,7 +210,7 @@ const getRegisterView = (req, res) => {
 const getProfileView = (req, res) => {
     try {
         delete req.user.password
-        console.log(req.user);
+        
         res.render('profile', { user: req.user, isLoggedIn: req.user })
 
     } catch (error) {
@@ -242,7 +242,7 @@ const getAllTicketView = (req, res) => {
 
 const getAdminView = (req, res) => {
     try {
-        console.log('getAdminView');
+        
         const logged = Object.values(req.user).every(property => property)
         return res.render('admin', {isLoggedIn: logged});
     } catch (error) {
