@@ -15,5 +15,7 @@ export default {
     gitHubClientSecret: process.env.GITHUB_CLIENT_SECRET,
     url: process.env.URL_HOST,
     callbackURL: process.env.GITHUB_CALLBACK_URL,
-    cookieParserEnv: process.env.COOKIE_PARSER
+    cookieParserEnv: process.env.COOKIE_PARSER,
+    user_mail: process.env.USER_MAIL,
+    pass_mail: process.env.PASS_MAIL
 }

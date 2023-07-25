@@ -1,4 +1,5 @@
 import { generateToken } from '../config/config.jwt.js'
+import { transport } from '../utils/mailer.js'
 
 const gitHubCallBack = (req, res) => {
     try {
@@ -75,10 +76,27 @@ const currentSession = (req, res) => {
     }
 }
 
+const getMail = async (req, res) => {
+    try {
+        let result = await transport.sendMail({
+            from: 'Luis ',
+            to: 'carlos8788@gmail.com',
+            subject: 'Correo de prueba',
+            html:'<h1>HOLA MUNDO</h1>',
+            attachments:[]
+        })
+        // console.log(result);
+        res.sendSuccessWithPayload(result);
+    } catch (error) {
+        return res.sendInternalError(error);
+    }
+}
+
 export default {
     gitHubCallBack,
     loginPost,
     registerPost,
     postLogOut,
     currentSession,
+    getMail
 }

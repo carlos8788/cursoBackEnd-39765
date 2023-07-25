@@ -34,6 +34,8 @@ export default class ViewsRouter extends BaseRouter {
         this.get('/allTickets', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.getAllTicketView) //USER
 
         this.post('/products', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.postProductsView) //USER
+
+        
         
     }
 
