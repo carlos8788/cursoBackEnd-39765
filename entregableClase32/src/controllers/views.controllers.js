@@ -1,5 +1,8 @@
 import { productService, cartService, ticketsService } from "../services/index.js";
 import { generateUser } from "../utils/dataFaker.js";
+import CustomError from '../services/errors/customErrors.js'
+import EErrors from '../services/errors/enums.js';
+import { generateProductErrorInfo } from '../services/errors/constant.js';
 
 const cart = []
 
@@ -157,6 +160,7 @@ const postProductsView = async (req, res) => {
     } catch (error) {
 
         console.log(error, 'eeper error');
+        return res.send({ error: error});
     }
 }
 

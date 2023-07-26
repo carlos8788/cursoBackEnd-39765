@@ -12,34 +12,47 @@ import config from './config.js';
 
 import UserDTO from '../DTOs/user/userDTO.js';
 
+import CustomError from '../services/errors/customErrors.js'
+import EErrors from '../services/errors/enums.js';
+import { generateUserErrorInfo } from '../services/errors/constant.js';
+
 const localStrategy = local.Strategy
 
 
 export const initializePassport = () => {
     passport.use('register', new localStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, emailUser, password, done) => {
-            const { first_name, last_name, email, age } = req.body;
-
             try {
-                const user = await usersService.getUsersByEmail(emailUser)
-                // let user = await userManager.getUsersByEmail(username);
-                if (user) {
+                const { first_name, last_name, email, age } = req.body;
+                if (!first_name || !last_name || !email || !age) {
 
+                    CustomError.createError({
+                        name:'User creation failed',
+                        cause: generateUserErrorInfo({first_name, last_name, email, age}),
+                        message:"Error trying to create User",
+                        code: EErrors.INVALID_TYPES_ERROR
+                    })
+                    
+                }
+                console.log('llega?');
+                const user = await usersService.getUsersByEmail(emailUser)
+                
+                if (user) {
+                    
                     return done(null, false, { message: 'User already exists' });
                 }
-
-                const newUser = new UserDTO({
+                
+                const newUser = {
                     first_name,
                     last_name,
                     email,
                     age,
                     password: createHash(password),
-                })
+                }
 
-                
 
                 const checkUser = Object.values(newUser).every(property => property)
-                if (!checkUser) return res.send({ status: 'error', message: 'User Incomplete' })
+                if (!checkUser) return done({ status: 'error', message: 'User Incomplete' })
 
                 const result = await usersService.createUser(newUser);
 
@@ -87,17 +100,17 @@ export const initializePassport = () => {
                         if (existsCart.length === 0) {
                             existsCart = await cartService.addCartService({ userId: userDB._id, products: [] });
                             let newCart = await usersService.addCart({ userId: userDB._id, cartId: existsCart._id });
-                            
+
                             newUserCart = newCart.carts[0];
                         }
 
                         return newUserCart;
                     }
-                    
-                    
+
+
                     let cart = existsCart[0] ? existsCart[0]._id : await handleCart();
-                    
-                    
+
+
 
                     const user = new UserDTO(
                         {
@@ -110,7 +123,7 @@ export const initializePassport = () => {
                         })
 
 
-                    
+
 
                     return done(null, user, { status: 'success', message: 'User log' })
                 } catch (error) {

@@ -220,6 +220,8 @@ const purchaseCart = async (req, res) => {
             }
         }
 
+        amount = Number(amount.toFixed(2))
+
         const preTicket = {
             user: req.user.id,
             cart: cid,

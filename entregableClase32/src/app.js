@@ -11,8 +11,10 @@ import ProductsRouter from './routers/Products.router.js';
 import CartsRouter from './routers/Carts.router.js';
 import ViewsRouter from './routers/Views.router.js';
 import TicketRouter from './routers/Ticket.router.js';
-import { notFoundMiddleware } from './middleware/notfound.js';
 import config from './config/config.js';
+
+import { notFoundMiddleware } from './middleware/notfound.js';
+import errorHandler from './middleware/errors/index.js';
 
 const app = express();
 const PORT = config.port || 8080
@@ -22,9 +24,6 @@ app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(config.cookieParserEnv));
-
-
-
 
 
 app.engine('handlebars', handlebars.engine());
@@ -51,6 +50,7 @@ app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
 app.use(notFoundMiddleware);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     try {
@@ -63,5 +63,3 @@ app.listen(PORT, () => {
         console.log(err);
     }
 });
-
-// mcyq pypi kold oszq

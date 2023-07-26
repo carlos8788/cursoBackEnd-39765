@@ -1,18 +1,22 @@
-// import { productService } from '../DAO/mongo/managers/index.js';
+
 import { productService } from '../services/index.js';
+import CustomError from '../services/errors/customErrors.js'
+import EErrors from '../services/errors/enums.js';
+import { generateProductErrorInfo } from '../services/errors/constant.js';
+
 
 const getProducts = async (req, res) => {
     try {
         let { limit, page, sort, category, filterStock } = req.query
-        
+
 
         if (filterStock) {
             try {
-                
+
                 const products = await productService.getProductsViewService()
-                
+
                 const filterByStock = products.filter(product => product.stock <= Number(filterStock))
-                
+
                 return res.sendSuccessWithPayload(filterByStock);
             } catch (error) {
                 console.log(error);
@@ -95,9 +99,9 @@ const getProductId = async (req, res) => {
 }
 
 const postProduct = async (req, res) => {
+
     try {
         const product = req.body
-        
         const {
             title,
             description,
@@ -109,11 +113,33 @@ const postProduct = async (req, res) => {
             thumbnails,
         } = product
 
-        const checkProduct = Object.values(product).every(property => property)
+        if (!title ||
+            !description ||
+            !price ||
+            !code ||
+            !stock ||
+            !status ||
+            !category ||
+            !thumbnails) {
+            CustomError.createError({
+                name: 'Product creation failed',
+                cause: generateProductErrorInfo(
+                    {
+                        title,
+                        description,
+                        price,
+                        code,
+                        stock,
+                        status,
+                        category,
+                        thumbnails,
+                    }
+                ),
+                message: "Error trying to create product",
+                code: EErrors.INVALID_TYPES_ERROR
+            })
 
-        if (!checkProduct) return res
-            .status(400)
-            .send({ status: 'error', message: "The product doesn't have all the properties" });
+        }
 
         if (!(typeof title === 'string' &&
             typeof description === 'string' &&
@@ -138,7 +164,8 @@ const postProduct = async (req, res) => {
         return res.status(201).send(result);
     }
     catch (err) {
-        return err
+        console.log(err);
+        return res.send({ message: err });
 
     }
 }
@@ -155,7 +182,7 @@ const putProduct = async (req, res) => {
         return res.status(200).send(`The product ${result.title} whit ID: ${result._id} was updated`);
     }
     catch (err) {
-        return err
+        return res.send({ message: err });
     };
 
 }
