@@ -1,0 +1,88 @@
+<div class="container ">
+    <header class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <div class="title text-center text-md-start">
+        <h1>Products</h1>
+    </div>
+    <div class="m-auto"><h2>Bienvenido: {{user.name}} ({{user.role}})</h2></div>
+    <div class="cart d-flex flex-column flex-md-row p-0 mt-2 mt-md-0 gap-4 text-center">
+        <img src="./img/cart.svg" alt="cart" class="img-fluid m-auto m-md-0">
+        <button type="button" class="btn btn-primary m-auto m-md-0" data-bs-toggle="modal" data-bs-target="#modalCart">
+            View Cart
+        </button>
+        <button type="button" class="btn btn-info m-auto m-md-0" id="cartFinal">
+            Buy Cart
+        </button>
+        <div class="modal fade" id="modalCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cart</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+
+                    </div>
+                    <div class="modal-footer">
+                        <div data-bs-dismiss="modal" id="modalFooter"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+    <div class="row mt-4">
+        {{#each products }}
+        <div class="card bg-secondary mb-3 mx-4 my-4" style="max-width: 20rem;">
+            <div class="card-header">code: {{this.code}}</div>
+            <div class="card-body">
+                <h4 class="card-title">{{this.title}}</h4>
+                <p class="card-text">
+                    <li>
+                        description: {{this.description}}
+                    </li>
+                    <li>
+                        price: ${{this.price}}
+                    </li>
+                    <li>
+                        category: {{this.category}}
+                    </li>
+                    <li>
+                        status: {{this.status}}
+                    </li>
+                    <li>
+                        stock: {{this.stock}}
+                    </li>
+                    <li>
+                        thumbnail: <img src="{{this.thumbnails}}" alt="" width="120" height="80">
+                    </li>
+                </p>
+                <a class="btn btn-success text-lg product" id="{{this._id}}" data-value="{{this.stock}}">Agregar a
+                    carrito</a>
+            </div>
+        </div>
+
+
+        {{/each}}
+    </div>
+
+    <div class="container d-flex justify-content-center align-items-center gap-4 p-4">
+
+
+        {{#if hasPrevPage}}
+        <a class="btn btn-primary px-5" href="{{prevLink}}">prev</a>
+
+        {{/if}}
+
+        {{#if hasNextPage}}
+
+        <a class="btn btn-primary px-5" href="{{nextLink}}">next</a>
+
+        <h3>Page: {{page}}/{{totalPages}}</h3>
+        {{/if}}
+    </div>
+
+</div>
+
+<script src="js/productsFront.js"></script>

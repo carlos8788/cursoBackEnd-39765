@@ -1,0 +1,116 @@
+<div class="container">
+
+
+    <h1>
+        ADMIN
+    </h1>
+
+    <div class="d-flex justify-content-center gap-5">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
+            New product
+        </button>
+        <button type="button" class="btn btn-success" id="productsStock">
+            Products with low stock </button>
+    </div>
+
+    <div id="productsInFront" class="container d-flex flex-wrap gap-5 justify-content-center my-5">
+
+    </div>
+
+    <div class="modal fade" id="yourModalID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUpdate">
+                        <input type="text" name="id" hidden id="modal-id" class="form-control ">
+                        <div class="mb-3">
+                            <label for="modal-title" class="form-label">Title</label>
+                            <input name="title" type="text" class="form-control" id="modal-title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-price" class="form-label">Price</label>
+                            <input name="price" type="text" class="form-control" id="modal-price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal-stock" class="form-label">Stock</label>
+                            <input name="stock" type="text" class="form-control" id="modal-stock">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Save changes"></input>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Product Form</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <input type="text" class="form-control" id="description" name="description">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="price" name="price">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="code" class="form-label">Code</label>
+                                    <input type="text" class="form-control" id="code" name="code">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="stock" class="form-label">Stock</label>
+                                    <input type="number" class="form-control" id="stock" name="stock">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Category</label>
+                                    <input type="text" class="form-control" id="category" name="category">
+                                </div>
+                                <div class="mb-5">
+                                    <label for="thumbnails" class="form-label">Thumbnails (URL)</label>
+                                    <input type="url" class="form-control" id="thumbnails" name="thumbnails">
+                                </div>
+                                <div class="mb-3 d-flex justify-content-center">
+                                    <label for="status" class="form-label h4 mx-2 text-dark">Status</label>
+                                    <input type="checkbox" class="form-check-input h4" id="status" name="status">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="productForm">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script src="js/admin.js"></script>
