@@ -17,5 +17,6 @@ export default {
     callbackURL: process.env.GITHUB_CALLBACK_URL,
     cookieParserEnv: process.env.COOKIE_PARSER,
     user_mail: process.env.USER_MAIL,
-    pass_mail: process.env.PASS_MAIL
+    pass_mail: process.env.PASS_MAIL,
+    enviroment: process.env.ENV
 }

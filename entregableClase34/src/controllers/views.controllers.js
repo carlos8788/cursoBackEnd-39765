@@ -8,18 +8,19 @@ const cart = []
 
 const getIndexView = async (req, res) => {
     try {
-
+        
         const products = await productService.getProductsViewService();
-
+        req.logger.debug('GET INDEX OK')
         res.render("index", { valueReturned: products, isLoggedIn: req.user });
     }
-    catch (err) {
-        console.log(err);
+    catch (error) {
+        req.logger.error(error)        
     }
 
 }
 
 const getCartsView = async (req, res) => {
+    req.logger.debug('Use carts view OK')
     res.render('userCarts', { isLoggedIn: req.user });
 }
 
@@ -86,7 +87,10 @@ const getProductsView = async (req, res) => {
             const { prevLink, nextLink } = links(products);
             const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs, page } = products
 
-            if (page > totalPages) return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user })
+            if (page > totalPages) {
+                req.logger.warning('Page Not Found')
+                return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user })
+            }
 
             return res.render('products', { products: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink, page, cart: cart.length, isLoggedIn: req.user });
         }
@@ -96,8 +100,11 @@ const getProductsView = async (req, res) => {
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
 
-        if (page > totalPages) return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user })
-
+        if (page > totalPages) {
+            req.logger.warning('Page Not Found')
+            return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user })
+        }
+        req.logger.debug('Products view OK')
         return res.render(
             'products',
             {
@@ -115,8 +122,9 @@ const getProductsView = async (req, res) => {
                 isLoggedIn: req.user
             }
         );
+        
     } catch (error) {
-        console.log(error);
+        req.logger.error(error)
     }
 }
 
@@ -155,12 +163,12 @@ const postProductsView = async (req, res) => {
                 return res.render('products', { message: 'Quantity must be greater than 0', })
             }
         }
-
+        req.logger.debug('post products view OK')
         return res.render('products', { isLoggedIn: req.user })
     } catch (error) {
 
-        console.log(error, 'eeper error');
-        return res.send({ error: error});
+        req.logger.error(error)
+        return res.sendInternalError(error)
     }
 }
 
@@ -186,8 +194,9 @@ const getCartIdView = async (req, res) => {
         return res.render('cart', { result, isLoggedIn: req.user });
 
 
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        req.logger.error(error)
+        return res.sendInternalError(error)
     }
 
 }
@@ -198,7 +207,8 @@ const getLoginView = (req, res) => {
         return res.render('login', { isLoggedIn: req.user })
 
     } catch (error) {
-        console.log(error);
+        req.logger.error(error)
+        return res.sendInternalError(error)
     }
 }
 
@@ -208,6 +218,7 @@ const getRegisterView = (req, res) => {
         return res.render('registerForm', { isLoggedIn: req.user })
 
     } catch (error) {
+        req.logger.error(error)
         return res.sendInternalError(error)
     }
 }
@@ -219,7 +230,7 @@ const getProfileView = (req, res) => {
         res.render('profile', { user: req.user, isLoggedIn: req.user })
 
     } catch (error) {
-        console.log(error);
+        req.logger.error(error)
         return res.sendInternalError(error)
     }
 }
@@ -231,6 +242,7 @@ const getTicketView = (req, res) => {
 
         return res.render('ticket', { isLoggedIn: logged, user: req.user });
     } catch (error) {
+        req.logger.error(error)
         return res.sendInternalError(error)
     }
 }
@@ -240,6 +252,7 @@ const getAllTicketView = (req, res) => {
         const logged = Object.values(req.user).every(property => property)
         return res.render('allTickets', { isLoggedIn: logged, user: req.user });
     } catch (error) {
+        req.logger.error(error)
         return res.sendInternalError(error)
 
     }
@@ -251,11 +264,13 @@ const getAdminView = (req, res) => {
         const logged = Object.values(req.user).every(property => property)
         return res.render('admin', { isLoggedIn: logged });
     } catch (error) {
+        req.logger.error(error)
         return res.sendInternalError(error)
     }
 }
 
 const forbiddenView = (req, res) => {
+    req.logger.warning('WARNING FORBIDDEN')
     res.render('forbidden');
 }
 
@@ -268,8 +283,8 @@ const generateProductView = (req, res) => {
         }
         res.send({ status: "success", users: users });
     } catch (error) {
-        console.log(error);
-        res.sendInternalError(error.message)
+        req.logger.error(error)
+        return res.sendInternalError(error)
     }
 
 }

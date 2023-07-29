@@ -19,7 +19,7 @@ const getProducts = async (req, res) => {
 
                 return res.sendSuccessWithPayload(filterByStock);
             } catch (error) {
-                console.log(error);
+                req.logger.error(error);
                 return res.sendInternalError(error);
             }
 
@@ -71,9 +71,11 @@ const getProducts = async (req, res) => {
 
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
+        req.logger.debug('Get Product OK')
         return res.status(200).send({ status: 'success', payload: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
-    } catch (err) {
-        return (err);
+    } catch (error) {
+        req.logger.error(error)
+        return (error);
     }
 
 
@@ -90,10 +92,12 @@ const getProductId = async (req, res) => {
         if (result === null || typeof (result) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
 
         // Resultado
+        req.logger.debug('GET product ID OK')
         return res.status(200).send(result);
 
-    } catch (err) {
-        return (err);
+    } catch (error) {
+        req.logger.error(error)
+        return (error);
     }
 
 }
@@ -160,11 +164,11 @@ const postProduct = async (req, res) => {
         if (result.code === 11000) return res
             .status(400)
             .send({ message: `E11000 duplicate key error collection: ecommerce.products dup key code: ${result.keyValue.code}` });
-
+            req.logger.debug('POST product OK')
         return res.status(201).send(result);
     }
     catch (err) {
-        console.log(err);
+        req.logger.error(error)
         return res.send({ message: err });
 
     }
@@ -178,11 +182,12 @@ const putProduct = async (req, res) => {
         const result = await productService.updateProductService(pid, product);
 
         if (result.message) return res.status(404).send({ message: `ID: ${pid} not found` })
-
+        req.logger.debug(`The product ${result.title} whit ID: ${result._id} was updated`)
         return res.status(200).send(`The product ${result.title} whit ID: ${result._id} was updated`);
     }
-    catch (err) {
-        return res.send({ message: err });
+    catch (error) {
+        req.logger.error(error)
+        return res.send({ message: error });
     };
 
 }
@@ -193,11 +198,12 @@ const deleteProduct = async (req, res) => {
         const result = await productService.deleteProductService(pid)
 
         if (!result) return res.status(404).send({ message: `ID: ${pid} not found` })
-
+        req.logger.debug(`ID: ${pid} was deleted`)
         return res.sendSuccess(`ID: ${pid} was deleted`);
 
-    } catch (err) {
-        return res.internalError(err.message)
+    } catch (error) {
+        req.logger.error(error)
+        return res.internalError(error.message)
     }
 }
 export default {

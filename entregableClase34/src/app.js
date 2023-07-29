@@ -15,11 +15,14 @@ import config from './config/config.js';
 
 import { notFoundMiddleware } from './middleware/notfound.js';
 import errorHandler from './middleware/errors/index.js';
+import attachLogger from './middleware/logger.js';
+
 
 const app = express();
 const PORT = config.port || 8080
 const URL = config.url || 'http://localhost:'
 
+app.use(attachLogger)
 app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -43,6 +46,19 @@ const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
 const viewsRouter = new ViewsRouter();
 
+app.get('/logger', (req, res) => {
+
+    req.logger.info(req.method)
+    req.logger.error('FATAL ERROR')
+    req.logger.fatal('LOGGER')
+    req.logger.error('LOGGER')
+    req.logger.warning('LOGGER')
+    req.logger.http('LOGGER')
+    req.logger.info('LOGGER')
+    req.logger.debug('LOGGER')
+    res.sendStatus(200)
+
+})
 
 app.use('/api/ticket', ticketRouter.getRouter())
 app.use('/api/session', sessionsRouter.getRouter());
@@ -50,6 +66,8 @@ app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
 app.use(notFoundMiddleware);
+
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

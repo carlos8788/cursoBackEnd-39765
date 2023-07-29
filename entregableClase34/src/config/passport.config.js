@@ -33,7 +33,7 @@ export const initializePassport = () => {
                     })
                     
                 }
-                console.log('llega?');
+                
                 const user = await usersService.getUsersByEmail(emailUser)
                 
                 if (user) {
