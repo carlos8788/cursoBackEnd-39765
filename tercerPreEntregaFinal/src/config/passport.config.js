@@ -39,7 +39,7 @@ export const initializePassport = () => {
                 
 
                 const checkUser = Object.values(newUser).every(property => property)
-                if (!checkUser) return res.send({ status: 'error', message: 'User Incomplete' })
+                if (!checkUser) return done({ status: 'error', message: 'User Incomplete' })
 
                 const result = await usersService.createUser(newUser);
 
