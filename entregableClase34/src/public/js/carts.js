@@ -23,9 +23,7 @@ async function handleData() {
             carts.innerHTML = '<h2>You have not bought any cart yet</h2>'
         }
 
-    } catch (error) {
-        console.log(error);
-    }
+    } catch{(error => {throw new Error(error)})};
 }
 
 handleData();

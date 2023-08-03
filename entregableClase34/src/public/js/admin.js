@@ -70,7 +70,7 @@ const productsFromDB = () => {
             });
 
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {throw new Error(error)});
 }
 
 productsStock.addEventListener('click', () => {
@@ -111,7 +111,7 @@ document.getElementById('productForm').addEventListener('submit', (event) => {
             }
         })
 
-        .catch(error => console.error('Error:', error));
+        .catch(error => {throw new Error(error)});
     const modalElement = document.getElementById('productModal');
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal.hide();
@@ -144,9 +144,7 @@ formUpdate.addEventListener('submit', async event => {
             productsFromDB();
         }
 
-    } catch (error) {
-        console.log(error);
-    }
+    } catch{(error => {throw new Error(error)})};
 
 
 });

@@ -27,7 +27,7 @@ const productsInCart = () => {
                 modalBody.innerHTML = `<h3> Empty cart </h3>`
             }
         })
-        .catch(err => console.log(err));
+        .catch(error => {throw new Error(error)})
 
 }
 
@@ -107,7 +107,7 @@ btnCartFinal.addEventListener('click', () => {
                     }
                 })
                 .then(() =>productsInCart())
-                .catch(error => console.log(error))
+                .catch(error => {throw new Error(error)});
 
         }
         else {

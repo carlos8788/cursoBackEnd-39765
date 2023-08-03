@@ -15,8 +15,10 @@ import config from './config/config.js';
 
 import { notFoundMiddleware } from './middleware/notfound.js';
 import errorHandler from './middleware/errors/index.js';
-import attachLogger from './middleware/logger.js';
+import {attachLogger, getLogger} from './middleware/logger.js';
 
+
+const logger = getLogger()
 
 const app = express();
 const PORT = config.port || 8080
@@ -72,13 +74,13 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
     try {
-        console.log(`Listening to the port ${PORT}\nAcceder a:`);
-        console.log(`\t1). ${URL}${PORT}/products`)
-        console.log(`\t2). ${URL}${PORT}`);
+        logger.debug(`Listening to the port ${PORT}\nAcceder a:`);
+        logger.debug(`\t1). ${URL}${PORT}/products`)
+        logger.debug(`\t2). ${URL}${PORT}`);
 
     }
     catch (err) {
-        console.log(err);
+        logger.debug(err);
     }
 });
 

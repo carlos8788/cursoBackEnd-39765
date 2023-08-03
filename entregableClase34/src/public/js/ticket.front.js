@@ -14,9 +14,7 @@ const getProducts = async (id) => {
         const response = await fetch(`api/carts/${id}`);
         const data = await response.json();
         return data;
-    } catch (error) {
-        console.error("Error:", error);
-    }
+    } catch{(error => {throw new Error(error)})};
 
 }
 
@@ -100,9 +98,7 @@ const btnDelete = (cartID) => {
                         setTimeout(() => {
                             window.location.reload();
                         }, 3000);
-                    } catch (error) {
-                        console.log(error);
-                    }
+                    } catch{(error => {throw new Error(error)})};
                 }
             };
 

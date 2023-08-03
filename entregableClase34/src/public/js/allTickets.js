@@ -38,9 +38,7 @@ const getTickets = async () => {
             tickets += "<h3>No purchases were made</h3>"
         }
         divTickets.innerHTML = tickets
-    } catch (error) {
-        console.log(error);
-    }
+    } catch{(error => {throw new Error(error)})};
 };
 
 const main = () => {

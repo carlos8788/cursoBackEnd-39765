@@ -3,6 +3,10 @@ import { generateUser } from "../utils/dataFaker.js";
 import CustomError from '../services/errors/customErrors.js'
 import EErrors from '../services/errors/enums.js';
 import { generateProductErrorInfo } from '../services/errors/constant.js';
+import {getLogger} from '../middleware/logger.js';
+
+const logger = getLogger()
+
 
 const cart = []
 
@@ -139,7 +143,7 @@ const getProductsInCart = async (req, res) => {
         return res.send({ cartLength: productsInCart.products.length, productsInCart: productsInCart.products })
 
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         return res.sendInternalError(error);
     }
 }

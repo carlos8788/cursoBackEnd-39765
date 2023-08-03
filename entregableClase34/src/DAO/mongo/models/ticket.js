@@ -43,7 +43,7 @@ ticketSchema.pre('save', async function (next) {
             const count = await this.model('Tickets').countDocuments();
 
             this.code = `${user.email}.${count + 1}/${this._id}`;
-            console.log(this.code);
+            
             
             this.count = count + 1;
             

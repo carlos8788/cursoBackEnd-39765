@@ -85,7 +85,7 @@ const getMail = async (req, res) => {
             html:'<h1>HOLA MUNDO</h1>',
             attachments:[]
         })
-        // console.log(result);
+        
         res.sendSuccessWithPayload(result);
     } catch (error) {
         return res.sendInternalError(error);

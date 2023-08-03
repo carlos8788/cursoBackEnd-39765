@@ -36,11 +36,7 @@ loginForm.addEventListener('submit', event => {
                 }
             });
 
-    } catch (error) {
-
-        console.log(error);
-
-    }
+    } catch{(error => {throw new Error(error)})};
 
 
 })

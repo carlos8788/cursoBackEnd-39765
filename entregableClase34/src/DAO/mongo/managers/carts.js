@@ -8,7 +8,7 @@ class CartManager {
         try {
             return await cartModel.find()
         } catch (err) {
-            console.log(err);
+            
             return err
         }
     };
@@ -36,9 +36,9 @@ class CartManager {
             return cartCreated
 
         }
-        catch (err) {
-            console.log(err);
-            return err.message;
+        catch (error) {
+            
+            return error.message;
 
         }
     }
@@ -74,7 +74,7 @@ class CartManager {
         }
 
         catch (err) {
-            console.log(err.message);
+            
             return err
 
         }

@@ -8,7 +8,7 @@ const ticketsPurchases = document.getElementById('ticketsPurchases');
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    console.log('event');
+    
 });
 
 
@@ -16,16 +16,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 productsPage.addEventListener('click', () => {
     try {
         window.location.href ='/products'
-    } catch (error) {
-        console.log(error);
-    }
+    } catch{(error => {throw new Error(error)})};
 })
 ticketsPurchases.addEventListener('click', () => {
     try {
         window.location.href = '/allTickets'
-    } catch (error) {
-        console.log(error);
-    }
+    } catch{(error => {throw new Error(error)})};
 })
 
 try {
@@ -57,9 +53,7 @@ try {
     )
 
 })
-} catch (error) {
-    console.error(error);
-}
+} catch{(error => {throw new Error(error)})};
 
 
 // ticketsView.addEventListener('click', () => {

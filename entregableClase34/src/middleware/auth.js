@@ -1,4 +1,7 @@
 import passport from "passport";
+import {getLogger} from "./logger.js"
+
+const logger = getLogger();
 
 export const passportCall = (strategy,options={}) =>{
     
@@ -7,7 +10,7 @@ export const passportCall = (strategy,options={}) =>{
         passport.authenticate(strategy,(error,user,info)=>{
             if(error) return next(error);
             if(!options.strategyType){
-                console.log(`Route ${req.url} doesn't have defined a strategyType`);
+                logger.error(`Route ${req.url} doesn't have defined a strategyType`);
                 return res.sendInternalError(`Route ${req.url} doesn't have defined a strategyType`);
             }
 
