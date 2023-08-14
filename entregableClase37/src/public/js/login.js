@@ -23,8 +23,9 @@ loginForm.addEventListener('submit', event => {
         })
             .then(response => response.json())
             .then(data => {
-                
-                const action = actions[data.user.userRole];
+                console.log(data);
+
+                const action = actions[data.user?.userRole];
                 
                 if (action) {
                     action();
@@ -36,7 +37,10 @@ loginForm.addEventListener('submit', event => {
                 }
             });
 
-    } catch{(error => {throw new Error(error)})};
+    } catch{(error => {
+        throw new Error(error)
+        
+    })};
 
 
 })

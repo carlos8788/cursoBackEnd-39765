@@ -221,7 +221,7 @@ const deleteCart = async (req, res) => {
 const purchaseCart = async (req, res) => {
     try {
         const cid = req.params.cid
-        const { amount } = req.body
+        let { amount } = req.body
         const cart = await cartService.getCartByIdService(cid)
 
         let insufficientProducts = [];
@@ -251,6 +251,7 @@ const purchaseCart = async (req, res) => {
         req.logger.debug('Purchase OK')
         return res.sendSuccess('Successful purchase')
     } catch (error) {
+        console.log(error);
         req.logger.error(error)
         return res.sendInternalError(error)
     }

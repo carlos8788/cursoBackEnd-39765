@@ -19,7 +19,11 @@ const schema = new mongoose.Schema({
         default: true
     },
     category: String,
-    thumbnails: []
+    thumbnails: [],
+    owner: {
+        type: String,
+        default: 'admin'
+    }
 })
 
 schema.plugin(mongoosePaginate)
