@@ -20,7 +20,6 @@ export default class SessionsRouter extends BaseRouter {
 
         this.post('/register', ['NO_AUTH'], passportCall('register', { strategyType: "locals" }), sessionsController.registerPost)
 
-
     }
 
 }

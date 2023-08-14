@@ -40,7 +40,8 @@ export default class BaseRouter {
         return (req, res, next) => {
             if (policies[0] === "PUBLIC") return next();
             const user = req.user;
-            if ((policies[0] === "ADMIN" || policies[1] === 'ADMIN') && user?.role === 'ADMIN') return next()
+            if ((policies[0] === "ADMIN") && user?.role === 'ADMIN') return next()
+            if ((policies[1] === "PREMIUM" || (policies[2] === "PREMIUM" )) && user?.role === 'premium' ) return next();
             if (policies[0] === "LOGIN" && !user) return res.redirect('/login')
             if (policies[0] === "LOGIN" && policies[1] === "USER" && user.role === 'user') return next()
             if (policies[0] === "GITHUB") return next();

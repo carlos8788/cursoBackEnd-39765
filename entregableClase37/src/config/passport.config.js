@@ -22,7 +22,8 @@ export const initializePassport = () => {
     passport.use('register', new localStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, emailUser, password, done) => {
             try {
-                const { first_name, last_name, email, age } = req.body;
+                const { first_name, last_name, email, age, role } = req.body;
+                
                 if (!first_name || !last_name || !email || !age) {
 
                     CustomError.createError({
@@ -47,6 +48,7 @@ export const initializePassport = () => {
                     email,
                     age,
                     password: createHash(password),
+                    role: role || 'user'
                 }
 
 
@@ -109,7 +111,7 @@ export const initializePassport = () => {
 
                     let cart = existsCart[0] ? existsCart[0]._id : await handleCart();
 
-
+                    
 
                     const user = new UserDTO(
                         {
@@ -120,7 +122,6 @@ export const initializePassport = () => {
                             role: userDB.role,
                             cart
                         })
-
 
 
 

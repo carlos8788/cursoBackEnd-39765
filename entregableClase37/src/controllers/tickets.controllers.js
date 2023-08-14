@@ -45,7 +45,7 @@ const postTicketController = async (req, res) => {
         }
         
         
-        return res.sendSuccess(ticket)
+        return res.sendSuccess(preTicket)
 
     } catch (error) {
         return res.sendInternalError(error)

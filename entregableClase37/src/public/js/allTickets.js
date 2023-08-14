@@ -25,7 +25,7 @@ const getTickets = async () => {
                 tickets += `<div class="card my-2">
                                 <div class="card-body">
                                     <h5 class="card-title">ID: ${ticket._id}</h5>
-                                    <p class="card-text">Amount: $${ticket.amount}</p>
+                                    <p class="card-text">Amount: $${ticket.amount.toFixed(2)}</p>
                                     <p class="card-text">Created at: ${purchase_time}</p>
                                     
                                 </div>

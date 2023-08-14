@@ -1,31 +1,36 @@
-import { productService, cartService, ticketsService } from "../services/index.js";
+import { productService, cartService } from "../services/index.js";
 import { generateUser } from "../utils/dataFaker.js";
 import CustomError from '../services/errors/customErrors.js'
 import EErrors from '../services/errors/enums.js';
 import { generateProductErrorInfo } from '../services/errors/constant.js';
-import {getLogger} from '../middleware/logger.js';
 
-const logger = getLogger()
+
 
 
 const cart = []
 
 const getIndexView = async (req, res) => {
     try {
-        
+
         const products = await productService.getProductsViewService();
         req.logger.debug('GET INDEX OK')
-        res.render("index", { valueReturned: products, isLoggedIn: req.user });
+        res.render(
+            "index",
+            {
+                valueReturned: products,
+                isLoggedIn: req.user,
+                premium: req.user.role === 'premium'
+            });
     }
     catch (error) {
-        req.logger.error(error)        
+        req.logger.error(error)
     }
 
 }
 
 const getCartsView = async (req, res) => {
     req.logger.debug('Use carts view OK')
-    res.render('userCarts', { isLoggedIn: req.user });
+    res.render('userCarts', { isLoggedIn: req.user, premium: req.user.role === 'premium' });
 }
 
 const getGitHubView = async (req, res) => {
@@ -53,8 +58,6 @@ const getProductsView = async (req, res) => {
 
             carrito = await cartService.addCartService({ userId: req.user.id, products: [] })
         }
-
-
 
 
         if (!(options.sort.price === -1 || options.sort.price === 1)) {
@@ -93,11 +96,29 @@ const getProductsView = async (req, res) => {
 
             if (page > totalPages) {
                 req.logger.warning('Page Not Found')
-                return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user })
+                return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user, premium: req.user.role === 'premium' })
             }
 
-            return res.render('products', { products: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink, page, cart: cart.length, isLoggedIn: req.user });
+            const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
+
+            return res.render(
+                'products',
+                {
+                    products: docsFiltered,
+                    totalPages,
+                    prevPage,
+                    nextPage,
+                    hasNextPage,
+                    hasPrevPage,
+                    prevLink,
+                    nextLink,
+                    page,
+                    cart: cart.length,
+                    isLoggedIn: req.user,
+                    premium: req.user.role === 'premium'
+                });
         }
+
 
         const products = await productService.getProductsService({}, options);
 
@@ -106,13 +127,16 @@ const getProductsView = async (req, res) => {
 
         if (page > totalPages) {
             req.logger.warning('Page Not Found')
-            return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user })
+            return res.render('notFound', { pageNotFound: '/', isLoggedIn: req.user, premium: req.user.role === 'premium' })
         }
+        const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
+
         req.logger.debug('Products view OK')
+
         return res.render(
             'products',
             {
-                products: docs,
+                products: docsFiltered,
                 totalPages,
                 prevPage,
                 nextPage,
@@ -123,11 +147,13 @@ const getProductsView = async (req, res) => {
                 page: options.page,
                 cart: cart.length,
                 user: req.user,
-                isLoggedIn: req.user
+                isLoggedIn: req.user,
+                premium: req.user.role === 'premium'
             }
         );
-        
+
     } catch (error) {
+
         req.logger.error(error)
     }
 }
@@ -143,7 +169,7 @@ const getProductsInCart = async (req, res) => {
         return res.send({ cartLength: productsInCart.products.length, productsInCart: productsInCart.products })
 
     } catch (error) {
-        logger.error(error);
+        req.logger.error(error);
         return res.sendInternalError(error);
     }
 }
@@ -164,11 +190,11 @@ const postProductsView = async (req, res) => {
                 // return res.send({ cartLength: updateCart.products.length, productsInCart:updateCart.products})
             }
             else {
-                return res.render('products', { message: 'Quantity must be greater than 0', })
+                return res.render('products', { message: 'Quantity must be greater than 0', premium: req.user.role === 'premium' })
             }
         }
         req.logger.debug('post products view OK')
-        return res.render('products', { isLoggedIn: req.user })
+        return res.render('products', { isLoggedIn: req.user, premium: req.user.role === 'premium' })
     } catch (error) {
 
         req.logger.error(error)
@@ -193,7 +219,13 @@ const getCartIdView = async (req, res) => {
 
         })
 
-        if (result === null || typeof (result) === 'string') return res.render('cart', { result: false, message: 'ID not found' });
+        if (result === null || typeof (result) === 'string') return res.render(
+                                                                                'cart',
+                                                                                {
+                                                                                    result: false,
+                                                                                    message: 'ID not found',
+                                                                                    premium: req.user.role === 'premium'
+                                                                                });
 
         return res.render('cart', { result, isLoggedIn: req.user });
 
@@ -231,7 +263,7 @@ const getProfileView = (req, res) => {
     try {
         delete req.user.password
 
-        res.render('profile', { user: req.user, isLoggedIn: req.user })
+        res.render('profile', { user: req.user, isLoggedIn: req.user, premium: req.user.role === 'premium' })
 
     } catch (error) {
         req.logger.error(error)
@@ -244,7 +276,7 @@ const getTicketView = (req, res) => {
 
         const logged = Object.values(req.user).every(property => property)
 
-        return res.render('ticket', { isLoggedIn: logged, user: req.user });
+        return res.render('ticket', { isLoggedIn: logged, user: req.user , premium: req.user.role === 'premium'});
     } catch (error) {
         req.logger.error(error)
         return res.sendInternalError(error)
@@ -254,7 +286,7 @@ const getTicketView = (req, res) => {
 const getAllTicketView = (req, res) => {
     try {
         const logged = Object.values(req.user).every(property => property)
-        return res.render('allTickets', { isLoggedIn: logged, user: req.user });
+        return res.render('allTickets', { isLoggedIn: logged, user: req.user, premium: req.user.role === 'premium' });
     } catch (error) {
         req.logger.error(error)
         return res.sendInternalError(error)
@@ -293,6 +325,16 @@ const generateProductView = (req, res) => {
 
 }
 
+const premiumView = (req, res) => {
+    try {
+        const logged = Object.values(req.user).every(property => property)
+        return res.render('premium', { isLoggedIn: logged, user: req.user, premium: req.user.role === 'premium' })
+    } catch (error) {
+        req.logger.error(error)
+        return res.sendInternalError(error)
+    }
+}
+
 
 export default {
     getIndexView,
@@ -309,5 +351,6 @@ export default {
     getAllTicketView,
     getAdminView,
     forbiddenView,
-    generateProductView
+    generateProductView,
+    premiumView
 }

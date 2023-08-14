@@ -17,7 +17,7 @@ export default class ProductManager {
 
         }
         catch (err) {
-            logger.error(err);
+            
             return err
         }
 

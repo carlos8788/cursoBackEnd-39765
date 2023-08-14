@@ -36,22 +36,22 @@ const productsInBody = async (products) => {
                 : 0
             productsFront +=
                 `<div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title">Title: ${product._id.title}</h5>
-                    <p class="card-text">Price: ${product._id.price}</p>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <p class="card-text m-0 p-0">Quantity: ${product.quantity}</p>      
-                        ${available} 
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center my-auto ">
-                        <p class="card-text m-0">Subtotal: ${subtotal}</p>
-                        <button type="button" class="btn btn-danger m-auto m-md-0" id="${product._id._id}">
-                            delete
-                        </button>
+                    <div class="card-body">
+                        <h5 class="card-title">Title: ${product._id.title}</h5>
+                        <p class="card-text">Price: ${product._id.price}</p>
+                        <div class="d-flex justify-content-between align-items-center my-2">
+                            <p class="card-text m-0 p-0">Quantity: ${product.quantity}</p>      
+                            ${available} 
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center my-auto ">
+                            <p class="card-text m-0">Subtotal: ${subtotal}</p>
+                            <button type="button" class="btn btn-danger m-auto m-md-0" id="${product._id._id}">
+                                delete
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            `
+                `
             total += subtotal
             
         }

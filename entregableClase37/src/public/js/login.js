@@ -9,6 +9,7 @@ loginForm.addEventListener('submit', event => {
     const actions = {
         'user': () => window.location.replace('/products'),
         'ADMIN': () => window.location.replace('/admin'), 
+        'premium': () => window.location.replace('/products'), 
     };
 
     const user = Object.fromEntries(new FormData(event.target))

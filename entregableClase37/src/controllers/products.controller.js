@@ -3,12 +3,11 @@ import { productService } from '../services/index.js';
 import CustomError from '../services/errors/customErrors.js'
 import EErrors from '../services/errors/enums.js';
 import { generateProductErrorInfo } from '../services/errors/constant.js';
-
+import { getLogger } from '../middleware/logger.js';
 
 const getProducts = async (req, res) => {
     try {
         let { limit, page, sort, category, filterStock } = req.query
-
 
         if (filterStock) {
             try {
@@ -64,15 +63,19 @@ const getProducts = async (req, res) => {
             const products = await productService.getProductsService({ category }, options);
             const { prevLink, nextLink } = links(products);
             const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
-            return res.status(200).send({ status: 'success', payload: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
+            const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
+            req.logger.debug('Get Product OK')
+            return res.status(200).send({ status: 'success', payload: docsFiltered, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
         }
-
+        
         const products = await productService.getProductsService({}, options);
-
+        
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
+        const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
+        
         req.logger.debug('Get Product OK')
-        return res.status(200).send({ status: 'success', payload: docs, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
+        return res.status(200).send({ status: 'success', payload: docsFiltered, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
     } catch (error) {
         req.logger.error(error)
         return (error);
@@ -106,8 +109,9 @@ const postProduct = async (req, res) => {
 
     try {
         let product = req.body
-        if (!product.owner) product.owner = 'admin'
-        console.log(product);
+        
+        (req.user.role !== 'premium') ? product.owner = 'admin' : product.owner = req.user.email
+        
         const {
             title,
             description,
@@ -129,6 +133,7 @@ const postProduct = async (req, res) => {
             !category ||
             !thumbnails ||
             !owner) {
+            
             CustomError.createError({
                 name: 'Product creation failed',
                 cause: generateProductErrorInfo(
@@ -173,9 +178,9 @@ const postProduct = async (req, res) => {
         req.logger.debug('POST product OK')
         return res.status(201).send(result);
     }
-    catch (err) {
+    catch (error) {
         req.logger.error(error)
-        return res.send({ message: err });
+        return res.send({ message: error });
 
     }
 }

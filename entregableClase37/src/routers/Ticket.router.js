@@ -10,8 +10,8 @@ export default class TicketsRouter extends BaseRouter {
 
         this.post('/', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.postTicketController)
 
-        this.delete('/:tid', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.deleteTicketController)
+        this.delete('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.deleteTicketController)
 
-        this.put('/:tid', ['AUTH', "USER"], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.updateTicketController)
+        this.put('/:tid', ['AUTH'], passportCall('jwt', { strategyType: 'jwt' }), ticketControllers.updateTicketController)
     }
 }

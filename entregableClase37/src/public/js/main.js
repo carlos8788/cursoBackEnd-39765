@@ -1,15 +1,11 @@
 const btnLogout = document.getElementById('logout')
-
-// const ticketsView = document.getElementById('tickets');
-
 const productsPage = document.getElementById('productsPage')
-
 const ticketsPurchases = document.getElementById('ticketsPurchases');
 
 
-document.addEventListener('DOMContentLoaded', (event) => {
+// document.addEventListener('DOMContentLoaded', (event) => {
     
-});
+// });
 
 
 

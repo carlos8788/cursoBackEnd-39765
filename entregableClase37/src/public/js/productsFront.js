@@ -21,7 +21,7 @@ const productsInCart = () => {
                 })
 
                 modalBody.innerHTML = products
-                modalFooter.innerHTML = `<h5>Total: $${Math.round(total * 100) / 100}</h5>`
+                modalFooter.innerHTML = `<h5>Total: $${total.toFixed(2)}</h5>`
             }
             else {
                 modalBody.innerHTML = `<h3> Empty cart </h3>`

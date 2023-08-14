@@ -52,7 +52,7 @@ const loginPost = async (req, res) => {
 
 const registerPost = async (req, res) => {
     try {
-        res.sendSuccess('User registered successfully')
+        return res.sendSuccess('User registered successfully')
     } catch (error) {
         return res.sendInternalError(error);
     }
