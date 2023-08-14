@@ -189,7 +189,8 @@ const putProduct = async (req, res) => {
     try {
         const { pid } = req.params
         const product = req.body
-
+        
+        if (product.price < 0 || product.stock < 0 ) return res.sendInternalError('Price or Stock is negative!')
         const result = await productService.updateProductService(pid, product);
 
         if (result.message) return res.status(404).send({ message: `ID: ${pid} not found` })
@@ -204,8 +205,13 @@ const putProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
+
     try {
         const { pid } = req.params
+        const product = await productService.getProductByIdService(pid)
+        
+        
+        if (product.owner !== req.user.email) return res.internalError('Forbidden! You cannot delete this product')
         const result = await productService.deleteProductService(pid)
 
         if (!result) return res.status(404).send({ message: `ID: ${pid} not found` })
@@ -217,10 +223,26 @@ const deleteProduct = async (req, res) => {
         return res.internalError(error.message)
     }
 }
+
+const getProductsFromPremium = async (req, res) => {
+    try {
+        const products = await productService.getProductsViewService()
+        const filteredProducts = products.filter(product => product.owner === req.user.email)
+        res.sendSuccessWithPayload(filteredProducts)
+        
+    } catch (error) {
+        
+        req.logger.error(error)
+        return res.internalError(error.message)
+    }
+}
+
+
 export default {
     getProducts,
     getProductId,
     postProduct,
     putProduct,
-    deleteProduct
+    deleteProduct,
+    getProductsFromPremium
 }

@@ -20,6 +20,9 @@ export default class BaseRouter {
     put(path, policies, ...callbacks) {
         this.router.put(path, passportCall('jwt', { strategyType: 'jwt' }), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
+    patch(path, policies, ...callbacks) {
+        this.router.patch(path, passportCall('jwt', { strategyType: 'jwt' }), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
+    }
     delete(path, policies, ...callbacks) {
         this.router.delete(path, passportCall('jwt', { strategyType: 'jwt' }), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
