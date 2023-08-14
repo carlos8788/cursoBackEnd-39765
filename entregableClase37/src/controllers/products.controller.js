@@ -105,7 +105,9 @@ const getProductId = async (req, res) => {
 const postProduct = async (req, res) => {
 
     try {
-        const product = req.body
+        let product = req.body
+        if (!product.owner) product.owner = 'admin'
+        console.log(product);
         const {
             title,
             description,
@@ -115,6 +117,7 @@ const postProduct = async (req, res) => {
             status,
             category,
             thumbnails,
+            owner,
         } = product
 
         if (!title ||
@@ -124,7 +127,8 @@ const postProduct = async (req, res) => {
             !stock ||
             !status ||
             !category ||
-            !thumbnails) {
+            !thumbnails ||
+            !owner) {
             CustomError.createError({
                 name: 'Product creation failed',
                 cause: generateProductErrorInfo(
@@ -137,6 +141,7 @@ const postProduct = async (req, res) => {
                         status,
                         category,
                         thumbnails,
+                        owner,
                     }
                 ),
                 message: "Error trying to create product",
@@ -152,6 +157,7 @@ const postProduct = async (req, res) => {
             typeof stock === 'number' &&
             typeof status === 'boolean' &&
             typeof category === 'string' &&
+            typeof owner === 'string' &&
             Array.isArray(thumbnails)))
             return res.status(400).send({ message: 'type of property is not valid' })
 
@@ -164,7 +170,7 @@ const postProduct = async (req, res) => {
         if (result.code === 11000) return res
             .status(400)
             .send({ message: `E11000 duplicate key error collection: ecommerce.products dup key code: ${result.keyValue.code}` });
-            req.logger.debug('POST product OK')
+        req.logger.debug('POST product OK')
         return res.status(201).send(result);
     }
     catch (err) {
