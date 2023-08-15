@@ -89,6 +89,10 @@ const postProductInCart = async (req, res) => {
 
         const checkIdProduct = await productService.getProductByIdService(pid);
 
+        // check if the product does not belong to the user
+
+        console.log(checkIdCart.owner, 'checkIdProduct');
+        console.log(req.user.email, 'checkUser');
 
         if (checkIdProduct === null || typeof (checkIdProduct) === 'string') return res.status(404).send({ status: 'error', message: `The ID product: ${pid} not found` })
 

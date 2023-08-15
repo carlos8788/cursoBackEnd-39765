@@ -14,12 +14,17 @@ const getIndexView = async (req, res) => {
 
         const products = await productService.getProductsViewService();
         req.logger.debug('GET INDEX OK')
+
+        let premium;
+        (req.user) ? premium = req.user.premium === 'premium' : premium = false
+
+
         res.render(
             "index",
             {
                 valueReturned: products,
                 isLoggedIn: req.user,
-                premium: req.user.role === 'premium'
+                premium
             });
     }
     catch (error) {
@@ -220,12 +225,12 @@ const getCartIdView = async (req, res) => {
         })
 
         if (result === null || typeof (result) === 'string') return res.render(
-                                                                                'cart',
-                                                                                {
-                                                                                    result: false,
-                                                                                    message: 'ID not found',
-                                                                                    premium: req.user.role === 'premium'
-                                                                                });
+            'cart',
+            {
+                result: false,
+                message: 'ID not found',
+                premium: req.user.role === 'premium'
+            });
 
         return res.render('cart', { result, isLoggedIn: req.user });
 
@@ -276,7 +281,7 @@ const getTicketView = (req, res) => {
 
         const logged = Object.values(req.user).every(property => property)
 
-        return res.render('ticket', { isLoggedIn: logged, user: req.user , premium: req.user.role === 'premium'});
+        return res.render('ticket', { isLoggedIn: logged, user: req.user, premium: req.user.role === 'premium' });
     } catch (error) {
         req.logger.error(error)
         return res.sendInternalError(error)

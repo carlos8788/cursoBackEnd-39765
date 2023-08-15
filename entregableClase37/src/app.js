@@ -11,6 +11,7 @@ import ProductsRouter from './routers/Products.router.js';
 import CartsRouter from './routers/Carts.router.js';
 import ViewsRouter from './routers/Views.router.js';
 import TicketRouter from './routers/Ticket.router.js';
+import UserRouter from './routers/users.router.js';
 import config from './config/config.js';
 
 import { notFoundMiddleware } from './middleware/notfound.js';
@@ -47,6 +48,7 @@ const sessionsRouter = new SessionsRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
 const viewsRouter = new ViewsRouter();
+const usersRouter = new UserRouter();
 
 app.get('/logger', (req, res) => {
 
@@ -66,6 +68,7 @@ app.use('/api/ticket', ticketRouter.getRouter())
 app.use('/api/session', sessionsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
+app.use('/api/users', usersRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
 app.use(notFoundMiddleware);
 

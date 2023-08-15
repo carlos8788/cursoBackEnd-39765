@@ -52,4 +52,8 @@ export default class UserManager {
             return error
         }
     }
+
+    changeRole = async (id, role) => {
+        return userModel.findByIdAndUpdate({_id: id}, {role: role})
+    }
 }

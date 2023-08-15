@@ -1,4 +1,4 @@
-export default class ProductService{
+export default class UserService{
     constructor(dao){
         this.dao = dao;
     }
@@ -19,5 +19,9 @@ export default class ProductService{
     }
     addCartService = (cart) => {
         return this.dao.addCart(cart)
+    }
+
+    changeUserService = (id, role) => {
+        return this.dao.changeRole(id, role)
     }
 }
