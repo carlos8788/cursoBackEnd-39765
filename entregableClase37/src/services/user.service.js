@@ -24,4 +24,8 @@ export default class UserService{
     changeUserService = (id, role) => {
         return this.dao.changeRole(id, role)
     }
+
+    updatePasswordService = (email, password) => {
+        return this.dao.updatePassword(email, password);
+    }
 }

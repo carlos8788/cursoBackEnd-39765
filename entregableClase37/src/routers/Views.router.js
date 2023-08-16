@@ -39,6 +39,9 @@ export default class ViewsRouter extends BaseRouter {
 
         this.get('/mockingproducts', ['AUTH', "USER"], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.generateProductView) //USER
         
+        this.get('/restoreRequest', ['PUBLIC'], passportCall('jwt', {strategyType: 'jwt'}), viewsControllers.restoreRequestView) //USER
+
+        this.get('/restorePassword', ['NO_AUTH'], passportCall('jwt', { strategyType: "jwt" }), viewsControllers.restorePasswordView) //USER //
         
     }
 

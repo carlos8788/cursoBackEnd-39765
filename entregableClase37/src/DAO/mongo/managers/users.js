@@ -56,4 +56,8 @@ export default class UserManager {
     changeRole = async (id, role) => {
         return userModel.findByIdAndUpdate({_id: id}, {role: role})
     }
+
+    updatePassword = async (email, password) => {
+        return userModel.findOneAndUpdate({email: email}, {password: password})
+    }
 }

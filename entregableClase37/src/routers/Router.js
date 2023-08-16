@@ -32,7 +32,8 @@ export default class BaseRouter {
         res.sendSuccessUser = user => res.send({ status: 'success', user });
         res.sendSuccessWithPayload = payload => res.send({ status: 'success', payload });
         res.sendInternalError = error => res.status(500).send({ status: 'error', error });
-        res.sendUnauthorized = error => res.status(400).send({ status: 'error', error });
+        res.sendUnauthorized = error => res.status(401).send({ status: 'error', error });
+        res.sendBadRequest = error => res.status(400).send({ status: 'error', error });
         res.sendNotFound = error => res.status(404).send({ status: 'error', error });
         res.sendSuccessGitHub = () => res.redirect('/viewGitHub')
         next();

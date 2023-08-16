@@ -20,6 +20,10 @@ export default class SessionsRouter extends BaseRouter {
 
         this.post('/register', ['NO_AUTH'], passportCall('register', { strategyType: "locals" }), sessionsController.registerPost)
 
+        this.post('/restoreRequest', ['NO_AUTH'], passportCall('jwt', { strategyType: "jwt" }), sessionsController.restoreRequest)
+
+        this.post('/restorePassword', ['PUBLIC'], passportCall('jwt', { strategyType: "jwt" }), sessionsController.restorePassword)
+
     }
 
 }

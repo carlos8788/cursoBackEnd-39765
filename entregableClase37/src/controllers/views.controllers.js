@@ -3,7 +3,8 @@ import { generateUser } from "../utils/dataFaker.js";
 import CustomError from '../services/errors/customErrors.js'
 import EErrors from '../services/errors/enums.js';
 import { generateProductErrorInfo } from '../services/errors/constant.js';
-
+import config from "../config/config.js";
+import  jwt  from "jsonwebtoken";
 
 
 
@@ -16,8 +17,7 @@ const getIndexView = async (req, res) => {
         req.logger.debug('GET INDEX OK')
 
         let premium;
-        (req.user) ? premium = req.user.premium === 'premium' : premium = false
-
+        (req.user) ? premium = req.user.role === 'premium' : premium = false
 
         res.render(
             "index",
@@ -340,6 +340,29 @@ const premiumView = (req, res) => {
     }
 }
 
+const restoreRequestView = (req, res) => {
+    try {
+        res.render('restoreRequest')
+    } catch (error) {
+        req.logger.error(error)
+        return res.sendInternalError(error)
+    }
+}
+
+const restorePasswordView = (req, res) => {
+    const { token } = req.query;
+
+    try {
+        
+        const validToken = jwt.verify(token, config.secretKey)
+
+        res.render('restorePassword')
+    } catch (error) {
+        req.logger.error(error)
+        return res.sendInternalError(error)
+    }
+}
+
 
 export default {
     getIndexView,
@@ -357,5 +380,7 @@ export default {
     getAdminView,
     forbiddenView,
     generateProductView,
-    premiumView
+    premiumView,
+    restoreRequestView,
+    restorePasswordView
 }
