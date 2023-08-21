@@ -18,6 +18,8 @@ import { notFoundMiddleware } from './middleware/notfound.js';
 import errorHandler from './middleware/errors/index.js';
 import {attachLogger, getLogger} from './middleware/logger.js';
 
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express'
 
 const logger = getLogger()
 
@@ -42,6 +44,22 @@ app.set('view engine', 'handlebars');
 
 connectToDB();
 initializePassport();
+
+
+// SWAGGER
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info:{
+            title:'Supermarket BBS',
+            description: 'Documentation API'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 const ticketRouter = new TicketRouter();
 const sessionsRouter = new SessionsRouter();
