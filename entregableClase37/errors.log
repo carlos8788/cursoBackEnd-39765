@@ -52,3 +52,9 @@
 [33merror[39m: [33mCannot read properties of undefined (reading 'role')[39m
 [33merror[39m: [33mCannot read properties of undefined (reading 'role')[39m
 [33merror[39m: [33mjwt is not defined[39m
+[33merror[39m: [33mError al obtener la cotización del dolar: No se pudo obtener la cotización del dolar[39m
+[33merror[39m: [33mError al obtener la cotización del dolar: Access Restricted - Your current Subscription Plan does not support HTTPS Encryption.[39m
+[35mwarning[39m: [35mWARNING FORBIDDEN[39m
+[33merror[39m: [33mCannot read properties of undefined (reading 'imp1')[39m
+[33merror[39m: [33mimp1 is not defined[39m
+[35mwarning[39m: [35mWARNING FORBIDDEN[39m

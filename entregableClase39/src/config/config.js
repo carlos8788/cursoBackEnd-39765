@@ -19,4 +19,5 @@ export default {
     user_mail: process.env.USER_MAIL,
     pass_mail: process.env.PASS_MAIL,
     enviroment: process.env.ENV,
+    keyCurrentcyLayer: process.env.KEY_CURRENT_LAYER
 }

@@ -1,0 +1,23 @@
+<div class="card w-50 mx-auto">
+    <h1 class="card-header" id="{{user.id}}">Tickets</h1>
+
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">User: {{user.name}}</h6>
+        <div class="" id="divTickets">
+
+        </div>
+        {{#each result.products }}
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Title: {{this._id.title}}</h5>
+                <p class="card-text">Description: {{this._id.description}}</p>
+                <p class="card-text">Category: {{this._id.category}}</p>
+                <p class="card-text">Quantity: {{this.quantity}}</p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>
+
+<script src="js/allTickets.js"></script>

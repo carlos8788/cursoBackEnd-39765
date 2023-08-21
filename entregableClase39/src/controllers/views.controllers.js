@@ -1,7 +1,11 @@
 import { productService, cartService } from "../services/index.js";
 import { generateUser } from "../utils/dataFaker.js";
+import CustomError from '../services/errors/customErrors.js'
+import EErrors from '../services/errors/enums.js';
+import { generateProductErrorInfo } from '../services/errors/constant.js';
 import config from "../config/config.js";
 import  jwt  from "jsonwebtoken";
+import { getDollarRate } from "../services/dollarCurrency.service.js";
 
 
 
@@ -298,9 +302,16 @@ const getAllTicketView = (req, res) => {
 
 const getAdminView = async (req, res) => {
     try {
-
+        // const cotizacion = await getDollarRate();
+        const cotizacion = 367.69
+        const dollar = {
+            compra: cotizacion - 20,
+            venta: cotizacion,
+            imp1: cotizacion * 1.30,
+            imp2: cotizacion * 1.30 + cotizacion *  0.45
+        }
         const logged = Object.values(req.user).every(property => property)
-        return res.render('admin', { isLoggedIn: logged });
+        return res.render('admin', { isLoggedIn: logged , 'dollar': dollar });
     } catch (error) {
         req.logger.error(error)
         return res.sendInternalError(error)
