@@ -1,0 +1,260 @@
+openapi: 3.0.0
+info:
+  title: API Carritos
+  version: 1.0.0
+
+paths:
+  /api/carts/usercarts:
+    get:
+      summary: Obtiene todos los carritos del usuario
+      tags:
+        - Carts
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      responses:
+        "200":
+          description: "Los carritos del usuario fueron obtenidos satisfactoriamente"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        "500":
+          description: "Error interno del servidor"
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito basado en su CID.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      responses:
+        "200":
+          description: "El carrito fue obtenido satisfactoriamente"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "404":
+          description: "Carrito no encontrado"
+        "500":
+          description: "Error interno del servidor"
+    put:
+      summary: Actualiza el carrito basado en su CID.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      responses:
+        "200":
+          description: "El carrito fue actualizado satisfactoriamente"
+        "404":
+          description: "Carrito no encontrado"
+        "500":
+          description: "Error interno del servidor"
+    delete:
+      summary: Elimina un carrito basado en su CID.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      responses:
+        "204":
+          description: "El carrito fue eliminado satisfactoriamente"
+        "404":
+          description: "Carrito no encontrado"
+        "500":
+          description: "Error interno del servidor"
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Coloca la cantidad de un producto en el carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+        - name: pid
+          in: path
+          description: ID único del producto.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      requestBody:
+        description: Cantidad del producto a agregar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  description: Cantidad del producto
+      responses:
+        "200":
+          description: "El producto fue agregado/actualizado satisfactoriamente en el carrito"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "400":
+          description: "Solicitud incorrecta"
+        "500":
+          description: "Error interno del servidor"
+    put:
+      summary: Actualiza la cantidad de un producto en el carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+        - name: pid
+          in: path
+          description: ID único del producto.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      requestBody:
+        description: Cantidad del producto a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  description: Cantidad del producto a actualizar
+      responses:
+        "200":
+          description: "El producto fue actualizado satisfactoriamente en el carrito"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "400":
+          description: "Solicitud incorrecta"
+        "500":
+          description: "Error interno del servidor"
+    delete:
+      summary: Elimina un producto del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+        - name: pid
+          in: path
+          description: ID único del producto.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      responses:
+        "204":
+          description: "El producto fue eliminado satisfactoriamente del carrito"
+        "404":
+          description: "Producto o carrito no encontrado"
+        "500":
+          description: "Error interno del servidor"
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Verifica el stock y realiza la compra del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID único del carrito.
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      security:
+        - jwt: ['AUTH', 'USER', 'PREMIUM']
+      responses:
+        "200":
+          description: "Compra realizada satisfactoriamente"
+        "400":
+          description: "Solicitud incorrecta (ej. stock insuficiente)"
+        "500":
+          description: "Error interno del servidor"
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        user:
+          type: string
+          format: ObjectId
+          description: ID del usuario
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                format: ObjectId
+                description: ID del producto
+              quantity:
+                type: number
+                description: Cantidad del producto en el carrito
+
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

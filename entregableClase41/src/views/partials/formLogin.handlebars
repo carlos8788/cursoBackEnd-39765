@@ -1,0 +1,33 @@
+<style>
+    .text-secondary:hover {
+        color: aquamarine !important
+    }
+</style>
+
+<form class="p-4 p-md-5 border rounded-3 bg-info" id="loginForm">
+    <div class="form-floating mb-3">
+        <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating mb-5">
+        <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+    </div>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
+    <a href="api/session/github" class="w-100 btn btn-dark btn-primary my-3">Login whit GitHub <span class="mx-2"><i
+                class="fab fa-github"></i> </span> </a>
+    <hr class="my-2">
+    <a class="text__register text-decoration-none " id="register" href="/register">If you don't
+        have a user, register</a>
+    <div class="mt-3">
+        <p class="text__register text-decoration-none text-light">
+            Did you forget your password?
+            <a class="text-decoration-none text-secondary pt-3" href="/restoreRequest">
+                click here to restore
+            </a>
+        </p>
+    </div>
+
+</form>
+<script src="js/login.js"></script>
