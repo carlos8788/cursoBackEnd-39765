@@ -1,5 +1,5 @@
 import { userService, productService, cartService, ticketsService } from '../services/index.js'
-import {getLogger} from '../middleware/logger.js';
+
 
 const getUserCarts = async (req, res) => {
 
@@ -210,7 +210,7 @@ const deleteCart = async (req, res) => {
 
         checkIdCart.products = []
         req.logger.debug('Delete OK')
-        const cart = await cartService.updateOneProduct(cid, checkIdCart.products)
+        const cart = await cartService.updateOneProductService(cid, checkIdCart.products)
         return res.status(200).send({ status: 'success', message: `the cart whit ID: ${cid} was emptied correctly `, cart });
 
     } catch (error) {

@@ -108,8 +108,6 @@ const getProductId = async (req, res) => {
 const postProduct = async (req, res) => {
 
     try {
-        console.log(req.body);
-        console.log(req.user);
         let product = req.body
 
 
@@ -174,7 +172,7 @@ const postProduct = async (req, res) => {
             .send({ message: 'Product and stock cannot be values less than or equal to zero' });
 
         const result = await productService.addProductService(product)
-        console.log(result);
+
         if (result.code === 11000) return res
             .status(400)
             .send({ message: `E11000 duplicate key error collection: ecommerce.products dup key code: ${result.keyValue.code}` });
@@ -183,7 +181,6 @@ const postProduct = async (req, res) => {
         // return res.status(201).send(req.body);
     }
     catch (error) {
-        console.log(error);
         req.logger.error(error)
         return res.send({ message: error });
 
