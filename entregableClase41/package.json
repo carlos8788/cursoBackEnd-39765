@@ -1,11 +1,11 @@
 {
-  "name": "entregableClase37",
+  "name": "entregableClase41",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/supertest.test.js",
     "start": "node ./src/app.js",
     "dev": "nodemon ./src/app.js"
   },
@@ -35,5 +35,10 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.8",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

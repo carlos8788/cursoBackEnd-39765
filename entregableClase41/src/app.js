@@ -27,9 +27,9 @@ const app = express();
 const PORT = config.port || 8080
 const URL = config.url || 'http://localhost:'
 
+app.use(express.json());
 app.use(attachLogger)
 app.use(express.static(`${__dirname}/public`));
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(config.cookieParserEnv));
 

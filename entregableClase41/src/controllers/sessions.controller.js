@@ -47,7 +47,7 @@ const loginPost = async (req, res) => {
             maxAge: 1000 * 60 * 60 * 24,
             httpOnly: true,
 
-        }).sendSuccessUser({ userRole: user.role })
+        }).sendSuccessUser({ userRole: user.role, email:user.email })
     } catch (error) {
         return res.sendInternalError(error);
     }
@@ -56,7 +56,7 @@ const loginPost = async (req, res) => {
 
 const registerPost = async (req, res) => {
     try {
-        return res.sendSuccess('User registered successfully')
+        return res.sendSuccessUserCreate('User registered successfully')
     } catch (error) {
         return res.sendInternalError(error);
     }
@@ -70,6 +70,7 @@ const postLogOut = (req, res) => {
         return res.sendInternalError(error);
     }
 }
+
 
 const currentSession = (req, res) => {
     try {

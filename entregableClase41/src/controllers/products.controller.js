@@ -67,13 +67,13 @@ const getProducts = async (req, res) => {
             req.logger.debug('Get Product OK')
             return res.status(200).send({ status: 'success', payload: docsFiltered, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
         }
-        
+
         const products = await productService.getProductsService({}, options);
-        
+
         const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
         const { prevLink, nextLink } = links(products);
         const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
-        
+
         req.logger.debug('Get Product OK')
         return res.status(200).send({ status: 'success', payload: docsFiltered, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
     } catch (error) {
@@ -108,10 +108,13 @@ const getProductId = async (req, res) => {
 const postProduct = async (req, res) => {
 
     try {
+        console.log(req.body);
+        console.log(req.user);
         let product = req.body
-        
-        (req.user.role !== 'premium') ? product.owner = 'admin' : product.owner = req.user.email
-        
+
+
+        product.owner = (req.user.role !== 'premium') ? 'admin' : req.user.email;
+
         const {
             title,
             description,
@@ -133,7 +136,7 @@ const postProduct = async (req, res) => {
             !category ||
             !thumbnails ||
             !owner) {
-            
+
             CustomError.createError({
                 name: 'Product creation failed',
                 cause: generateProductErrorInfo(
@@ -171,14 +174,16 @@ const postProduct = async (req, res) => {
             .send({ message: 'Product and stock cannot be values less than or equal to zero' });
 
         const result = await productService.addProductService(product)
-
+        console.log(result);
         if (result.code === 11000) return res
             .status(400)
             .send({ message: `E11000 duplicate key error collection: ecommerce.products dup key code: ${result.keyValue.code}` });
         req.logger.debug('POST product OK')
         return res.status(201).send(result);
+        // return res.status(201).send(req.body);
     }
     catch (error) {
+        console.log(error);
         req.logger.error(error)
         return res.send({ message: error });
 
@@ -189,8 +194,9 @@ const putProduct = async (req, res) => {
     try {
         const { pid } = req.params
         const product = req.body
+
+        if (product.price < 0 || product.stock < 0) return res.sendInternalError('Price or Stock is negative!')
         
-        if (product.price < 0 || product.stock < 0 ) return res.sendInternalError('Price or Stock is negative!')
         const result = await productService.updateProductService(pid, product);
 
         if (result.message) return res.status(404).send({ message: `ID: ${pid} not found` })
@@ -209,8 +215,8 @@ const deleteProduct = async (req, res) => {
     try {
         const { pid } = req.params
         const product = await productService.getProductByIdService(pid)
-        
-        
+
+
         if (product.owner !== req.user.email) return res.internalError('Forbidden! You cannot delete this product')
         const result = await productService.deleteProductService(pid)
 
@@ -229,9 +235,9 @@ const getProductsFromPremium = async (req, res) => {
         const products = await productService.getProductsViewService()
         const filteredProducts = products.filter(product => product.owner === req.user.email)
         res.sendSuccessWithPayload(filteredProducts)
-        
+
     } catch (error) {
-        
+
         req.logger.error(error)
         return res.internalError(error.message)
     }

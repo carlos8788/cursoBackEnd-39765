@@ -5,7 +5,7 @@ import EErrors from '../services/errors/enums.js';
 import { generateProductErrorInfo } from '../services/errors/constant.js';
 import config from "../config/config.js";
 import  jwt  from "jsonwebtoken";
-import { getDollarRate } from "../services/dollarCurrency.service.js";
+
 
 
 
