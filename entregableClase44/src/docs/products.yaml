@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  title: API Productos
+  version: 1.0.0
+
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: "Los productos fueron obtenidos satisfactoriamente de la base de datos"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "500":
+          description: "Error interno del servidor"
+
+    post:
+      summary: Crea un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        description: Datos del nuevo producto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/NewProduct'
+      responses:
+        "201":
+          description: "El producto fue creado satisfactoriamente"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: "Solicitud incorrecta"
+        "500":
+          description: "Error interno del servidor"
+
+  /api/products/{code}:
+    get:
+      summary: Obtiene un producto específico basado en su código.
+      tags:
+        - Products
+      parameters:
+        - name: code
+          in: path
+          description: Código único del producto.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "El producto fue obtenido satisfactoriamente de la base de datos"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: "Producto no encontrado"
+        "500":
+          description: "Error interno del servidor"
+
+    put:
+      summary: Actualiza un producto basado en su código.
+      tags:
+        - Products
+      parameters:
+        - name: code
+          in: path
+          description: Código único del producto.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Datos del producto a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/UpdateProduct'
+      responses:
+        "200":
+          description: "El producto fue actualizado satisfactoriamente"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: "Producto no encontrado"
+        "500":
+          description: "Error interno del servidor"
+
+    delete:
+      summary: Elimina un producto basado en su código.
+      tags:
+        - Products
+      parameters:
+        - name: code
+          in: path
+          description: Código único del producto.
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "El producto fue eliminado satisfactoriamente"
+        "404":
+          description: "Producto no encontrado"
+        "500":
+          description: "Error interno del servidor"
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Título del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: number
+          format: float
+          description: Precio del producto
+        code:
+          type: string
+          description: Código único del producto
+        stock:
+          type: number
+          description: Stock del producto
+        status:
+          type: boolean
+          description: Estado del producto (true = activo, false = inactivo)
+        category:
+          type: string
+          description: Categoría del producto
+        thumbnails:
+          type: array
+          items:
+            type: string
+          description: Miniaturas del producto
+        owner:
+          type: string
+          description: Dueño del producto (por defecto 'admin')
+
+  requestBodies:
+    NewProduct:
+      description: Datos del nuevo producto
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Título del producto
+              description:
+                type: string
+                description: Descripción del producto
+              price:
+                type: number
+                format: float
+                description: Precio del producto
+              code:
+                type: string
+                description: Código único del producto
+              stock:
+                type: number
+                description: Stock del producto
+              status:
+                type: boolean
+                description: Estado del producto (opcional, por defecto true)
+              category:
+                type: string
+                description: Categoría del producto
+              thumbnails:
+                type: array
+                items:
+                  type: string
+                description: Miniaturas del producto
+              owner:
+                type: string
+                description: Dueño del producto (opcional, por defecto 'admin')
+
+    UpdateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Título del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: number
+          format: float
+          description: Precio del producto
+        stock:
+          type: number
+          description: Stock del producto
+        status:
+          type: boolean
+          description: Estado del producto
+        category:
+          type: string
+          description: Categoría del producto
+        thumbnails:
+          type: array
+          items:
+            type: string
+          description: Miniaturas del producto
+        owner:
+          type: string
+          description: Dueño del producto
+
