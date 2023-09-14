@@ -1,17 +1,29 @@
-import multer from 'multer';
+import multer, { diskStorage } from 'multer';
 
-
-import multer from 'multer';
-
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/');
+    let uploadPath;
+    
+    if (file.mimetype.startsWith('image')) {
+      
+      if (req.url.includes('profile')) {
+        uploadPath = 'uploads/profiles';
+      } else if (req.url.includes('products')) {
+        uploadPath = 'uploads/products';
+      } else {
+        uploadPath = 'uploads/documents';
+      }
+    } else {
+      uploadPath = 'uploads/documents';
+    }
+    cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
+    cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
 const upload = multer({ storage: storage });
 
 export default upload;
+
