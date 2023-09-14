@@ -29,31 +29,49 @@ const changeUserRole = async (req, res) => {
     }
 };
 
-const uploadDocuments = async (req, res) => {
-    // router.post('/api/users/:uid/documents', upload.array('documents', 10), async (req, res) => {
+
+const uploadHandler = async (req, res) => {
     try {
+        console.log('entro con error');
         const { uid } = req.params;
+        const { type, document_type } = req.query;
+
+        console.log('estoy upload');
+
+        if (!['profile', 'product', 'document'].includes(type)) {
+          return res.sendBadRequest('Invalid type parameter');
+        }
+
         const files = req.files;
 
         const documents = files.map(file => ({
             name: file.originalname,
-            reference: `/uploads/${file.filename}`,
+            reference: `/uploads/${type}s/${file.filename}`,
+            type: document_type 
         }));
-
-        const response = await userService.updateUserDocumentsService(uid, documents);
+        console.log(uid, 'uuid', documents, 'documents', type, 'type');
+        const response = await userService.updateUserDocumentsService(uid, type, documents);
+        console.log(response);
         if (response.error) {
             throw new Error(response.error);
         }
 
-        res.json(response);
+        return res.sendSuccess(response);
+        
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.log('no encontinue');
+        console.log(error);
+        return res.sendInternalError(error)
     }
 };
 
 
+
+
+
+
 export default {
     changeUserRole,
-    uploadDocuments
+    uploadHandler
 }
 

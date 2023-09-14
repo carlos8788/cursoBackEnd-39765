@@ -33,7 +33,7 @@ export default class UserService{
         return this.dao.updateLastConnection(id);
     }
 
-    updateUserDocumentsService = (uid, documents) => {
-        return this.dao.updateUserDocuments(uid, documents);
+    updateUserDocumentsService = (uid, type, documents) => {
+        return this.dao.updateUserDocuments(uid, type, documents);
     }
 }

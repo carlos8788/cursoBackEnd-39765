@@ -3,15 +3,13 @@ import multer, { diskStorage } from 'multer';
 const storage = diskStorage({
   destination: function (req, file, cb) {
     let uploadPath;
-    
+
     if (file.mimetype.startsWith('image')) {
-      
-      if (req.url.includes('profile')) {
-        uploadPath = 'uploads/profiles';
-      } else if (req.url.includes('products')) {
+
+      if (req.url.includes('products')) {
         uploadPath = 'uploads/products';
       } else {
-        uploadPath = 'uploads/documents';
+        uploadPath = 'uploads/profile';
       }
     } else {
       uploadPath = 'uploads/documents';

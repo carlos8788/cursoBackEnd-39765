@@ -5,6 +5,32 @@
     <button class="btn btn-success my-5" id="btn-change-role">Change role</button>
     <h2 class="text-center h1" >Role: <span id="role">{{user.role}}</span></h2>
 
+    <!-- Sección para subir la foto de perfil -->
+    <div class="my-5">
+        <h3>Upload Profile Picture</h3>
+        <input type="file" id="profilePictureInput" class="form-control" name="documents" />
+        <button class="btn btn-primary my-2" id="btn-upload-profile-pic">Upload Profile Picture</button>
+    </div>
+
+    <!-- Sección para subir los documentos -->
+    <div class="my-5">
+        <h3>Upload Documents</h3>
+        <div class="mb-3">
+            <label for="identificationInput" class="form-label">Identificación</label>
+            <input type="file" id="identificationInput" class="form-control" name="documents" />
+            <button class="btn btn-primary my-2" id="btn-upload-identification">Upload Identification</button>
+        </div>
+        <div class="mb-3">
+            <label for="domicileProofInput" class="form-label">Comprobante de domicilio</label>
+            <input type="file" id="domicileProofInput" class="form-control" name="documents" />
+            <button class="btn btn-primary my-2" id="btn-upload-domicile-proof">Upload Domicile Proof</button>
+        </div>
+        <div class="mb-3">
+            <label for="accountStatementInput" class="form-label">Comprobante de estado de cuenta</label>
+            <input type="file" id="accountStatementInput" class="form-control" name="documents" />
+            <button class="btn btn-primary my-2" id="btn-upload-account-statement">Upload Account Statement</button>
+        </div>
+    </div>
 </div>
 
 <script src="js/profile.js"></script>

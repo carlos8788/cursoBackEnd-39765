@@ -51,7 +51,7 @@ export default class BaseRouter {
             if (policies[0] === "LOGIN" && policies[1] === "USER" && user.role === 'user') return next()
             if (policies[0] === "GITHUB") return next();
             if (policies[0] === "USER" || policies[1] === 'ADMIN') return next();
-            if (policies[0] === "AUTH" && policies[1] === ['USER'] && user) return next();
+            if (policies[0] === "AUTH" && policies[1] === 'USER' && user) return next();
             if (policies[0] === "AUTH" && !user) return res.status(401).send({ status: "error", error: "Unauthorized Router doesn't exist the user" });
             if (policies[0] === "NO_AUTH" && user) return res.status(401).send({ status: "error", error: "Unauthorized Router" });
             if (policies[0] === "NO_AUTH" && !user) return next();

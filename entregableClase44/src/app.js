@@ -82,12 +82,17 @@ app.get('/logger', (req, res) => {
 
 })
 
+
 app.use('/api/ticket', ticketRouter.getRouter())
 app.use('/api/session', sessionsRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/carts', cartsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
 app.use('/', viewsRouter.getRouter());
+app.use((error, req, res, next) => {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  });
 app.use(notFoundMiddleware);
 
 

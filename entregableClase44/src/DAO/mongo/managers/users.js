@@ -72,22 +72,59 @@ export default class UserManager {
             return error;
         }
     }
-    
-    updateUserDocuments = async (uid, documents) => {
+
+
+    updateUserDocuments = async (uid, type, documents) => {
+        console.log(documents, 'documents users.js');
         try {
-            const user = await this.getUsersById(uid);
-            if (!user) {
-                throw new Error('User not found');
+            if (type === 'profile' || type === 'document') {
+                const entity = await this.getUsersById(uid);
+
+                if (type === 'profile') {
+                    const profileIndex = entity.documents.findIndex(doc => doc.type === 'profile');
+
+                    if (profileIndex !== -1) {
+                        entity.documents[profileIndex] = { type: 'profile', ...documents[0] };
+                    } else {
+                        entity.documents.push({ type: 'profile', ...documents[0] });
+                    }
+                }
+                else {
+                    documents.forEach((doc) => {
+
+                        const allowedDocTypes = [
+                            "dni",
+                            "domicilio",
+                            "cuenta"
+                        ];
+
+                        if (allowedDocTypes.includes(doc.type)) {
+
+                            const docIndex = entity.documents.findIndex(existingDoc => existingDoc.type === doc.type);
+
+                            if (docIndex !== -1) {
+                                entity.documents[docIndex] = doc;
+                            } else {
+                                entity.documents.push(doc);
+                            }
+                        }
+                        else {
+                            throw new Error(`Invalid document type: ${doc.type}`);
+                        }
+                    });
+                }
+
+                await entity.save();
+                return { message: 'Documents updated successfully' };
+            } else {
+                throw new Error('Invalid type parameter');
             }
-
-            user.documents = [...(user.documents || []), ...documents];
-            user.status = 'Document uploaded';
-
-            await user.save();
-            return { message: 'Documents uploaded successfully', documents };
         } catch (error) {
-            return { error: error.message };
+            console.error(error);
+            throw error;
         }
     };
+
+
 
 }
