@@ -75,7 +75,7 @@ export default class UserManager {
 
 
     updateUserDocuments = async (uid, type, documents) => {
-        console.log(documents, 'documents users.js');
+        
         try {
             if (type === 'profile' || type === 'document') {
                 const entity = await this.getUsersById(uid);
@@ -84,9 +84,10 @@ export default class UserManager {
                     const profileIndex = entity.documents.findIndex(doc => doc.type === 'profile');
 
                     if (profileIndex !== -1) {
-                        entity.documents[profileIndex] = { type: 'profile', ...documents[0] };
+                        entity.documents[profileIndex] = {...documents[0], type: 'profile' };
+                        console.log(entity.documents[profileIndex], 88);
                     } else {
-                        entity.documents.push({ type: 'profile', ...documents[0] });
+                        entity.documents.push({ ...documents[0], type: 'profile' });
                     }
                 }
                 else {
@@ -114,17 +115,23 @@ export default class UserManager {
                     });
                 }
 
+                // entity.documents = []
+
                 await entity.save();
                 return { message: 'Documents updated successfully' };
             } else {
                 throw new Error('Invalid type parameter');
             }
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             throw error;
         }
     };
 
-
+    getDocuments = async (uid) => {
+        const user = await userModel.findById({_id: uid})
+        console.log(user);
+        return user.documents
+    }
 
 }

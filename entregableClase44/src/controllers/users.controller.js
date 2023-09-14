@@ -5,8 +5,22 @@ const changeUserRole = async (req, res) => {
     try {
 
         let role;
+
+        if (req.body.role === 'user') {
+            console.log('estoy');
+            const documents = await userService.getUserDocumentsService(req.user.id);
+            const typesNeeded = ['dni', 'domicilio', 'cuenta'];
+            const typesFound = documents.map(doc => doc.type);
+            const hasAllTypes = typesNeeded.every(type => typesFound.includes(type));
+            console.log(hasAllTypes);
+            if(!hasAllTypes) return res.sendUnauthorized('Not authorized')
+            
+        };
+
         (req.body.role === 'user') ? role = 'premium' : role = 'user';
+
         req.user.role = role;
+        console.log(req.user.role);
         const userUpdate = await userService.changeUserService(req.params.uid, role);
         const user = {
             name: `${userUpdate.first_name} ${userUpdate.last_name}`,
@@ -25,6 +39,7 @@ const changeUserRole = async (req, res) => {
 
 
     } catch (error) {
+        console.log(error);
         return res.sendInternalError(error)
     }
 };
@@ -32,14 +47,14 @@ const changeUserRole = async (req, res) => {
 
 const uploadHandler = async (req, res) => {
     try {
-        console.log('entro con error');
+
         const { uid } = req.params;
         const { type, document_type } = req.query;
 
-        console.log('estoy upload');
+
 
         if (!['profile', 'product', 'document'].includes(type)) {
-          return res.sendBadRequest('Invalid type parameter');
+            return res.sendBadRequest('Invalid type parameter');
         }
 
         const files = req.files;
@@ -47,20 +62,19 @@ const uploadHandler = async (req, res) => {
         const documents = files.map(file => ({
             name: file.originalname,
             reference: `/uploads/${type}s/${file.filename}`,
-            type: document_type 
+            type: document_type
         }));
         console.log(uid, 'uuid', documents, 'documents', type, 'type');
         const response = await userService.updateUserDocumentsService(uid, type, documents);
-        console.log(response);
+
         if (response.error) {
             throw new Error(response.error);
         }
 
         return res.sendSuccess(response);
-        
+
     } catch (error) {
-        console.log('no encontinue');
-        console.log(error);
+
         return res.sendInternalError(error)
     }
 };

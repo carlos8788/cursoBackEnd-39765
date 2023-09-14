@@ -37,6 +37,10 @@ const schema = new mongoose.Schema({
     },
     documents: [
         {
+            type: {
+                type: String,
+   
+            },
             name: {
                 type: String,
                 required: true,

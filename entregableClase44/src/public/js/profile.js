@@ -8,7 +8,17 @@ btnChangeRole.addEventListener('click', function () {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role: role.textContent })
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 401) {
+                return (Swal.fire(
+                    'No Change role!',
+                    'Not authorized.',
+                    'error'
+                ))
+            }
+            return response.json();
+
+        })
         .then(data => {
             const h2 = document.createElement('h2');
             h2.textContent = 'Role change, you will be redirected'
@@ -51,24 +61,25 @@ function uploadFile(type, inputId, docType) {
 
     const formData = new FormData();
     formData.append('file', file);
-
-    if(docType) {
+    let url = `/api/users/${id.textContent}/documents?type=${type}`
+    if (docType) {
         formData.append('docType', docType);
+        url += `&document_type=${docType}`
     }
-
-    fetch(`/api/users/${id.textContent}/documents?type=${type}`, {
+    console.log(formData);
+    fetch(url, {
         method: 'POST',
         body: formData,
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('File uploaded successfully:', data);
-        alert('File uploaded successfully');
-    })
-    .catch(error => {
-        console.error('Error uploading file:', error);
-        alert('Error uploading file');
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log('File uploaded successfully:', data);
+            alert('File uploaded successfully');
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+            alert('Error uploading file');
+        });
 }
 
 

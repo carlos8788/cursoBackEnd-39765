@@ -36,4 +36,8 @@ export default class UserService{
     updateUserDocumentsService = (uid, type, documents) => {
         return this.dao.updateUserDocuments(uid, type, documents);
     }
+
+    getUserDocumentsService = (id) => {
+        return this.dao.getDocuments(id)
+    }
 }
