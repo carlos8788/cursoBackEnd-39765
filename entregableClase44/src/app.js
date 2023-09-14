@@ -36,7 +36,7 @@ app.use(cookieParser(config.cookieParserEnv));
 
 app.engine('handlebars', handlebars.engine());
 
-
+app.use('/uploads', express.static('uploads'));
 app.set('views', `${__dirname}/views`);
 app.set('partials', `${__dirname}/views/partials`);
 app.set('view engine', 'handlebars');

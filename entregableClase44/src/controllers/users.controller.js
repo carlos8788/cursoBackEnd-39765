@@ -16,7 +16,7 @@ const changeUserRole = async (req, res) => {
             cart: userUpdate.carts[0]
         }
         const token = generateToken(user);
-        
+
         return res.cookie('authToken', token, {
             httpOnly: true,
             sameSite: 'strict',
@@ -29,8 +29,31 @@ const changeUserRole = async (req, res) => {
     }
 };
 
+const uploadDocuments = async (req, res) => {
+    // router.post('/api/users/:uid/documents', upload.array('documents', 10), async (req, res) => {
+    try {
+        const { uid } = req.params;
+        const files = req.files;
+
+        const documents = files.map(file => ({
+            name: file.originalname,
+            reference: `/uploads/${file.filename}`,
+        }));
+
+        const response = await userService.updateUserDocumentsService(uid, documents);
+        if (response.error) {
+            throw new Error(response.error);
+        }
+
+        res.json(response);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 export default {
-    changeUserRole
+    changeUserRole,
+    uploadDocuments
 }
 

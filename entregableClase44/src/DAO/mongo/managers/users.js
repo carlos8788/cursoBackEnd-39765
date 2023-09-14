@@ -54,10 +54,40 @@ export default class UserManager {
     }
 
     changeRole = async (id, role) => {
-        return userModel.findByIdAndUpdate({_id: id}, {role: role})
+        return userModel.findByIdAndUpdate({ _id: id }, { role: role })
     }
 
     updatePassword = async (email, password) => {
-        return userModel.findOneAndUpdate({email: email}, {password: password})
+        return userModel.findOneAndUpdate({ email: email }, { password: password })
     }
+
+    updateLastConnection = async (userId) => {
+        try {
+            return await userModel.findByIdAndUpdate(
+                userId,
+                { last_connection: Date.now() },
+                { new: true }
+            );
+        } catch (error) {
+            return error;
+        }
+    }
+    
+    updateUserDocuments = async (uid, documents) => {
+        try {
+            const user = await this.getUsersById(uid);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            user.documents = [...(user.documents || []), ...documents];
+            user.status = 'Document uploaded';
+
+            await user.save();
+            return { message: 'Documents uploaded successfully', documents };
+        } catch (error) {
+            return { error: error.message };
+        }
+    };
+
 }

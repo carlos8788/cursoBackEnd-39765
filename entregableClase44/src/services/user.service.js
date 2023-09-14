@@ -28,4 +28,12 @@ export default class UserService{
     updatePasswordService = (email, password) => {
         return this.dao.updatePassword(email, password);
     }
+
+    updateLastConnectionService = (id) => {
+        return this.dao.updateLastConnection(id);
+    }
+
+    updateUserDocumentsService = (uid, documents) => {
+        return this.dao.updateUserDocuments(uid, documents);
+    }
 }

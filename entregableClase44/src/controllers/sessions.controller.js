@@ -41,6 +41,8 @@ const loginPost = async (req, res) => {
             cart: req.user.carts
         }
 
+        userService.updateLastConnectionService(user.id)
+
         const access_token = generateToken(user)
 
         return res.cookie('authToken', access_token, {
@@ -65,6 +67,7 @@ const registerPost = async (req, res) => {
 const postLogOut = (req, res) => {
 
     try {
+        userService.updateLastConnectionService(req.user.id)
         return res.clearCookie('authToken').sendSuccess('logged out successfully')
     } catch (error) {
         return res.sendInternalError(error);
