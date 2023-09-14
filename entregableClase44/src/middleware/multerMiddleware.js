@@ -5,8 +5,8 @@ const storage = diskStorage({
     let uploadPath;
 
     if (file.mimetype.startsWith('image')) {
-
-      if (req.url.includes('products')) {
+      
+      if (req.baseUrl.includes('products')) {
         uploadPath = 'uploads/products';
       } else {
         uploadPath = 'uploads/profile';

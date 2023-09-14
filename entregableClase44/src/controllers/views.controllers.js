@@ -106,7 +106,7 @@ const getProductsView = async (req, res) => {
             }
 
             const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
-
+            
             return res.render(
                 'products',
                 {
@@ -138,7 +138,7 @@ const getProductsView = async (req, res) => {
         const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
 
         req.logger.debug('Products view OK')
-
+        
         return res.render(
             'products',
             {

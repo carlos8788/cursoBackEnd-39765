@@ -66,14 +66,14 @@ function uploadFile(type, inputId, docType) {
         formData.append('docType', docType);
         url += `&document_type=${docType}`
     }
-    console.log(formData);
+    
     fetch(url, {
         method: 'POST',
         body: formData,
     })
         .then(response => response.json())
         .then(data => {
-            console.log('File uploaded successfully:', data);
+            
             alert('File uploaded successfully');
         })
         .catch(error => {

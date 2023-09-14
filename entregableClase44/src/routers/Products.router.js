@@ -1,7 +1,7 @@
 import { passportCall } from '../middleware/auth.js';
 import BaseRouter from './Router.js';
 import productsController from '../controllers/products.controller.js';
-
+import upload from "../middleware/multerMiddleware.js";
 
 export default class ProductsRouter extends BaseRouter {
     //http://localhost:8080/api/products?limit=2
@@ -16,7 +16,7 @@ export default class ProductsRouter extends BaseRouter {
         // this.get('/:pid', ['ADMIN', 'PREMIUM'], passportCall('jwt', {strategyType: 'jwt'}), productsController.getProductId)
 
         //http://localhost:8080/api/products/
-        this.post('/', ['ADMIN', 'PREMIUM'], passportCall('jwt', {strategyType: 'jwt'}), productsController.postProduct)
+        this.post('/', ['ADMIN', 'PREMIUM'], passportCall('jwt', {strategyType: 'jwt'}), upload.array('file', 10), productsController.postProduct)
 
         this.put('/:pid', ['ADMIN', 'PREMIUM'], passportCall('jwt', {strategyType: 'jwt'}), productsController.putProduct)
 

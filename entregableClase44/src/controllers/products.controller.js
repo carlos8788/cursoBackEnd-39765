@@ -3,7 +3,8 @@ import { productService } from '../services/index.js';
 import CustomError from '../services/errors/customErrors.js'
 import EErrors from '../services/errors/enums.js';
 import { generateProductErrorInfo } from '../services/errors/constant.js';
-import { getLogger } from '../middleware/logger.js';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const getProducts = async (req, res) => {
     try {
@@ -65,6 +66,7 @@ const getProducts = async (req, res) => {
             const { totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, docs } = products
             const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
             req.logger.debug('Get Product OK')
+
             return res.status(200).send({ status: 'success', payload: docsFiltered, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
         }
 
@@ -75,6 +77,7 @@ const getProducts = async (req, res) => {
         const docsFiltered = docs.filter(prod => prod.owner !== req.user.email)
 
         req.logger.debug('Get Product OK')
+
         return res.status(200).send({ status: 'success', payload: docsFiltered, totalPages, prevPage, nextPage, hasNextPage, hasPrevPage, prevLink, nextLink });
     } catch (error) {
         req.logger.error(error)
@@ -112,6 +115,13 @@ const postProduct = async (req, res) => {
 
 
         product.owner = (req.user.role !== 'premium') ? 'admin' : req.user.email;
+        if (req.files) {
+            product.thumbnails = req.files.map(file => file.path);
+        }
+        
+        product.price = Number(product.price[0])
+        product.stock = Number(product.stock[0])
+        product.status = (product.status[0] === 'on') ? true : false;
 
         const {
             title,
@@ -156,6 +166,7 @@ const postProduct = async (req, res) => {
 
         }
 
+
         if (!(typeof title === 'string' &&
             typeof description === 'string' &&
             typeof price === 'number' &&
@@ -167,9 +178,9 @@ const postProduct = async (req, res) => {
             Array.isArray(thumbnails)))
             return res.status(400).send({ message: 'type of property is not valid' })
 
-        if (price < 0 || stock < 0) return res
-            .status(400)
-            .send({ message: 'Product and stock cannot be values less than or equal to zero' });
+        // if (price < 0 || stock < 0) return res
+        //     .status(400)
+        //     .send({ message: 'Product and stock cannot be values less than or equal to zero' });
 
         const result = await productService.addProductService(product)
 
@@ -178,11 +189,12 @@ const postProduct = async (req, res) => {
             .send({ message: `E11000 duplicate key error collection: ecommerce.products dup key code: ${result.keyValue.code}` });
         req.logger.debug('POST product OK')
         return res.status(201).send(result);
-        // return res.status(201).send(req.body);
+
     }
     catch (error) {
+        
         req.logger.error(error)
-        return res.send({ message: error });
+        return res.send(error);
 
     }
 }
@@ -193,7 +205,7 @@ const putProduct = async (req, res) => {
         const product = req.body
 
         if (product.price < 0 || product.stock < 0) return res.sendInternalError('Price or Stock is negative!')
-        
+
         const result = await productService.updateProductService(pid, product);
 
         if (result.message) return res.status(404).send({ message: `ID: ${pid} not found` })
@@ -213,6 +225,18 @@ const deleteProduct = async (req, res) => {
         const { pid } = req.params
         const product = await productService.getProductByIdService(pid)
 
+        
+        if (product.thumbnails[0]) {
+            await fs.promises.unlink(path.resolve(product.thumbnails[0])), (err) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                res.json({ message: 'File deleted successfully' });
+            };
+        } else {
+            res.status(400).json({ error: 'File path is required' });
+        }
+
 
         if (product.owner !== req.user.email) return res.internalError('Forbidden! You cannot delete this product')
         const result = await productService.deleteProductService(pid)
@@ -222,6 +246,7 @@ const deleteProduct = async (req, res) => {
         return res.sendSuccess(`ID: ${pid} was deleted`);
 
     } catch (error) {
+        
         req.logger.error(error)
         return res.internalError(error.message)
     }

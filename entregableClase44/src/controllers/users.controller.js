@@ -7,12 +7,12 @@ const changeUserRole = async (req, res) => {
         let role;
 
         if (req.body.role === 'user') {
-            console.log('estoy');
+            
             const documents = await userService.getUserDocumentsService(req.user.id);
             const typesNeeded = ['dni', 'domicilio', 'cuenta'];
             const typesFound = documents.map(doc => doc.type);
             const hasAllTypes = typesNeeded.every(type => typesFound.includes(type));
-            console.log(hasAllTypes);
+            
             if(!hasAllTypes) return res.sendUnauthorized('Not authorized')
             
         };
@@ -20,7 +20,7 @@ const changeUserRole = async (req, res) => {
         (req.body.role === 'user') ? role = 'premium' : role = 'user';
 
         req.user.role = role;
-        console.log(req.user.role);
+        
         const userUpdate = await userService.changeUserService(req.params.uid, role);
         const user = {
             name: `${userUpdate.first_name} ${userUpdate.last_name}`,
@@ -39,7 +39,7 @@ const changeUserRole = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
+        
         return res.sendInternalError(error)
     }
 };
@@ -64,7 +64,7 @@ const uploadHandler = async (req, res) => {
             reference: `/uploads/${type}s/${file.filename}`,
             type: document_type
         }));
-        console.log(uid, 'uuid', documents, 'documents', type, 'type');
+        
         const response = await userService.updateUserDocumentsService(uid, type, documents);
 
         if (response.error) {

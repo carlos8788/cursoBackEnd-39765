@@ -85,7 +85,7 @@ export default class UserManager {
 
                     if (profileIndex !== -1) {
                         entity.documents[profileIndex] = {...documents[0], type: 'profile' };
-                        console.log(entity.documents[profileIndex], 88);
+                        
                     } else {
                         entity.documents.push({ ...documents[0], type: 'profile' });
                     }
@@ -123,15 +123,20 @@ export default class UserManager {
                 throw new Error('Invalid type parameter');
             }
         } catch (error) {
-            // console.error(error);
+            
             throw error;
         }
     };
 
     getDocuments = async (uid) => {
-        const user = await userModel.findById({_id: uid})
-        console.log(user);
-        return user.documents
+        try {
+            const user = await userModel.findById({_id: uid})
+            
+            return user.documents
+            
+        } catch (error) {
+            return error
+        }
     }
 
 }

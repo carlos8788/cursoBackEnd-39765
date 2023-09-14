@@ -33,10 +33,12 @@ addP.addEventListener('click', () => {
                                     <label for="category" class="form-label">Category</label>
                                     <input type="text" class="form-control" id="category" name="category" required>
                                 </div>
+                                
                                 <div class="mb-3">
-                                    <label for="thumbnails" class="form-label">Thumbnails</label>
-                                    <input type="url" class="form-control" id="thumbnails" name="thumbnails">
-                                </div>
+                                <label for="thumbnails" class="form-label">Thumbnails</label>
+                                <input type="file" id="thumbnails" class="form-control" name="file" />
+                                
+                            </div>
                                 <input type="submit" class="btn btn-primary" value="Submit"/>
                             </form>
 
@@ -46,41 +48,77 @@ addP.addEventListener('click', () => {
 })
 
 const productForm = () => {
+    // document.getElementById('product-form').addEventListener('submit', (event) => {
+    //     event.preventDefault();
+    //     let product = Object.fromEntries(new FormData(event.target))
+        
+    //     product.status = product.status === 'on';
+    //     product.documents = [product.thumbnails]
+    //     product.price = Number(product.price)
+    //     product.stock = Number(product.stock)
+    //     fetch('api/products', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(product)
+    //     })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 Swal.fire({
+    //                     title: 'Success',
+    //                     text: 'Product added successfully',
+    //                     icon: 'success'
+    //                 })
+
+
+    //             } else {
+    //                 Swal.fire({
+    //                     title: 'Error',
+    //                     text: 'Product not added',
+    //                     icon: 'error'
+    //                 })
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             throw new Error(error);
+    //         })
+    //     document.getElementById('product-form').reset()
+    // })
     document.getElementById('product-form').addEventListener('submit', (event) => {
         event.preventDefault();
-        let product = Object.fromEntries(new FormData(event.target))
         
-        product.status = product.status === 'on';
-        product.thumbnails = [product.thumbnails]
-        product.price = Number(product.price)
-        product.stock = Number(product.stock)
+        let formData = new FormData(event.target);
+        formData.append('status', formData.get('status') === 'on' ? true : false);
+        formData.append('price', Number(formData.get('price')));
+        formData.append('stock', Number(formData.get('stock')));
+    
         fetch('api/products', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(product)
+            body: formData
         })
             .then(response => {
+
                 if (response.ok) {
                     Swal.fire({
                         title: 'Success',
                         text: 'Product added successfully',
                         icon: 'success'
-                    })
-
-
+                    });
                 } else {
                     Swal.fire({
                         title: 'Error',
                         text: 'Product not added',
                         icon: 'error'
-                    })
+                    });
                 }
             })
             .catch((error) => {
+
                 throw new Error(error);
-            })
-        document.getElementById('product-form').reset()
-    })
+            });
+    
+        document.getElementById('product-form').reset();
+    });
+    
 }
